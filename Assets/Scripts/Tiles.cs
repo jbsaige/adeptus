@@ -3,22 +3,16 @@ using System.Collections;
 
 public class Tiles : MonoBehaviour
 {
-    public GameManager manager;
-    public int Element, x, z;
-    public string ElementName;
+    public GameManager Manager;
+    public int x, z;
+    public GameManager.ElementType Element;
     public bool hasPowerWell = false;
     private bool iAmHighLighted;
 
-    // Use this for initialization
-    void Start()
-    {
-    }
-
     public void SetElement(int element)
     {
-        this.Element = element;
-        this.GetComponent<MeshRenderer>().material = manager.mats[element];
-        this.ElementName = manager.elements[element];
+        this.Element = (GameManager.ElementType)element;
+        this.GetComponent<MeshRenderer>().material = Manager.mats[element];
     }
 
     public void SetXandZ(int x, int z)
@@ -34,27 +28,11 @@ public class Tiles : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (collider.Raycast(ray, out hitInfo, Mathf.Infinity))
+        if (this.collider.Raycast(ray, out hitInfo, Mathf.Infinity))
         {
-            manager.Highlighting.transform.position = new Vector3(transform.position.x, -0.2f, transform.position.z);
-            iAmHighLighted = true;
+            this.Manager.Highlighting.transform.position = new Vector3(this.transform.position.x, -0.2f, this.transform.position.z);
+            this.Manager.HighlightedTile = this;
         }
-        else
-        {
-            iAmHighLighted = false;
-        }
-
     }
-
-    // OnMouseUp is called when the user has released the mouse button (Since v1.0)
-    void OnMouseUp()
-    {
-        if (Input.GetMouseButtonUp(0) && iAmHighLighted)
-        {
-            manager.zoomOnToTile(this);
-        }
-
-    }
-
 
 }
