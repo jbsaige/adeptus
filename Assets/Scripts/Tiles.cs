@@ -11,7 +11,7 @@ public class Tiles : MonoBehaviour
 
     public void SetElement(int element)
     {
-        this.Element = (GameManager.ElementType)element;
+        this.Element = (GameManager.ElementType)element+1;
         this.GetComponent<MeshRenderer>().material = Manager.mats[element];
     }
 
@@ -28,7 +28,7 @@ public class Tiles : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (this.collider.Raycast(ray, out hitInfo, Mathf.Infinity))
+        if (this.collider.Raycast(ray, out hitInfo, Mathf.Infinity) && this.Manager.zoom == GameManager.ZoomingMode.ZoomedOut)
         {
             this.Manager.Highlighting.transform.position = new Vector3(this.transform.position.x, -0.2f, this.transform.position.z);
             this.Manager.HighlightedTile = this;
