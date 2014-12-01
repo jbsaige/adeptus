@@ -1,15 +1,15 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 
     public GameObject Tile, TileHighlight, PowerWell;
     public Canvas Canvas;
-    public GameObject PanelLeft, PanelRight, PanelTop, PanelBottom;
-    public GameObject InfoZone, InfoUnit, InfoP1Power, InfoP2Power;
+    public GameObject PanelLeft, PanelRight, PanelTop, PanelBottom, PanelTips, PanelSummonTop, PanelSummonBottom;
+    public GameObject InfoZone, InfoUnit, InfoP1Power, InfoP2Power, InfoTips;
     public GameObject ButtonCancel, ButtonZoomOut, ButtonSummon, ButtonMove, ButtonOSpell, ButtonDSpell, ButtonAdeptE, ButtonAdeptA, ButtonAdeptF, ButtonAdeptW;
     public GameObject Castle, Adept, Demon, Monster, None;
     public GameObject[] TextDisplays;
@@ -30,14 +30,16 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public Tiles HighlightedTile;
     [HideInInspector]
-    public bool isZoomed = false, Player1IsCPU = false, Player2IsCPU = false;
+    public bool isZoomed = false, Player1IsCPU = false, Player2IsCPU = false, isTutorial = true;
     [HideInInspector]
     public int CurrentPlayer = 1;
     [HideInInspector]
     public int[] PlayerPower;
     public enum ZoomingMode { ZoomedIn, ZoomingIn, ZoomedOut, ZoomingOut };
-    [HideInInspector]
     public ZoomingMode zoom = ZoomingMode.ZoomedOut;
+    public enum SummoningMenuMode { SlidedIn, SlidingIn, SlidedOut, SlidingOut };
+    public SummoningMenuMode summonMode = SummoningMenuMode.SlidedOut;
+    [HideInInspector]
     private float zsX, zsZ, zsFOV, ztX, ztZ, ztFOV, zoomStep, zoomStart, xDiff, zDiff, fovDiff;
     private float canvasWidth, canvasHeight, panelWidth, panelHeight, panelAnchorX, panelAnchorY;
     private int fontSize;
@@ -47,10 +49,13 @@ public class GameManager : MonoBehaviour
     private Actor IamSpawning;
     public Color[] PlayerColor;
     public Color[] ElementalColors;
+    private bool showingTip = false;
+    private float hideTipWhen = 0f;
 
     // Use this for initialization
     void Start()
     {
+        DontDestroyOnLoad(this);
         //Place level select UI here.
         Start_SetupGame();
     }
@@ -138,7 +143,7 @@ public class GameManager : MonoBehaviour
             }
         }
         placePowerWells();
-        placeActors();
+        Start_PlaceActors();
     }
 
     private void placePowerWells()
@@ -169,21 +174,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void placeActors()
+    private void Start_PlaceActors()
     {
-        //TODO: Put castles at 3,7 and 19,7.
-        //TODO: Put adepts at 2,6-10 and 20,6-10.
         placeNewActor(3, 7, Actor.ActorType.Castle, ElementType.None, 1);
-        //placeNewActor(2, 6, Actor.ActorType.Adept, ElementType.Earth, 1);
-        //placeNewActor(2, 7, Actor.ActorType.Adept, ElementType.Air, 1);
-        //placeNewActor(2, 8, Actor.ActorType.Adept, ElementType.Fire, 1);
-        //placeNewActor(2, 9, Actor.ActorType.Adept, ElementType.Water, 1);
-
         placeNewActor(19, 7, Actor.ActorType.Castle, ElementType.None, 2);
-        //placeNewActor(20, 6, Actor.ActorType.Adept, ElementType.Earth, 2);
-        //placeNewActor(20, 7, Actor.ActorType.Adept, ElementType.Air, 2);
-        //placeNewActor(20, 8, Actor.ActorType.Adept, ElementType.Fire, 2);
-        //placeNewActor(20, 9, Actor.ActorType.Adept, ElementType.Water, 2);
     }
 
     public void cancelAction()
@@ -266,7 +260,36 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void moveActor()
+    {
+        gameMode = GameMode.MoveSpawn;
+        setUpZoomOut();
+    }
+
     private void moveActor(int oldX, int oldZ, int newX, int newZ)
+    {
+        Actor movingActor = allTiles[oldX, oldZ].GetComponentInChildren<Actor>();
+        Actor emptyActor = allTiles[newX, newZ].GetComponentInChildren<Actor>();
+        movingActor.transform.parent = allTiles[newX, newZ].transform;
+        emptyActor.transform.parent = allTiles[oldX, oldZ].transform;
+        movingActor.Move(newX, newZ);
+        movingActor.transform.position = allTiles[newX, newZ].transform.position;
+    }
+
+    private void triggerBattle(Actor P1Piece, Actor P2Piece)
+    {
+        //TODO: Trigger the real battle.
+        showingTip = true;
+        hideTipWhen = Time.time + 1f;
+        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s" + P1Piece.Element.ToString() + " "  + P1Piece.characterType.ToString() + " is attacking!\r\nOppoent's " + P2Piece.Element.ToString() + " "  + P2Piece.characterType.ToString() + " is defending!\r\nGood Luck!";
+    }
+
+    private void adeptSummonAction()
+    {
+
+    }
+
+    private void finishAdeptSummonAction()
     {
 
     }
@@ -338,6 +361,18 @@ public class GameManager : MonoBehaviour
                         break;
                     case Actor.ActorType.Adept:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Adept";
+                        ButtonMove.GetComponentInChildren<Text>().text = "Move";
+                        ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                        ButtonMove.GetComponent<Button>().interactable = true;
+                        ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell";
+                        //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                        ButtonDSpell.GetComponent<Button>().interactable = false;
+                        ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell";
+                        //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                        ButtonOSpell.GetComponent<Button>().interactable = false;
+                        ButtonSummon.GetComponentInChildren<Text>().text = "Summon";
+                        //ButtonSummon.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                        ButtonSummon.GetComponent<Button>().interactable = false;
                         break;
                     case Actor.ActorType.Demon:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Demon";
@@ -392,10 +427,55 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
-            placeNewActor(tile.x, tile.z, IamSpawning.characterType, IamSpawning.Element, CurrentPlayer);
-            gameMode = GameMode.Default;
-            changePlayer();
+            if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.None)
+            {
+                //If the gameMode is CastSpell we don't care.  Players cannot cast onto empty hexes.
+                if (gameMode == GameMode.PlaceSpawn)
+                {
+                    //This hex is empty.  Place the new thing here.
+                    Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
+                    placeNewActor(tile.x, tile.z, IamSpawning.characterType, IamSpawning.Element, CurrentPlayer);
+                    gameMode = GameMode.Default;
+                    changePlayer();
+                }
+                else if (gameMode == GameMode.MoveSpawn)
+                {
+                    //This hex is empty.  Move to here.
+                    Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
+                    moveActor(selectedTile.x, selectedTile.z, tile.x, tile.z);
+                    gameMode = GameMode.Default;
+                    changePlayer();
+                }
+            }
+            else if (tile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+            {
+                //The player clicked on their own piece.
+                if (gameMode == GameMode.CastSpell)
+                {
+                    //The player wants to cast a spell on their own piece.
+                }
+                else
+                {
+                    //Let's cancel the current mode and return to default.
+                    Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
+                    gameMode = GameMode.Default;
+                }
+            }
+            else// if (tile.GetComponentInChildren<Actor>().Player != CurrentPlayer)
+            {//The above else if appears redundant, maybe use else.
+                //The player clicked on an oppoent's piece.
+                if (gameMode == GameMode.CastSpell)
+                {
+                    //The player wants to cast a spell on an oppoent's piece.
+                }
+                else if (gameMode == GameMode.MoveSpawn)
+                {
+                    //The player wants to battle.
+                    //TODO: Trigger battle.
+                    Debug.Log("Trigger Battle Here!");
+                    triggerBattle(selectedTile.GetComponentInChildren<Actor>(), tile.GetComponentInChildren<Actor>());
+                }
+            }
         }
     }
 
@@ -438,7 +518,7 @@ public class GameManager : MonoBehaviour
         canvasHeight = Canvas.transform.position.y * 2;
         panelWidth = canvasWidth * 0.25F;
         panelHeight = canvasHeight * 0.25F;
-        fontSize = (int)(canvasWidth * 0.02f);
+        fontSize = (int)(canvasWidth * 0.03f);
         for (int i = 0; i < TextDisplays.Length; i++)
         {
             TextDisplays[i].GetComponent<Text>().fontSize = fontSize;
@@ -448,6 +528,27 @@ public class GameManager : MonoBehaviour
     // Update is called every frame, if the MonoBehaviour is enabled (Since v1.0)
     void Update()
     {
+        if (showingTip == true && Time.time > hideTipWhen)
+        {
+            PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
+            InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
+            showingTip = false;
+        }
+        else if (showingTip == true)
+        {
+            float alphaBlend = 255f;
+            float timeRemaning = hideTipWhen - Time.time;
+            if (timeRemaning > zoomMaxSteps - 0.25f)
+            {
+                alphaBlend = BezierBlend((0.25f + ((zoomMaxSteps - 0.25f) - timeRemaning)) * 4f);
+            }
+            else if (timeRemaning < 0.25F)
+            {
+                alphaBlend = BezierBlend((timeRemaning) * 4f);
+            }
+            PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, alphaBlend);
+            InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, alphaBlend);
+        }
         if (Input.GetMouseButtonUp(0) && zoom == ZoomingMode.ZoomedOut)
         {
             zoomOnToTile(HighlightedTile);
@@ -482,10 +583,6 @@ public class GameManager : MonoBehaviour
                     PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(-x, 0f);
                     PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -y);
                     PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y);
-                    //if (gameMode != GameMode.Default)
-                    //{
-                    //    ButtonCancel.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, 0f);
-                    //}
                 }
             }
             else
@@ -531,6 +628,11 @@ public class GameManager : MonoBehaviour
 
         InfoP1Power.GetComponent<Text>().text = "Player 1 Power:\r\n" + PlayerPower[0];
         InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + PlayerPower[1];
+        showingTip = true;
+        hideTipWhen = Time.time + zoomMaxSteps;
+        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s Turn!\r\nCurrent Power: " + PlayerPower[CurrentPlayer - 1].ToString();
+        //PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
+        //InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
     }
 
 }
