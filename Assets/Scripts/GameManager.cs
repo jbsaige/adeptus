@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public Canvas Canvas;
     public GameObject PanelLeft, PanelRight, PanelTop, PanelBottom, PanelTips, PanelSummonTop, PanelSummonBottom;
     public GameObject InfoZone, InfoUnit, InfoP1Power, InfoP2Power, InfoTips;
-    public GameObject ButtonCancel, ButtonZoomOut, ButtonSummon, ButtonMove, ButtonOSpell, ButtonDSpell, ButtonAdeptE, ButtonAdeptA, ButtonAdeptF, ButtonAdeptW;
+    public GameObject ButtonCancel, ButtonZoomOut, ButtonArmageddon, ButtonMove, ButtonOSpell, ButtonDSpell, ButtonAdeptE, ButtonAdeptA, ButtonAdeptF, ButtonAdeptW;
     public GameObject Castle, Adept, Demon, Monster, None;
     public GameObject[] TextDisplays;
     public Material texEarth, texAir, texFire, texWater, texVoid;
@@ -87,7 +87,9 @@ public class GameManager : MonoBehaviour
         PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(-panelWidth, 0f);
         PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(panelWidth, 0f);
         PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight);
+        PanelSummonTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight * 2);
         PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight);
+        PanelSummonBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight * 2);
         InfoP1Power.GetComponent<Text>().color *= PlayerColor[0];
         InfoP1Power.GetComponent<Text>().text = "Player 1 Power:\r\n" + PlayerPower[0];
         InfoP2Power.GetComponent<Text>().color *= PlayerColor[1];
@@ -286,7 +288,8 @@ public class GameManager : MonoBehaviour
 
     private void adeptSummonAction()
     {
-
+        summonMode = SummoningMenuMode.SlidingOut;
+        setUpZoomOut();
     }
 
     private void finishAdeptSummonAction()
@@ -361,24 +364,49 @@ public class GameManager : MonoBehaviour
                         break;
                     case Actor.ActorType.Adept:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Adept";
-                        ButtonMove.GetComponentInChildren<Text>().text = "Move";
-                        ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                        ButtonMove.GetComponent<Button>().interactable = true;
-                        ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell";
-                        //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                        ButtonDSpell.GetComponent<Button>().interactable = false;
-                        ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell";
-                        //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                        ButtonOSpell.GetComponent<Button>().interactable = false;
-                        ButtonSummon.GetComponentInChildren<Text>().text = "Summon";
-                        //ButtonSummon.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                        ButtonSummon.GetComponent<Button>().interactable = false;
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+                        {
+                            ButtonMove.GetComponentInChildren<Text>().text = "Move";
+                            ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                            ButtonMove.GetComponent<Button>().interactable = true;
+                            ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell";
+                            ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell";
+                            ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon";
+                            summonMode = SummoningMenuMode.SlidingIn;
+                            if (PlayerPower[CurrentPlayer - 1] > 50)
+                            {
+                                //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                ButtonDSpell.GetComponent<Button>().interactable = true;
+                                //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                ButtonOSpell.GetComponent<Button>().interactable = true;
+                                if (PlayerPower[CurrentPlayer - 1] > 1000)
+                                {
+                                    //ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                    ButtonArmageddon.GetComponent<Button>().interactable = true;
+
+                                }
+                            }
+                            else
+                            {
+                                ButtonDSpell.GetComponent<Button>().interactable = false;
+                                ButtonOSpell.GetComponent<Button>().interactable = false;
+                                ButtonArmageddon.GetComponent<Button>().interactable = false;
+                            }
+                        }
                         break;
                     case Actor.ActorType.Demon:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Demon";
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+                        {
+
+                        }
                         break;
                     case Actor.ActorType.Monster:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Monster";
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+                        {
+
+                        }
                         break;
                     case Actor.ActorType.Castle:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s Castle";
@@ -481,6 +509,10 @@ public class GameManager : MonoBehaviour
 
     public void setUpZoomOut()
     {
+        if (summonMode == SummoningMenuMode.SlidedIn)
+        {
+            summonMode = SummoningMenuMode.SlidingOut;
+        }
         zoom = ZoomingMode.ZoomingOut;
         ztX = cameraX;
         ztZ = cameraZ;
@@ -566,23 +598,27 @@ public class GameManager : MonoBehaviour
                 float bezier = BezierBlend(timeStep);
                 Camera.main.fieldOfView = zsFOV - (fovDiff * bezier);
                 Camera.main.transform.position = new Vector3(zsX - (xDiff * bezier), Camera.main.transform.position.y, zsZ - (zDiff * bezier));
+                float x, y, y2;
                 if (zoom == ZoomingMode.ZoomingIn)
                 {
-                    float x = (bezier * panelWidth) - panelWidth;
-                    float y = (bezier * panelHeight) - panelHeight;
-                    PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, 0f);
-                    PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(-x, 0f);
-                    PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -y);
-                    PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y);
+                    x = (bezier * panelWidth) - panelWidth;
+                    y = (bezier * panelHeight) - panelHeight;
+                    y2 = (bezier * panelHeight * 2) - panelHeight * 2;
                 }
                 else
                 {
-                    float x = -(bezier * panelWidth);
-                    float y = -(bezier * panelHeight);
-                    PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, 0f);
-                    PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(-x, 0f);
-                    PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -y);
-                    PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y);
+                    x = -(bezier * panelWidth);
+                    y = -(bezier * panelHeight);
+                    y2 = -(bezier * panelHeight * 2);
+                }
+                PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, 0f);
+                PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(-x, 0f);
+                PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -y);
+                PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y);
+                if (summonMode == SummoningMenuMode.SlidingIn || summonMode == SummoningMenuMode.SlidingOut)
+                {
+                    PanelSummonTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -y2);
+                    PanelSummonBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y2);
                 }
             }
             else
@@ -596,6 +632,15 @@ public class GameManager : MonoBehaviour
                 {
                     zoom = ZoomingMode.ZoomedIn;
                     isZoomed = true;
+                }
+
+                if (summonMode == SummoningMenuMode.SlidingIn)
+                {
+                    summonMode = SummoningMenuMode.SlidedIn;
+                }
+                else
+                {
+                    summonMode = SummoningMenuMode.SlidedOut;
                 }
             }
 
