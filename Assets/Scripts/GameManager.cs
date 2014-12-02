@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public Material texEarth, texAir, texFire, texWater, texVoid;
     public GUISkin mySkin;
     public float xOffset, zOffset, cameraX, cameraZ, cameraFOV, zoomMaxSteps, zoomFOV;
-    public int xSize, zSize, numPowerWells;
+    public int xSize, zSize, numPowerWells, powerSummonMonster, powerSummonElemental, powerArmageddon, powerOSpell, powerDSpell, powerMove;
     public enum RenderMode { Pattern, Random, StripeH, StripeV };
     public RenderMode renderMode;
     public enum ElementType { None, Earth, Air, Fire, Water };
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     private float zsX, zsZ, zsFOV, ztX, ztZ, ztFOV, zoomStep, zoomStart, xDiff, zDiff, fovDiff;
     private float canvasWidth, canvasHeight, panelWidth, panelHeight, panelAnchorX, panelAnchorY;
-    private int fontSize;
+    private int fontSize, pendingPowerExpendature;
     private bool[,] placedAdepts;
     private Tiles selectedTile;
     private Tiles[,] allTiles;
@@ -63,6 +63,18 @@ public class GameManager : MonoBehaviour
 
     public void Start_SetupGame()
     {
+        if (powerArmageddon < 1)
+        {
+            powerArmageddon = 1000;
+        }
+        if (powerSummonElemental < 1)
+        {
+            powerSummonElemental = 100;
+        }
+        if (powerSummonMonster < 1)
+        {
+            powerSummonMonster = 50;
+        }
         allTiles = new Tiles[xSize, zSize];
         mats = new Material[4] { texEarth, texAir, texFire, texWater };
         Highlighting = (GameObject)Instantiate(TileHighlight, new Vector3(0, -0.2f, 0), TileHighlight.transform.rotation);
@@ -205,6 +217,7 @@ public class GameManager : MonoBehaviour
         gameMode = GameMode.Default;
         Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
         ButtonCancel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
+        pendingPowerExpendature = 0;
     }
 
     public void placeAdeptEarth()
@@ -241,6 +254,8 @@ public class GameManager : MonoBehaviour
 
     private void placeNewActor(int x, int z, Actor.ActorType type, ElementType element, int player)
     {
+        Color primerColor = new Color(1f, 1f, 1f);
+        Debug.Log("Trying to spawn " + element.ToString() + type.ToString() + " at " + x.ToString() + "," + z.ToString() + " for player " + player.ToString());
         GameObject instantiatee = null;
         switch (type)
         {
@@ -269,9 +284,53 @@ public class GameManager : MonoBehaviour
 
         GameObject CharacterObject = (GameObject)Instantiate(instantiatee, allTiles[x, z].transform.position, instantiatee.transform.rotation);
         CharacterObject.name = type.ToString();
-        if (CharacterObject.GetComponentInChildren<MeshRenderer>() != null)
+        Debug.Log("Setting Colors");
+        SkinnedMeshRenderer[] skMeshes = CharacterObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+        if (skMeshes != null && skMeshes.Length > 0)
         {
-            CharacterObject.GetComponentInChildren<MeshRenderer>().material.color = CharacterObject.GetComponentInChildren<MeshRenderer>().material.color * PlayerColor[player - 1] * ElementalColors[(int)element];
+            foreach (SkinnedMeshRenderer mesh in skMeshes)
+            {
+                Material[] mats = mesh.materials;
+                if (mats != null && mats.Length > 0)
+                {
+                    foreach (Material mat in mats)
+                    {
+                        mat.color = primerColor * PlayerColor[player - 1] * ElementalColors[(int)element];
+                        Debug.Log("Color modified");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Material not found.");
+                }
+            }
+        }
+        else
+        {
+            MeshRenderer[] meshes = CharacterObject.GetComponentsInChildren<MeshRenderer>();
+            if (meshes != null && meshes.Length > 0)
+            {
+                foreach (MeshRenderer mesh in meshes)
+                {
+                    Material[] mats = mesh.materials;
+                    if (mats != null && mats.Length > 0)
+                    {
+                        foreach (Material mat in mats)
+                        {
+                            mat.color = primerColor * PlayerColor[player - 1] * ElementalColors[(int)element];
+                            Debug.Log("Color modified");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Material not found.");
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("MeshRender not found.");
+            }
         }
         Actor CharacterScript = CharacterObject.AddComponent<Actor>();
         CharacterScript.SetUp(type, x, z, (int)element, player, CharacterObject, this);
@@ -301,21 +360,16 @@ public class GameManager : MonoBehaviour
         //TODO: Trigger the real battle.
         showingTip = true;
         hideTipWhen = Time.time + 1f;
-        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s" + P1Piece.Element.ToString() + " "  + P1Piece.characterType.ToString() + " is attacking!\r\nOppoent's " + P2Piece.Element.ToString() + " "  + P2Piece.characterType.ToString() + " is defending!\r\nGood Luck!";
-    }
-
-    private void adeptSummonAction()
-    {
-        //summonMode = SummoningMenuMode.SlidingOut;
-        gameMode = GameMode.PlaceSpawn;
-        setUpZoomOut();
+        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s" + P1Piece.Element.ToString() + " " + P1Piece.characterType.ToString() + " is attacking!\r\nOppoent's " + P2Piece.Element.ToString() + " " + P2Piece.characterType.ToString() + " is defending!\r\nGood Luck!";
     }
 
     private void adeptSummonAction(ElementType element, Actor.ActorType type)
     {
         IamSpawning.characterType = type;
         IamSpawning.Element = element;
-        adeptSummonAction();
+        pendingPowerExpendature = -50;
+        gameMode = GameMode.PlaceSpawn;
+        setUpZoomOut();
     }
 
     private void finishAdeptSummonAction()
@@ -392,46 +446,74 @@ public class GameManager : MonoBehaviour
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Adept";
                         if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
                         {
-                            ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n0p";
-                            ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                            ButtonMove.GetComponent<Button>().interactable = true;
-                            ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell\r\n50p";
-                            ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell\r\n50p";
-                            ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon\r\n1000p";
+                            ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
+                            ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell\r\n(" + powerDSpell.ToString() + "p)";
+                            ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell\r\n(" + powerOSpell.ToString() + "p)";
+                            ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon\r\n(" + powerArmageddon.ToString() + "p)";
                             summonMode = SummoningMenuMode.SlidingIn;
-                            if (PlayerPower[CurrentPlayer - 1] > 50)
+                            if (PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            {
+                                ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                ButtonMove.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
+                                ButtonMove.GetComponent<Button>().interactable = false;
+                            }
+                            if (PlayerPower[CurrentPlayer - 1] >= powerOSpell)
+                            {
+                                //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                ButtonOSpell.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
+                                ButtonOSpell.GetComponent<Button>().interactable = false;
+                            }
+                            if (PlayerPower[CurrentPlayer - 1] >= powerDSpell)
                             {
                                 //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonDSpell.GetComponent<Button>().interactable = true;
-                                //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                                ButtonOSpell.GetComponent<Button>().interactable = true;
-                                ButtonSME.GetComponent<Button>().interactable = true;
-                                ButtonSMA.GetComponent<Button>().interactable = true;
-                                ButtonSMF.GetComponent<Button>().interactable = true;
-                                ButtonSMW.GetComponent<Button>().interactable = true;
-                                ButtonSEE.GetComponent<Button>().interactable = true;
-                                ButtonSEA.GetComponent<Button>().interactable = true;
-                                ButtonSEF.GetComponent<Button>().interactable = true;
-                                ButtonSEW.GetComponent<Button>().interactable = true;
-                                if (PlayerPower[CurrentPlayer - 1] > 1000)
-                                {
-                                    //ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                                    ButtonArmageddon.GetComponent<Button>().interactable = true;
-                                }
                             }
                             else
                             {
                                 ButtonDSpell.GetComponent<Button>().interactable = false;
-                                ButtonOSpell.GetComponent<Button>().interactable = false;
-                                ButtonArmageddon.GetComponent<Button>().interactable = false;
+                            }
+                            if (PlayerPower[CurrentPlayer - 1] >= powerSummonMonster)
+                            {
+                                ButtonSEE.GetComponent<Button>().interactable = true;
+                                ButtonSEA.GetComponent<Button>().interactable = true;
+                                ButtonSEF.GetComponent<Button>().interactable = true;
+                                ButtonSEW.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
                                 ButtonSME.GetComponent<Button>().interactable = false;
                                 ButtonSMA.GetComponent<Button>().interactable = false;
                                 ButtonSMF.GetComponent<Button>().interactable = false;
                                 ButtonSMW.GetComponent<Button>().interactable = false;
+                            }
+                            if (PlayerPower[CurrentPlayer - 1] >= powerSummonElemental)
+                            {
+                                ButtonSME.GetComponent<Button>().interactable = true;
+                                ButtonSMA.GetComponent<Button>().interactable = true;
+                                ButtonSMF.GetComponent<Button>().interactable = true;
+                                ButtonSMW.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
                                 ButtonSEE.GetComponent<Button>().interactable = false;
                                 ButtonSEA.GetComponent<Button>().interactable = false;
                                 ButtonSEF.GetComponent<Button>().interactable = false;
                                 ButtonSEW.GetComponent<Button>().interactable = false;
+                            }
+                            if (PlayerPower[CurrentPlayer - 1] >= powerArmageddon)
+                            {
+                                //ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                ButtonArmageddon.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
+                                ButtonArmageddon.GetComponent<Button>().interactable = false;
                             }
                         }
                         break;
@@ -439,14 +521,32 @@ public class GameManager : MonoBehaviour
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Demon";
                         if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
                         {
-
+                            ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
+                            if (PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            {
+                                ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                ButtonMove.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
+                                ButtonMove.GetComponent<Button>().interactable = false;
+                            }
                         }
                         break;
                     case Actor.ActorType.Monster:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Monster";
                         if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
                         {
-
+                            ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
+                            if (PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            {
+                                ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
+                                ButtonMove.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
+                                ButtonMove.GetComponent<Button>().interactable = false;
+                            }
                         }
                         break;
                     case Actor.ActorType.Castle:
@@ -591,10 +691,22 @@ public class GameManager : MonoBehaviour
         canvasHeight = Canvas.transform.position.y * 2;
         panelWidth = canvasWidth * 0.25F;
         panelHeight = canvasHeight * 0.25F;
-        fontSize = (int)(canvasWidth * 0.03f);
+        fontSize = (int)(canvasWidth * 0.025f);
         for (int i = 0; i < TextDisplays.Length; i++)
         {
             TextDisplays[i].GetComponent<Text>().fontSize = fontSize;
+        }
+        if (zoom == ZoomingMode.ZoomedOut)
+        {
+            PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(-panelWidth, 0f);
+            PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(panelWidth, 0f);
+            PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight);
+            PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight);
+        }
+        if (summonMode == SummoningMenuMode.SlidedOut)
+        {
+            PanelSummonTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight * 2);
+            PanelSummonBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight * 2);
         }
     }
 
@@ -706,7 +818,7 @@ public class GameManager : MonoBehaviour
                     GameObject adept = allTiles[x, z].transform.Find("Adept").gameObject;
                     if (allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == CurrentPlayer)
                     {
-                        PlayerPower[CurrentPlayer - 1] += 10;
+                        PlayerPower[CurrentPlayer - 1] += 10 - pendingPowerExpendature;
                     }
                 }
             }

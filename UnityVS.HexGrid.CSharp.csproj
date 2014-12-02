@@ -58,5 +58,9 @@
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Tiles.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Earthborn Troll\Shader\Alpha_Texture.shader" />
+    <None Include="Assets\Earthborn Troll\Shader\DoubleSided-Light-Spec.shader" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>
