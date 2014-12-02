@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject PanelLeft, PanelRight, PanelTop, PanelBottom, PanelTips, PanelSummonTop, PanelSummonBottom;
     public GameObject InfoZone, InfoUnit, InfoP1Power, InfoP2Power, InfoTips;
     public GameObject ButtonCancel, ButtonZoomOut, ButtonArmageddon, ButtonMove, ButtonOSpell, ButtonDSpell, ButtonAdeptE, ButtonAdeptA, ButtonAdeptF, ButtonAdeptW;
+    public GameObject ButtonSME, ButtonSMA, ButtonSMF, ButtonSMW, ButtonSEE, ButtonSEA, ButtonSEF, ButtonSEW;
     public GameObject Castle, Adept, Demon, Monster, None;
     public GameObject[] TextDisplays;
     public Material texEarth, texAir, texFire, texWater, texVoid;
@@ -79,7 +80,7 @@ public class GameManager : MonoBehaviour
         recalculateCanvasSize();
         generateMap();
         Start_PanelSetup();
-        Start_ButtonSetup();
+        Start_ButtonSetup(true);
     }
 
     private void Start_PanelSetup()
@@ -98,6 +99,11 @@ public class GameManager : MonoBehaviour
 
     private void Start_ButtonSetup()
     {
+        Start_ButtonSetup(false);
+    }
+
+    private void Start_ButtonSetup(bool RunFirstTime)
+    {
         Button[] ButtonsLeft = PanelLeft.GetComponentsInChildren<Button>();
         Button[] ButtonsRight = PanelRight.GetComponentsInChildren<Button>();
         Button[] Buttons = ButtonsLeft.Concat(ButtonsRight).ToArray();
@@ -115,6 +121,18 @@ public class GameManager : MonoBehaviour
         ButtonZoomOut.GetComponentInChildren<Text>().text = "Zoom Out";
         ButtonZoomOut.GetComponent<Button>().onClick.AddListener(() => setUpZoomOut());
         ButtonZoomOut.GetComponent<Button>().interactable = true;
+        if (RunFirstTime)
+        {
+            ButtonSME.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Earth, Actor.ActorType.Monster));
+            ButtonSMA.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Air, Actor.ActorType.Monster));
+            ButtonSMF.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Fire, Actor.ActorType.Monster));
+            ButtonSMW.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Water, Actor.ActorType.Monster));
+            ButtonSEE.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Earth, Actor.ActorType.Demon));
+            ButtonSEA.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Air, Actor.ActorType.Demon));
+            ButtonSEF.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Fire, Actor.ActorType.Demon));
+            ButtonSEW.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Water, Actor.ActorType.Demon));
+
+        }
     }
 
     private void generateMap()
@@ -288,8 +306,16 @@ public class GameManager : MonoBehaviour
 
     private void adeptSummonAction()
     {
-        summonMode = SummoningMenuMode.SlidingOut;
+        //summonMode = SummoningMenuMode.SlidingOut;
+        gameMode = GameMode.PlaceSpawn;
         setUpZoomOut();
+    }
+
+    private void adeptSummonAction(ElementType element, Actor.ActorType type)
+    {
+        IamSpawning.characterType = type;
+        IamSpawning.Element = element;
+        adeptSummonAction();
     }
 
     private void finishAdeptSummonAction()
@@ -346,7 +372,7 @@ public class GameManager : MonoBehaviour
             if (zoom == ZoomingMode.ZoomedOut)
             {
                 selectedTile = tile;
-                Start_ButtonSetup();
+                Start_ButtonSetup(false);
                 InfoZone.GetComponent<Text>().text = selectedTile.Element.ToString() + " Zone";
                 if (selectedTile.hasPowerWell)
                 {
@@ -366,12 +392,12 @@ public class GameManager : MonoBehaviour
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Adept";
                         if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
                         {
-                            ButtonMove.GetComponentInChildren<Text>().text = "Move";
+                            ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n0p";
                             ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                             ButtonMove.GetComponent<Button>().interactable = true;
-                            ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell";
-                            ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell";
-                            ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon";
+                            ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell\r\n50p";
+                            ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell\r\n50p";
+                            ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon\r\n1000p";
                             summonMode = SummoningMenuMode.SlidingIn;
                             if (PlayerPower[CurrentPlayer - 1] > 50)
                             {
@@ -379,11 +405,18 @@ public class GameManager : MonoBehaviour
                                 ButtonDSpell.GetComponent<Button>().interactable = true;
                                 //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonOSpell.GetComponent<Button>().interactable = true;
+                                ButtonSME.GetComponent<Button>().interactable = true;
+                                ButtonSMA.GetComponent<Button>().interactable = true;
+                                ButtonSMF.GetComponent<Button>().interactable = true;
+                                ButtonSMW.GetComponent<Button>().interactable = true;
+                                ButtonSEE.GetComponent<Button>().interactable = true;
+                                ButtonSEA.GetComponent<Button>().interactable = true;
+                                ButtonSEF.GetComponent<Button>().interactable = true;
+                                ButtonSEW.GetComponent<Button>().interactable = true;
                                 if (PlayerPower[CurrentPlayer - 1] > 1000)
                                 {
                                     //ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                     ButtonArmageddon.GetComponent<Button>().interactable = true;
-
                                 }
                             }
                             else
@@ -391,6 +424,14 @@ public class GameManager : MonoBehaviour
                                 ButtonDSpell.GetComponent<Button>().interactable = false;
                                 ButtonOSpell.GetComponent<Button>().interactable = false;
                                 ButtonArmageddon.GetComponent<Button>().interactable = false;
+                                ButtonSME.GetComponent<Button>().interactable = false;
+                                ButtonSMA.GetComponent<Button>().interactable = false;
+                                ButtonSMF.GetComponent<Button>().interactable = false;
+                                ButtonSMW.GetComponent<Button>().interactable = false;
+                                ButtonSEE.GetComponent<Button>().interactable = false;
+                                ButtonSEA.GetComponent<Button>().interactable = false;
+                                ButtonSEF.GetComponent<Button>().interactable = false;
+                                ButtonSEW.GetComponent<Button>().interactable = false;
                             }
                         }
                         break;
