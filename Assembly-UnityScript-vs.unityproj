@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{680BAB62-2820-5F53-4498-DB145CA63334}</ProjectGuid>
+	<ProjectGuid>{3FCE6D58-485F-620A-7A2C-E705CBAAD291}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\Enemy Movement\PlayerMoveController.js" />
      <None Include="Assets\Scripts\BreadcrumbAi\Examples\Demo\Materials\DoubleSided.shader" />
      <None Include="Assets\Shaders\ReflectiveDiffuseSpecTransp.shader" />
+     <None Include="Assets\Elementals\!Readme.txt" />
      <None Include="Assets\Scripts\BreadcrumbAi\Ai\Documentation\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

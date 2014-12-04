@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{A456927C-FC25-3E6E-EDE5-B69BC6CC4B84}</ProjectGuid>
+	<ProjectGuid>{0098C23D-C40E-5428-DE2A-8CD6B4F00C01}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\BreadcrumbAi\Ai\Editor\BreadcrumbEditor.cs" />
      <None Include="Assets\Scripts\BreadcrumbAi\Examples\Demo\Materials\DoubleSided.shader" />
      <None Include="Assets\Shaders\ReflectiveDiffuseSpecTransp.shader" />
+     <None Include="Assets\Elementals\!Readme.txt" />
      <None Include="Assets\Scripts\BreadcrumbAi\Ai\Documentation\ReadMe.txt" />
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -57,9 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{D79FDE30-41D7-2768-81A2-EBAA6272F38D}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{265DCFD1-5AF0-A48E-6F7B-657D60E0F3B7}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript.unityproj">
-      <Project>{680BAB62-2820-5F53-4498-DB145CA63334}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
+      <Project>{3FCE6D58-485F-620A-7A2C-E705CBAAD291}</Project>      <Name>Assembly-UnityScript</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
