@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.adeptus.CSharp", "UnityVS.adeptus.CSharp.csproj", "{18073C59-B899-A82E-9A74-07F71C70F7E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.adeptus.CSharp.Editor", "UnityVS.adeptus.CSharp.Editor.csproj", "{F068FBAE-A484-459B-A771-99B3B6E2699A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18073C59-B899-A82E-9A74-07F71C70F7E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18073C59-B899-A82E-9A74-07F71C70F7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18073C59-B899-A82E-9A74-07F71C70F7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18073C59-B899-A82E-9A74-07F71C70F7E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F068FBAE-A484-459B-A771-99B3B6E2699A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F068FBAE-A484-459B-A771-99B3B6E2699A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F068FBAE-A484-459B-A771-99B3B6E2699A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F068FBAE-A484-459B-A771-99B3B6E2699A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
