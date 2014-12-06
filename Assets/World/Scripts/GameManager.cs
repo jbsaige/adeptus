@@ -358,9 +358,10 @@ public class GameManager : MonoBehaviour
     private void triggerBattle(Actor P1Piece, Actor P2Piece)
     {
         //TODO: Trigger the real battle.
-        showingTip = true;
-        hideTipWhen = Time.time + 1f;
-        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s" + P1Piece.Element.ToString() + " " + P1Piece.characterType.ToString() + " is attacking!\r\nOppoent's " + P2Piece.Element.ToString() + " " + P2Piece.characterType.ToString() + " is defending!\r\nGood Luck!";
+        //showingTip = true;
+        //hideTipWhen = Time.time + 1f;
+        //InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s" + P1Piece.Element.ToString() + " " + P1Piece.characterType.ToString() + " is attacking!\r\nOppoent's " + P2Piece.Element.ToString() + " " + P2Piece.characterType.ToString() + " is defending!\r\nGood Luck!";
+        Application.LoadLevel("Sandbox");
     }
 
     private void adeptSummonAction(ElementType element, Actor.ActorType type)

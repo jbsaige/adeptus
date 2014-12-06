@@ -17,7 +17,8 @@ public class Actor : MonoBehaviour
 
     }
 
-    public void SetUp(ActorType type, int x, int z, int element, int player, GameObject avatar, GameManager manager){
+    public void SetUp(ActorType type, int x, int z, int element, int player, GameObject avatar, GameManager manager)
+    {
         this.Player = player;
         this.x = x;
         this.z = z;

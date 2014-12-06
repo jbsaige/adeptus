@@ -11,7 +11,7 @@ public class Tiles : MonoBehaviour
 
     public void SetElement(int element)
     {
-        this.Element = (GameManager.ElementType)element+1;
+        this.Element = (GameManager.ElementType)element + 1;
         this.GetComponent<MeshRenderer>().material = Manager.mats[element];
     }
 
