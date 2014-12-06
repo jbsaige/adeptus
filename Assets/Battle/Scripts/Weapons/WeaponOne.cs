@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (AudioSource))]
+public class WeaponOneSounds
+{
+    public AudioClip audio_hit_1, audio_hit_2;
+}
 public class WeaponOne : MonoBehaviour 
 {
     // ranged weapons are actually fire button one weapons and could include melee weapons; so instead of "Gun", make a "WeaponOne" class for weapon one/button one.
@@ -9,8 +12,10 @@ public class WeaponOne : MonoBehaviour
     public WeaponOneType weaponOneType;
     public float weaponID;
     public float rpm;
+    public float rangedAttackSpeed;
     public float damage = 1;
     public LayerMask collisionMask;
+    public WeaponOneSounds audioClips;
 
     public Transform projectileSpawn;
     private LineRenderer tracerRound;
@@ -28,6 +33,8 @@ public class WeaponOne : MonoBehaviour
     private float rangedAttackRate = 2.0f;
     private float meleeAttackNext = 0.0f;
     private float meleeAttackRate = 1.0f;
+    private AudioSource audioSource;
+   
 
     void Start()
     {
@@ -98,7 +105,8 @@ public class WeaponOne : MonoBehaviour
         {
             rangedAttackNext = Time.time + rangedAttackRate;
             Rigidbody rangedAttackForm = Instantiate(rangedProjectilePrefab, transform.position + transform.forward + transform.up, transform.rotation) as Rigidbody;
-            rangedAttackForm.AddForce(transform.forward * 500);
+            rangedAttackForm.AddForce(transform.forward * rangedAttackSpeed);
+            audioSource.clip = audioClips.audio_hit_1;
         }
     }
 

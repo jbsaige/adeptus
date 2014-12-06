@@ -43,7 +43,7 @@ public class Enemy : Entity
     private Enemy thisEnemy;
     private float maxHealth;
     private GameGUI gui;
-    [HideInInspector]public bool _isHit, _isHitBySpit;
+    [HideInInspector]public bool _isHit, _isHitBySpit, _isHitByRock, _isHitByWave;
 
 
     void Start()
@@ -150,6 +150,18 @@ public class Enemy : Entity
             thisEnemy.TakeDamage(3);
             _isHitBySpit = false;
         }
+
+        if (_isHitByRock)
+        {
+            thisEnemy.TakeDamage(4);
+            _isHitByRock = false;
+        }
+
+        if (_isHitByWave)
+        {
+            thisEnemy.TakeDamage(3);
+            _isHitByWave = false;
+        }
         gui.SetEnemyHealth(thisEnemy.health / maxHealth, thisEnemy.health);
     }
 
@@ -159,6 +171,8 @@ public class Enemy : Entity
         thisEnemy.health = 0;
         _isHit = false;
         _isHitBySpit = false;
+        _isHitByRock = false;
+        _isHitByWave = false;
         EnemyHealthManager();
         gameController.FightOver(true);
         base.Die();
@@ -170,6 +184,15 @@ public class Enemy : Entity
         {
             _isHitBySpit = true;
         }
-        
+
+        if (col.collider.name.Contains("Rock"))
+        {
+            _isHitByRock = true;
+        }
+
+        if (col.collider.name.Contains("KrakenWave"))
+        {
+            _isHitByWave = true;
+        }
     }
 }
