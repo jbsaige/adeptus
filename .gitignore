@@ -29,4 +29,5 @@ $RECYCLE.BIN/
 #############
 
 /Library/metadata/*
-/obj*
+/obj/*
+/Temp/*
