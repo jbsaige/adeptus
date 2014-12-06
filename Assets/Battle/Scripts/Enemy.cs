@@ -43,6 +43,7 @@ public class Enemy : Entity
     private Enemy thisEnemy;
     private float maxHealth;
     private GameGUI gui;
+    [HideInInspector]public bool _isHit, _isHitBySpit;
 
 
     void Start()
@@ -138,6 +139,17 @@ public class Enemy : Entity
 
     private void EnemyHealthManager()
     {
+        if (_isHit)
+        {
+            thisEnemy.TakeDamage(1);
+            _isHit = false;
+        }
+
+        if (_isHitBySpit)
+        {
+            thisEnemy.TakeDamage(3);
+            _isHitBySpit = false;
+        }
         gui.SetEnemyHealth(thisEnemy.health / maxHealth, thisEnemy.health);
     }
 
@@ -145,8 +157,19 @@ public class Enemy : Entity
     {
         //player.AddExperience(expOnDeath);
         thisEnemy.health = 0;
+        _isHit = false;
+        _isHitBySpit = false;
         EnemyHealthManager();
         gameController.FightOver(true);
         base.Die();
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.collider.name.Contains("FireSpit"))
+        {
+            _isHitBySpit = true;
+        }
+        
     }
 }

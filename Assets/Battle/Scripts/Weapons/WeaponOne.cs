@@ -18,6 +18,17 @@ public class WeaponOne : MonoBehaviour
     private float secondsBetweenShots;
     private float nextPossibleShootTime;
 
+    // New Weapon system based on breadcrumb and mixed with this:
+    public Rigidbody rangedProjectilePrefab;
+    public GameObject bloodPrefab;
+    public GameObject specialPrefab;
+
+    // Attack rates
+    private float rangedAttackNext = 0.0f;
+    private float rangedAttackRate = 2.0f;
+    private float meleeAttackNext = 0.0f;
+    private float meleeAttackRate = 1.0f;
+
     void Start()
     {
         secondsBetweenShots = 120/rpm;
@@ -27,6 +38,8 @@ public class WeaponOne : MonoBehaviour
         }
     }
 
+
+    // old shoot method
     public void Shoot()
     {
         if (CanShoot())
@@ -77,6 +90,16 @@ public class WeaponOne : MonoBehaviour
         }
 
         return canShoot;
+    }
+
+    public void RangedAttack()
+    {
+        if (Time.time > rangedAttackNext)
+        {
+            rangedAttackNext = Time.time + rangedAttackRate;
+            Rigidbody rangedAttackForm = Instantiate(rangedProjectilePrefab, transform.position + transform.forward + transform.up, transform.rotation) as Rigidbody;
+            rangedAttackForm.AddForce(transform.forward * 500);
+        }
     }
 
     IEnumerator RenderTracerRound(Vector3 hitLocation)

@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public Transform handHold;
     private WeaponOne weaponOne;
     public WeaponOne[] weapons;
+    public WeaponTwo weaponTwo;
     private CharacterController controller;
     private Camera cam;
     private Animator animator;
@@ -71,13 +72,25 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetButtonDown("Shoot"))
             {
-                weaponOne.Shoot();
+                // calls old shoot method
+                //weaponOne.Shoot();
+                
+                // new shoot method
+                weaponOne.RangedAttack();
             }
             else if (Input.GetButton("Shoot"))
             {
                 weaponOne.ShootContinuous();
             }
         }
+        if (weaponTwo)
+        {
+            if (Input.GetButtonDown("Punch"))
+            {
+                weaponTwo.MeleeAttack();
+            }
+        }
+
 
         for (int i = 0; i < weapons.Length; i++)
         {

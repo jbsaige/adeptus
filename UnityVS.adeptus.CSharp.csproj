@@ -76,6 +76,7 @@
     <Compile Include="Assets\Battle\Scripts\BreadcrumbAi\Examples\Demo\Scripts\DemoTidySpit.cs" />
     <Compile Include="Assets\Battle\Scripts\Enemy.cs" />
     <Compile Include="Assets\Battle\Scripts\Entity.cs" />
+    <Compile Include="Assets\Battle\Scripts\GameController\AirEffectController.cs" />
     <Compile Include="Assets\Battle\Scripts\GameController\FireWorldEffects.cs" />
     <Compile Include="Assets\Battle\Scripts\GameController\GameController.cs" />
     <Compile Include="Assets\Battle\Scripts\GameController\HashIDs.cs" />

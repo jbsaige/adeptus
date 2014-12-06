@@ -95,8 +95,8 @@ public class DemoEnemyControls : MonoBehaviour {
 							audioSource.clip = audioClips.audio_melee_attack_2;
 						}
 						audioSource.PlayOneShot(audioSource.clip);
-						player.GetComponent<DemoPlayerControls>()._isHit = true;
-						player.GetComponent<DemoPlayerControls>().Bleed(transform.rotation);
+						player.GetComponent<PlayerStats>()._isHit = true;
+						//player.GetComponent<PlayerStats>().Bleed(transform.rotation);
 						_animAttack = true;
 					} else {
 						_animAttack = false;
@@ -186,6 +186,8 @@ public class DemoEnemyControls : MonoBehaviour {
 		Destroy(gameObject);
 	}
 	
+
+    // Make one of these for each weapon type so enemy takes damage.
 	void OnCollisionEnter(Collision col){
 		if(col.collider.name.Contains("Bullet")){
 			_isHit = true;
@@ -193,5 +195,13 @@ public class DemoEnemyControls : MonoBehaviour {
 			GameObject blood = Instantiate(bloodPrefab, col.collider.transform.position, col.collider.transform.rotation) as GameObject;
 			Destroy(blood, 3);
 		}
+            // attempt to make fire spit weapon do damage... failed
+        //else if (col.collider.name.Contains("FireSpit"))
+        //{
+        //    _isHit = true;
+        //    ai.Health -= 3;
+        //    GameObject blood = Instantiate(bloodPrefab, col.collider.transform.position, col.collider.transform.rotation) as GameObject;
+        //    Destroy(blood, 3);
+        //}
 	}
 }
