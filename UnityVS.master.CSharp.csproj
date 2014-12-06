@@ -54,6 +54,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Battle\Elementals\Scripts\OrbitCamera.cs" />
+    <Compile Include="Assets\Battle\Elementals\Scripts\TestParticles.cs" />
     <Compile Include="Assets\Battle\Scripts\BreadcrumbAi\Ai\Scripts\Ai.cs" />
     <Compile Include="Assets\Battle\Scripts\BreadcrumbAi\Ai\Scripts\AiManager.cs" />
     <Compile Include="Assets\Battle\Scripts\BreadcrumbAi\Ai\Scripts\Breadcrumbs.cs" />
@@ -74,6 +76,8 @@
     <Compile Include="Assets\Battle\Scripts\BreadcrumbAi\Examples\Demo\Scripts\DemoTidySpit.cs" />
     <Compile Include="Assets\Battle\Scripts\Enemy.cs" />
     <Compile Include="Assets\Battle\Scripts\Entity.cs" />
+    <Compile Include="Assets\Battle\Scripts\GameController\AirEffectController.cs" />
+    <Compile Include="Assets\Battle\Scripts\GameController\FireWorldEffects.cs" />
     <Compile Include="Assets\Battle\Scripts\GameController\GameController.cs" />
     <Compile Include="Assets\Battle\Scripts\GameController\HashIDs.cs" />
     <Compile Include="Assets\Battle\Scripts\GameController\LastPlayerSighting.cs" />
@@ -95,9 +99,11 @@
     <Compile Include="Assets\World\Scripts\Tiles.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Battle\Elementals\!Readme.txt" />
     <None Include="Assets\Battle\Scripts\BreadcrumbAi\Ai\Documentation\ReadMe.txt" />
     <None Include="Assets\Battle\Scripts\BreadcrumbAi\Examples\Demo\Materials\DoubleSided.shader" />
     <None Include="Assets\Battle\Shaders\ReflectiveDiffuseSpecTransp.shader" />
+    <None Include="Assets\World\Downloaded Assets\BloodMageJonas\HairShader.shader" />
     <None Include="Assets\World\Downloaded Assets\Earthborn Troll\Shader\Alpha_Texture.shader" />
     <None Include="Assets\World\Downloaded Assets\Earthborn Troll\Shader\DoubleSided-Light-Spec.shader" />
   </ItemGroup>

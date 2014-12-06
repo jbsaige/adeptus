@@ -91,9 +91,11 @@
     <Compile Include="Assets\Battle\Scripts\BreadcrumbAi\Ai\Editor\BreadcrumbEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Battle\Elementals\!Readme.txt" />
     <None Include="Assets\Battle\Scripts\BreadcrumbAi\Ai\Documentation\ReadMe.txt" />
     <None Include="Assets\Battle\Scripts\BreadcrumbAi\Examples\Demo\Materials\DoubleSided.shader" />
     <None Include="Assets\Battle\Shaders\ReflectiveDiffuseSpecTransp.shader" />
+    <None Include="Assets\World\Downloaded Assets\BloodMageJonas\HairShader.shader" />
     <None Include="Assets\World\Downloaded Assets\Earthborn Troll\Shader\Alpha_Texture.shader" />
     <None Include="Assets\World\Downloaded Assets\Earthborn Troll\Shader\DoubleSided-Light-Spec.shader" />
   </ItemGroup>
