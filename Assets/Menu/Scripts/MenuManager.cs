@@ -9,6 +9,7 @@ public class MenuManager : MonoBehaviour
     public GameObject[] TextDisplaysLarge;
     public GameObject ButtonRandomMap, ButtonPatternMap;
 
+    private GameManager GameManager;
     private float canvasWidth, canvasHeight;
     private int fontSize;
 
@@ -41,14 +42,19 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void SetGameManager(GameManager gameManager)
+    {
+        this.GameManager = gameManager;
+    }
+
     public void loadPatternMap()
     {
-
+        GameManager.loadPatternMap();
     }
 
     public void loadRandomMap()
     {
-
+        GameManager.loadRandomMap();
     }
 
 
