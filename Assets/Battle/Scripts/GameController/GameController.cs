@@ -4,6 +4,7 @@ using System.Collections;
 public class GameController : MonoBehaviour {
 
     private Actor.ActorType PlayerType, EnemyType;
+    private WorldManager.ElementType PlayerElement, EnemyElement;
 
     private GameManager GameManager;
 
@@ -13,11 +14,8 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        // During Debug / development phase only
-        PlayerType = 0;
-        EnemyType = 0;
         GameManager = FindObjectOfType<GameManager>();
-
+        GameManager.SetBattleManager(this);
         CreatePlayers();
 	}
 
@@ -25,7 +23,9 @@ public class GameController : MonoBehaviour {
     void CreatePlayers()
     {
         PlayerType = GameManager.BattleP1.characterType;
+        PlayerElement = GameManager.BattleP1.Element;
         EnemyType = GameManager.BattleP2.characterType;
+        EnemyElement = GameManager.BattleP2.Element;
 
         switch (PlayerType)
         {

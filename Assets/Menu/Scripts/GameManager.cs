@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     private MenuManager MenuManager;
     private TileManager TileManger;
     private WorldManager.RenderMode RenderMode;
+    private GameController BattleManager;
+    private bool WorldIsLoaded = false;
 
     public void Start()
     {
@@ -34,7 +36,12 @@ public class GameManager : MonoBehaviour
         WorldManager = FindObjectOfType<WorldManager>();
         WorldManager.renderMode = this.RenderMode;
         WorldManager.setGameManager(this);
+        if (WorldIsLoaded)
+        {
+            WorldManager.setAllTiles(TileManger.allTiles);
+        }
         WorldManager.Start_SetupGame();
+        WorldIsLoaded = true;
     }
 
     public void loadRandomMap()
@@ -69,7 +76,21 @@ public class GameManager : MonoBehaviour
 
     public void ReturnFromBattle(int winner)
     {
+        Debug.Log("Returning from battle");
+        this.loadStoredMap();
+    }
 
+    public void LoadBattle(string BattleGroundName)
+    {
+        TileManger.allTiles = WorldManager.getAllTiles();
+        Application.LoadLevel(BattleGroundName);
+    }
+
+    public void SetBattleManager(GameController battleManager)
+    {
+        this.BattleManager = battleManager;
+        //This is for debug only
+        BattleManager.FightOver(true);
     }
 
 }

@@ -66,6 +66,16 @@ public class WorldManager : MonoBehaviour
         this.GameManager = manager;
     }
 
+    public void setAllTiles(Tiles[,] tiles)
+    {
+        this.allTiles = tiles;
+    }
+
+    public Tiles[,] getAllTiles()
+    {
+        return this.allTiles;
+    }
+
     public void Start_SetupGame()
     {
         if (powerArmageddon < 1)
@@ -80,7 +90,10 @@ public class WorldManager : MonoBehaviour
         {
             powerSummonMonster = 50;
         }
-        allTiles = new Tiles[xSize, zSize];
+        if (allTiles == null)
+        {
+            allTiles = new Tiles[xSize, zSize];
+        }
         mats = new Material[4] { texEarth, texAir, texFire, texWater };
         Highlighting = (GameObject)Instantiate(TileHighlight, new Vector3(0, -0.2f, 0), TileHighlight.transform.rotation);
         IamSpawning = new Actor();
@@ -358,7 +371,7 @@ public class WorldManager : MonoBehaviour
         //TODO: Trigger the real battle.
         GameManager.BattleP1 = P1Piece;
         GameManager.BattleP2 = P2Piece;
-        Application.LoadLevel(BattleTile.Element.ToString());
+        GameManager.LoadBattle(BattleTile.Element.ToString());
     }
 
     private void adeptSummonAction(ElementType element, Actor.ActorType type)
