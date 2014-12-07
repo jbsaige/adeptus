@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    public Actor BattleP1, BattleP2;
+
     private WorldManager WorldManager;
     private MenuManager MenuManager;
     private TileManager TileManger;
@@ -17,9 +19,9 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This is necessary because otherwise we go too fast and try to access WorldManager before it exists.
+    /// This relies on WorldManager calling this script back at FinishLoad.
     /// </summary>
-    /// <param name="mode"></param>
+    /// <param name="mode">A WorldManager.RenderMode type.</param>
     /// <returns></returns>
     private void LoadMap(global::WorldManager.RenderMode mode)
     {
@@ -63,6 +65,11 @@ public class GameManager : MonoBehaviour
     public Tiles[,] getStoredTiles()
     {
         return TileManger.allTiles;
+    }
+
+    public void ReturnFromBattle(int winner)
+    {
+
     }
 
 }

@@ -14,7 +14,6 @@ public class Actor : MonoBehaviour
     {
         x = newX;
         z = newZ;
-
     }
 
     public void SetUp(ActorType type, int x, int z, int element, int player, GameObject avatar, WorldManager manager)

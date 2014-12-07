@@ -7,6 +7,7 @@ public class Tiles : MonoBehaviour
     public int x, z;
     public WorldManager.ElementType Element;
     public bool hasPowerWell = false;
+    public Actor Actor;
     private bool iAmHighLighted;
 
     public void SetElement(int element)

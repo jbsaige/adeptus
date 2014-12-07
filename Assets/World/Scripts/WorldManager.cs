@@ -225,41 +225,16 @@ public class WorldManager : MonoBehaviour
         pendingPowerExpendature = 0;
     }
 
-    public void placeAdeptEarth()
+    public void placeAdept(ElementType Type)
     {
         gameMode = GameMode.PlaceSpawn;
         IamSpawning.characterType = Actor.ActorType.Adept;
-        IamSpawning.Element = ElementType.Earth;
-        setUpZoomOut();
-    }
-
-    public void placeAdeptAir()
-    {
-        gameMode = GameMode.PlaceSpawn;
-        IamSpawning.characterType = Actor.ActorType.Adept;
-        IamSpawning.Element = ElementType.Air;
-        setUpZoomOut();
-    }
-
-    public void placeAdeptFire()
-    {
-        gameMode = GameMode.PlaceSpawn;
-        IamSpawning.characterType = Actor.ActorType.Adept;
-        IamSpawning.Element = ElementType.Fire;
-        setUpZoomOut();
-    }
-
-    public void placeAdeptWater()
-    {
-        gameMode = GameMode.PlaceSpawn;
-        IamSpawning.characterType = Actor.ActorType.Adept;
-        IamSpawning.Element = ElementType.Water;
+        IamSpawning.Element = Type;
         setUpZoomOut();
     }
 
     private void placeNewActor(int x, int z, Actor.ActorType type, ElementType element, int player)
     {
-        Color primerColor = new Color(1f, 1f, 1f);
         Debug.Log("Trying to spawn " + element.ToString() + type.ToString() + " at " + x.ToString() + "," + z.ToString() + " for player " + player.ToString());
         GameObject instantiatee = null;
         switch (type)
@@ -290,24 +265,14 @@ public class WorldManager : MonoBehaviour
         GameObject CharacterObject = (GameObject)Instantiate(instantiatee, allTiles[x, z].transform.position, instantiatee.transform.rotation);
         CharacterObject.name = type.ToString();
         Debug.Log("Setting Colors");
+        //Some objects have SkinnedMeshRenderer, some have MeshRenderer.
         SkinnedMeshRenderer[] skMeshes = CharacterObject.GetComponentsInChildren<SkinnedMeshRenderer>();
         if (skMeshes != null && skMeshes.Length > 0)
         {
             foreach (SkinnedMeshRenderer mesh in skMeshes)
             {
                 Material[] mats = mesh.materials;
-                if (mats != null && mats.Length > 0)
-                {
-                    foreach (Material mat in mats)
-                    {
-                        mat.color = primerColor * PlayerColor[player - 1] * ElementalColors[(int)element];
-                        Debug.Log("Color modified");
-                    }
-                }
-                else
-                {
-                    Debug.Log("Material not found.");
-                }
+                ColorActor(mats, player, (int)element);
             }
         }
         else
@@ -318,18 +283,7 @@ public class WorldManager : MonoBehaviour
                 foreach (MeshRenderer mesh in meshes)
                 {
                     Material[] mats = mesh.materials;
-                    if (mats != null && mats.Length > 0)
-                    {
-                        foreach (Material mat in mats)
-                        {
-                            mat.color = primerColor * PlayerColor[player - 1] * ElementalColors[(int)element];
-                            Debug.Log("Color modified");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Material not found.");
-                    }
+                    ColorActor(mats, player, (int)element);
                 }
             }
             else
@@ -341,7 +295,24 @@ public class WorldManager : MonoBehaviour
         CharacterScript.SetUp(type, x, z, (int)element, player, CharacterObject, this);
 
         CharacterObject.transform.parent = allTiles[x, z].transform;
+        allTiles[x, z].Actor = CharacterScript;
+    }
 
+    private void ColorActor(Material[] mats, int player, int element)
+    {
+        Color primerColor = new Color(1f, 1f, 1f);
+        if (mats != null && mats.Length > 0)
+        {
+            foreach (Material mat in mats)
+            {
+                mat.color = primerColor * PlayerColor[player - 1] * ElementalColors[element];
+                Debug.Log("Color modified");
+            }
+        }
+        else
+        {
+            Debug.Log("Material not found.");
+        }
     }
 
     private void moveActor()
@@ -354,19 +325,40 @@ public class WorldManager : MonoBehaviour
     {
         Actor movingActor = allTiles[oldX, oldZ].GetComponentInChildren<Actor>();
         Actor emptyActor = allTiles[newX, newZ].GetComponentInChildren<Actor>();
+        //Update the transform parents
         movingActor.transform.parent = allTiles[newX, newZ].transform;
         emptyActor.transform.parent = allTiles[oldX, oldZ].transform;
+        //Update the Tiles.Actor information.
+        allTiles[oldX, oldZ].Actor = emptyActor;
+        allTiles[newX, newZ].Actor = movingActor;
+        //Do the actual move.
         movingActor.Move(newX, newZ);
         movingActor.transform.position = allTiles[newX, newZ].transform.position;
     }
 
-    private void triggerBattle(Actor P1Piece, Actor P2Piece)
+    public void destroyActor(Actor actor)
+    {
+        int x = actor.x;
+        int z = actor.z;
+        Destroy(actor);
+        //Required to keep the consistancy.
+        placeNewActor(x, z, Actor.ActorType.None, 0, 0);
+    }
+
+    public void destroyActorAt(int x, int z)
+    {
+        Actor actor = allTiles[x, z].GetComponentInChildren<Actor>();
+        Destroy(actor);
+        //Required to keep the consistancy.
+        placeNewActor(x, z, Actor.ActorType.None, 0, 0);
+    }
+
+    private void triggerBattle(Actor P1Piece, Actor P2Piece, Tiles BattleTile)
     {
         //TODO: Trigger the real battle.
-        //showingTip = true;
-        //hideTipWhen = Time.time + 1f;
-        //InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s" + P1Piece.Element.ToString() + " " + P1Piece.characterType.ToString() + " is attacking!\r\nOppoent's " + P2Piece.Element.ToString() + " " + P2Piece.characterType.ToString() + " is defending!\r\nGood Luck!";
-        Application.LoadLevel("Sandbox");
+        GameManager.BattleP1 = P1Piece;
+        GameManager.BattleP2 = P2Piece;
+        Application.LoadLevel(BattleTile.Element.ToString());
     }
 
     private void adeptSummonAction(ElementType element, Actor.ActorType type)
@@ -566,25 +558,25 @@ public class WorldManager : MonoBehaviour
                             if (placedAdepts[CurrentPlayer - 1, 0] == false)
                             {
                                 ButtonAdeptE.GetComponentInChildren<Text>().text = "Spawn Earth Adept";
-                                ButtonAdeptE.GetComponent<Button>().onClick.AddListener(() => placeAdeptEarth());
+                                ButtonAdeptE.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Earth));
                                 ButtonAdeptE.GetComponent<Button>().interactable = true;
                             }
                             if (placedAdepts[CurrentPlayer - 1, 1] == false)
                             {
                                 ButtonAdeptA.GetComponentInChildren<Text>().text = "Spawn Air Adept";
-                                ButtonAdeptA.GetComponent<Button>().onClick.AddListener(() => placeAdeptAir());
+                                ButtonAdeptA.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Air));
                                 ButtonAdeptA.GetComponent<Button>().interactable = true;
                             }
                             if (placedAdepts[CurrentPlayer - 1, 2] == false)
                             {
                                 ButtonAdeptF.GetComponentInChildren<Text>().text = "Spawn Fire Adept";
-                                ButtonAdeptF.GetComponent<Button>().onClick.AddListener(() => placeAdeptFire());
+                                ButtonAdeptF.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Fire));
                                 ButtonAdeptF.GetComponent<Button>().interactable = true;
                             }
                             if (placedAdepts[CurrentPlayer - 1, 3] == false)
                             {
                                 ButtonAdeptW.GetComponentInChildren<Text>().text = "Spawn Water Adept";
-                                ButtonAdeptW.GetComponent<Button>().onClick.AddListener(() => placeAdeptWater());
+                                ButtonAdeptW.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Water));
                                 ButtonAdeptW.GetComponent<Button>().interactable = true;
                             }
                         }
@@ -652,7 +644,7 @@ public class WorldManager : MonoBehaviour
                     //The player wants to battle.
                     //TODO: Trigger battle.
                     Debug.Log("Trigger Battle Here!");
-                    triggerBattle(selectedTile.GetComponentInChildren<Actor>(), tile.GetComponentInChildren<Actor>());
+                    triggerBattle(selectedTile.GetComponentInChildren<Actor>(), tile.GetComponentInChildren<Actor>(), tile);
                 }
             }
         }
