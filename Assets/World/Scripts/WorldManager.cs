@@ -52,13 +52,18 @@ public class WorldManager : MonoBehaviour
     public Color[] ElementalColors;
     private bool showingTip = false;
     private float hideTipWhen = 0f;
+    private GameManager GameManager;
 
     // Use this for initialization
     void Start()
     {
-        //DontDestroyOnLoad(this);
-        //Place level select UI here.
-        //Start_SetupGame();
+        GameManager = FindObjectOfType<GameManager>();
+        GameManager.FinishLoad();
+    }
+
+    public void setGameManager(GameManager manager)
+    {
+        this.GameManager = manager;
     }
 
     public void Start_SetupGame()
@@ -413,6 +418,10 @@ public class WorldManager : MonoBehaviour
                 value = distToW;
             }
             return (((int)value / 2) % mats.Length);
+        }
+        else if (renderMode == RenderMode.FromStored)
+        {
+            return (int)(allTiles[x, z].Element) - 1;
         }
         else
         {
