@@ -119,8 +119,21 @@ namespace BreadcrumbAi{
 			// Checks if following player is enabled and a player has been found	
 			if(_CanFollowPlayer && this.Ai_FindPlayer()){
 				_HasWanderPos = false; // TODO: this needs to be fixed
-				visionState = VISION_STATE.CanSeePlayer;
-				
+                // stuff Thomas has added
+                GameObject wraithPlayer = GameObject.Find("Wraith");
+                if (wraithPlayer != null && !wraithPlayer.renderer.enabled)
+                {
+                    visionState = VISION_STATE.CanSeeNothing;
+                    Debug.Log("Can't see player");
+                    attackState = ATTACK_STATE.CanNotAttack;
+                }
+                // end stuff Thomas has added except for the else containing the following line..  visionState Line contained in it is original.
+                else
+                {
+                    visionState = VISION_STATE.CanSeePlayer;
+                    Debug.Log("can see player");
+                    attackState = ATTACK_STATE.CanAttackPlayer;
+                }
 				
 				// CHANGE THIS TO FLEE (_CanFlee)
 				if(_IsRanged){ // Is this a ranged ground unit?

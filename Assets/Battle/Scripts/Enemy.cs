@@ -24,6 +24,8 @@ public class Enemy : Entity
     private Ai ai;
     private AudioSource audioSource;
     private GameController gameController;
+    private WeaponOne playerWeaponOne;
+    private PlayerStats playerOne;
 
     //Weapon Components
     public Transform handHold;
@@ -43,7 +45,7 @@ public class Enemy : Entity
     private Enemy thisEnemy;
     private float maxHealth;
     private GameGUI gui;
-    [HideInInspector]public bool _isHit, _isHitBySpit, _isHitByRock, _isHitByWave;
+    [HideInInspector]public bool _isHit, _isHitBySpit, _isHitByRock, _isHitByWave, _isHitByBolt, _isHitByRoar, _isHitBySong, _isHitByFireBurst, _isHitByDrain;
 
 
     void Start()
@@ -55,6 +57,8 @@ public class Enemy : Entity
         animator = GetComponent<Animator>();
         audioSource = gameObject.AddComponent<AudioSource>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        playerWeaponOne = GameObject.FindGameObjectWithTag("WeaponOne").GetComponent<WeaponOne>();
+        playerOne = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
         gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GameGUI>();
         thisEnemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
         maxHealth = thisEnemy.health;
@@ -141,27 +145,63 @@ public class Enemy : Entity
     {
         if (_isHit)
         {
-            thisEnemy.TakeDamage(1);
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            //thisEnemy.TakeDamage(1);
             _isHit = false;
         }
 
         if (_isHitBySpit)
         {
-            thisEnemy.TakeDamage(3);
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            //thisEnemy.TakeDamage(1);
             _isHitBySpit = false;
         }
 
         if (_isHitByRock)
         {
-            thisEnemy.TakeDamage(4);
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            //thisEnemy.TakeDamage(1);
             _isHitByRock = false;
         }
 
         if (_isHitByWave)
         {
-            thisEnemy.TakeDamage(3);
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            //thisEnemy.TakeDamage(1);
             _isHitByWave = false;
         }
+
+        if (_isHitByBolt)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            _isHitByBolt = false;
+        }
+
+        if (_isHitByRoar)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            _isHitByRoar = false;
+        }
+
+        if (_isHitBySong)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            _isHitBySong = false;
+        }
+
+        if (_isHitByFireBurst)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            _isHitByFireBurst = false;
+        }
+
+        if (_isHitByDrain)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            playerOne.health++;
+            _isHitByDrain = false;
+        }
+
         gui.SetEnemyHealth(thisEnemy.health / maxHealth, thisEnemy.health);
     }
 
@@ -173,6 +213,11 @@ public class Enemy : Entity
         _isHitBySpit = false;
         _isHitByRock = false;
         _isHitByWave = false;
+        _isHitByBolt = false;
+        _isHitByRoar = false;
+        _isHitBySong = false;
+        _isHitByFireBurst = false;
+        _isHitByDrain = false;
         EnemyHealthManager();
         gameController.FightOver(true);
         base.Die();
@@ -193,6 +238,39 @@ public class Enemy : Entity
         if (col.collider.name.Contains("KrakenWave"))
         {
             _isHitByWave = true;
+        }
+
+        if (col.collider.name.Contains("ThunderBolt Projectile"))
+        {
+            _isHitByBolt = true;
+        }
+
+        if (col.collider.name.Contains("Roar"))
+        {
+            _isHitByRoar = true;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Roar")
+        {
+            _isHitByRoar = true;
+        }
+
+        if (other.tag == "Song")
+        {
+            _isHitBySong = true;
+        }
+
+        if (other.tag == "FireBurst")
+        {
+            _isHitByFireBurst = true;
+        }
+
+        if (other.tag == "Drain")
+        {
+            _isHitByDrain = true;
         }
     }
 }

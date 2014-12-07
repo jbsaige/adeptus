@@ -8,7 +8,7 @@ public class WeaponOneSounds
 public class WeaponOne : MonoBehaviour 
 {
     // ranged weapons are actually fire button one weapons and could include melee weapons; so instead of "Gun", make a "WeaponOne" class for weapon one/button one.
-    public enum WeaponOneType { Semi, Burst, Auto, Rock, KrakenWave, Thunderbolt, FireSpit, BehemothPunch, Sing, LightningBolt, FireBurst, JuggerCharge, Drain, Gaze, FireBreath, PoisonGas, AdeptFire, AdeptWater, AdeptEarth, AdeptAir, DragonAttackOne, DragonAttackTwo, DragonAttackThree, DragonAttackFour };
+    public enum WeaponOneType { Semi, Burst, Auto, Rock, KrakenWave, Thunderbolt, FireSpit, BehemothRoar, Sing, LightningBolt, FireBurst, JuggerCharge, Drain, Gaze, FireBreath, PoisonGas, AdeptFire, AdeptWater, AdeptEarth, AdeptAir, DragonAttackOne, DragonAttackTwo, DragonAttackThree, DragonAttackFour };
     public WeaponOneType weaponOneType;
     public float weaponID;
     public float rpm;
@@ -19,6 +19,7 @@ public class WeaponOne : MonoBehaviour
 
     public Transform projectileSpawn;
     private LineRenderer tracerRound;
+   
 
     private float secondsBetweenShots;
     private float nextPossibleShootTime;
@@ -38,6 +39,8 @@ public class WeaponOne : MonoBehaviour
 
     void Start()
     {
+        
+
         secondsBetweenShots = 120/rpm;
         if (GetComponent<LineRenderer>())
         {
@@ -107,6 +110,15 @@ public class WeaponOne : MonoBehaviour
             Rigidbody rangedAttackForm = Instantiate(rangedProjectilePrefab, transform.position + transform.forward + transform.up, transform.rotation) as Rigidbody;
             rangedAttackForm.AddForce(transform.forward * rangedAttackSpeed);
             audioSource.clip = audioClips.audio_hit_1;
+        }
+    }
+
+    public void ContinuousAttack()
+    {
+        if (weaponOneType == WeaponOneType.Sing || weaponOneType == WeaponOneType.Drain)
+        //if (weaponOneType == WeaponOneType.Sing)
+        {
+            RangedAttack();
         }
     }
 

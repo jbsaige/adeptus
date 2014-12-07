@@ -13,12 +13,15 @@ public class PlayerController : MonoBehaviour
     public float speedDampTime = 0.1f;
 
     private float acceleration = 5;
+    private bool isFrozen;
+    private Vector3 FreezePosition = Vector3.zero;
 
     //Components
     public Transform handHold;
     private WeaponOne weaponOne;
     public WeaponOne[] weapons;
     public WeaponTwo weaponTwo;
+    
     private CharacterController controller;
     private Camera cam;
     private Animator animator;
@@ -40,12 +43,18 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        isFrozen = false;
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         cam = Camera.main;
         // can put an switch statement here where it equips the weapon corresponding to the type of creature
         //  alternate is to make a script for each creature for it's weapons/defenses
         EquipWeapon(0);
+        GameObject wraithPlayer = GameObject.Find("Wraith");
+        if (wraithPlayer != null)
+        {
+            wraithPlayer.renderer.enabled = false;
+        }
     }
 
 
@@ -64,7 +73,11 @@ public class PlayerController : MonoBehaviour
     {
         ControlMouse();
         ControlWASD();
-
+        if (isFrozen)
+        {
+            //Input.ResetInputAxes();
+            transform.position = FreezePosition;
+        }
         //Weapon INPUT
         //added extra if layer for if a weapon isn't equipped, but this functionality not useful in this game because we won't be equpping various guns
         // most likley not
@@ -77,12 +90,53 @@ public class PlayerController : MonoBehaviour
                 
                 // new shoot method
                 weaponOne.RangedAttack();
+                isFrozen = false;
             }
             else if (Input.GetButton("Shoot"))
             {
-                weaponOne.ShootContinuous();
+                weaponOne.ContinuousAttack();
+                //if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.Sing || weaponOne.weaponOneType == WeaponOne.WeaponOneType.Drain)
+                if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.Sing)
+                {
+                    isFrozen = true;  // to disable movement
+                    FreezePosition = transform.position;
+
+                    controller.enabled = false;
+                }
+
+                if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.Drain)
+                {
+                    GameObject wraithPlayer = GameObject.Find("Wraith");
+                    if (wraithPlayer != null)
+                    {
+                        wraithPlayer.renderer.enabled = true;
+                    }
+                }
+            }
+
+            if (Input.GetButtonUp("Shoot"))
+            {
+                //if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.Sing || weaponOne.weaponOneType == WeaponOne.WeaponOneType.Drain)
+                if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.Sing)
+                {
+                    GameObject songObject = GameObject.FindGameObjectWithTag("Song");
+                    Destroy(songObject);
+                    isFrozen = false; // to re-enable movement
+
+                    controller.enabled = true;
+                }
+
+                if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.Drain)
+                {
+                    GameObject wraithPlayer = GameObject.Find("Wraith");
+                    if (wraithPlayer != null)
+                    {
+                        wraithPlayer.renderer.enabled = false;
+                    }
+                }
             }
         }
+            
         if (weaponTwo)
         {
             if (Input.GetButtonDown("Punch"))

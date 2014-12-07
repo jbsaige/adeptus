@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour {
     private int PlayerType;
     private int EnemyType;
 
-
+    // use public prefab variables to assign player/enemy prefabs and then reference those below in the case switches to instantiate
     
     
 	// Use this for initialization
