@@ -124,14 +124,14 @@ namespace BreadcrumbAi{
                 if (wraithPlayer != null && !wraithPlayer.renderer.enabled)
                 {
                     visionState = VISION_STATE.CanSeeNothing;
-                    Debug.Log("Can't see player");
+                    //Debug.Log("Can't see player");
                     attackState = ATTACK_STATE.CanNotAttack;
                 }
                 // end stuff Thomas has added except for the else containing the following line..  visionState Line contained in it is original.
                 else
                 {
                     visionState = VISION_STATE.CanSeePlayer;
-                    Debug.Log("can see player");
+                    //Debug.Log("can see player");
                     attackState = ATTACK_STATE.CanAttackPlayer;
                 }
 				

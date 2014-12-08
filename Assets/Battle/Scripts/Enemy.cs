@@ -26,6 +26,7 @@ public class Enemy : Entity
     private GameController gameController;
     private WeaponOne playerWeaponOne;
     private PlayerStats playerOne;
+    //private PlayerController playerOneController;
 
     //Weapon Components
     public Transform handHold;
@@ -45,7 +46,7 @@ public class Enemy : Entity
     private Enemy thisEnemy;
     private float maxHealth;
     private GameGUI gui;
-    [HideInInspector]public bool _isHit, _isHitBySpit, _isHitByRock, _isHitByWave, _isHitByBolt, _isHitByRoar, _isHitBySong, _isHitByFireBurst, _isHitByDrain;
+    [HideInInspector]public bool _isHit, _isHitBySpit, _isHitByRock, _isHitByWave, _isHitByBolt, _isHitByRoar, _isHitBySong, _isHitByFireBurst, _isHitByDrain, _isHitByGaze, _isHitByFireball, _isHitByAcidSpit, _isHitByMagic;
 
 
     void Start()
@@ -59,6 +60,7 @@ public class Enemy : Entity
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         playerWeaponOne = GameObject.FindGameObjectWithTag("WeaponOne").GetComponent<WeaponOne>();
         playerOne = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        //playerOneController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GameGUI>();
         thisEnemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
         maxHealth = thisEnemy.health;
@@ -202,6 +204,37 @@ public class Enemy : Entity
             _isHitByDrain = false;
         }
 
+        if (_isHitByGaze)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            ai.followSpeed--;
+            ai.wanderSpeed--;
+            ai.patrolSpeed--;
+            ai.avoidSpeed--;
+            if (ai.followSpeed <= 0)
+            {
+                Die();
+            }
+            _isHitByGaze = false;
+        }
+
+        if (_isHitByFireball)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            _isHitByFireball = false;
+        }
+
+        if (_isHitByAcidSpit)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            _isHitByAcidSpit = false;
+        }
+
+        if (_isHitByMagic)
+        {
+            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            _isHitByMagic = false;
+        }
         gui.SetEnemyHealth(thisEnemy.health / maxHealth, thisEnemy.health);
     }
 
@@ -218,9 +251,13 @@ public class Enemy : Entity
         _isHitBySong = false;
         _isHitByFireBurst = false;
         _isHitByDrain = false;
+        _isHitByGaze = false;
+        _isHitByFireball = false;
+        _isHitByAcidSpit = false;
+        _isHitByMagic = false;
         EnemyHealthManager();
-        gameController.FightOver(true);
         base.Die();
+        gameController.FightOver(true);
     }
 
     void OnCollisionEnter(Collision col)
@@ -248,6 +285,26 @@ public class Enemy : Entity
         if (col.collider.name.Contains("Roar"))
         {
             _isHitByRoar = true;
+        }
+
+        if (col.collider.name.Contains("Gaze"))
+        {
+            _isHitByGaze = true;
+        }
+
+        if (col.collider.name.Contains("Fireball"))
+        {
+            _isHitByFireball = true;
+        }
+
+        if (col.collider.name.Contains("AcidSpit"))
+        {
+            _isHitByAcidSpit = true;
+        }
+
+        if (col.collider.name.Contains("AdeptShot"))
+        {
+            _isHitByMagic = true;
         }
     }
 

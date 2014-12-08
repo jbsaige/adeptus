@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private bool isFrozen;
     private Vector3 FreezePosition = Vector3.zero;
 
-    //Components
+    // Weapon System Components
     public Transform handHold;
     private WeaponOne weaponOne;
     public WeaponOne[] weapons;
@@ -91,6 +91,14 @@ public class PlayerController : MonoBehaviour
                 // new shoot method
                 weaponOne.RangedAttack();
                 isFrozen = false;
+                if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.FireBreath)
+                {
+                    EquipWeapon(1);
+                }
+                if (weaponOne.weaponOneType == WeaponOne.WeaponOneType.PoisonGas)
+                {
+                    EquipWeapon(0);
+                }
             }
             else if (Input.GetButton("Shoot"))
             {

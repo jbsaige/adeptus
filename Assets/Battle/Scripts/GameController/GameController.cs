@@ -1,7 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour 
+{
+    // The player pieces
+    public GameObject playerAdept;
+    public GameObject playerGiant;
+    public GameObject playerKraken;
+    public GameObject playerThunderbird;
+    public GameObject playerSalamander;
+    public GameObject playerBehemoth;
+    public GameObject playerSiren;
+    public GameObject playerDjinn;
+    public GameObject playerFirebird;
+    public GameObject playerJuggernaut;
+    public GameObject playerWraith;
+    public GameObject playerGorgon;
+    public GameObject playerChimera;
+    
+    // The enemy pieces
+    public GameObject enemyAdept;
+    public GameObject enemySalamander;
+    public GameObject enemyFirebird;
+
+    // Spawn Variables
+    public Vector3 playerSpawnValues;
+    public Vector3 enemySpawnValues;
 
     private Actor.ActorType PlayerType, EnemyType;
     private WorldManager.ElementType PlayerElement, EnemyElement;
@@ -33,6 +57,7 @@ public class GameController : MonoBehaviour {
                 //This should not happen.
                 break;
             case Actor.ActorType.Adept:
+                SpawnPlayerAdept();
                 break;
             case Actor.ActorType.Demon:
                 break;
@@ -50,10 +75,12 @@ public class GameController : MonoBehaviour {
                 //This should not happen.
                 break;
             case Actor.ActorType.Adept:
+                SpawnEnemyAdept();
                 break;
             case Actor.ActorType.Demon:
                 break;
             case Actor.ActorType.Monster:
+                SpawnEnemySalamander();
                 break;
             case Actor.ActorType.Castle:
                 break;
@@ -80,6 +107,29 @@ public class GameController : MonoBehaviour {
         {
             GameManager.ReturnFromBattle(2);
         }
+    }
+
+
+    // Spawn Methods
+    void SpawnPlayerAdept()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerAdept, spawnPosition, spawnRotation);
+    }
+
+    void SpawnEnemyAdept()
+    {
+        Vector3 spawnPosition = new Vector3(enemySpawnValues.x, enemySpawnValues.y, enemySpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(enemyAdept, spawnPosition, spawnRotation);
+    }
+
+    void SpawnEnemySalamander()
+    {
+        Vector3 spawnPosition = new Vector3(enemySpawnValues.x, enemySpawnValues.y, enemySpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(enemySalamander, spawnPosition, spawnRotation);
     }
 
 }

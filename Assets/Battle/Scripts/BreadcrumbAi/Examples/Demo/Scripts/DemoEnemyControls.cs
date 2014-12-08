@@ -15,6 +15,11 @@ public class DemoEnemyControls : MonoBehaviour {
 	public bool _canDropPickUp;
 	public EnemyType enemyType;
 	public Rigidbody rangedProjectilePrefab;
+
+    // Alternate Weapon System
+    public Transform handHold;
+    private WeaponOne weaponOne;
+    public WeaponOne[] weapons;
 	
 	public GameObject bloodPrefab;
 	public GameObject specialPrefab;
@@ -47,6 +52,8 @@ public class DemoEnemyControls : MonoBehaviour {
 		if(go){
 			player = go.transform;
 		}
+
+        EquipWeapon(0);
 	}
 	
 	void Update () {
@@ -104,8 +111,10 @@ public class DemoEnemyControls : MonoBehaviour {
 		    	} else {
 					if(ai.attackState == Ai.ATTACK_STATE.CanAttackPlayer && Time.time > rangedAttackNext){
 						rangedAttackNext = Time.time + rangedAttackRate;
-						Rigidbody spit = Instantiate(rangedProjectilePrefab, transform.position + transform.forward + transform.up, transform.rotation) as Rigidbody;
-						spit.AddForce(transform.forward * 500);
+                        // test of different attack method
+                        weaponOne.RangedAttack();
+                        //Rigidbody spit = Instantiate(rangedProjectilePrefab, transform.position + transform.forward + transform.up, transform.rotation) as Rigidbody;
+                        //spit.AddForce(transform.forward * 500);
 						_animAttack = true;
 					} else {
 						_animAttack = false;
@@ -204,4 +213,18 @@ public class DemoEnemyControls : MonoBehaviour {
         //    Destroy(blood, 3);
         //}
 	}
+
+    //added this to try and mimick player weapon system
+    void EquipWeapon(int i)
+    {
+        if (weaponOne)
+        {
+            Destroy(weaponOne.gameObject);
+
+        }
+
+        weaponOne = Instantiate(weapons[i], handHold.position, handHold.rotation) as WeaponOne;
+        weaponOne.transform.parent = handHold;
+        //animator.SetFloat("Weapon ID", weaponOne.weaponID);
+    }
 }

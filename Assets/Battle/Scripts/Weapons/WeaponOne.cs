@@ -31,7 +31,7 @@ public class WeaponOne : MonoBehaviour
 
     // Attack rates
     private float rangedAttackNext = 0.0f;
-    private float rangedAttackRate = 2.0f;
+    private float rangedAttackRate = 10000.0f;
     private float meleeAttackNext = 0.0f;
     private float meleeAttackRate = 1.0f;
     private AudioSource audioSource;
@@ -41,7 +41,7 @@ public class WeaponOne : MonoBehaviour
     {
         
 
-        secondsBetweenShots = 120/rpm;
+        secondsBetweenShots = 1000/rpm;
         if (GetComponent<LineRenderer>())
         {
             tracerRound = GetComponent<LineRenderer>();
@@ -104,9 +104,12 @@ public class WeaponOne : MonoBehaviour
 
     public void RangedAttack()
     {
-        if (Time.time > rangedAttackNext)
+        //if (Time.time > rangedAttackNext)
+        if(CanShoot())
         {
-            rangedAttackNext = Time.time + rangedAttackRate;
+            //rangedAttackNext = Time.time + rangedAttackRate;
+            //rangedAttackNext = Time.time + secondsBetweenShots;
+            nextPossibleShootTime = Time.time + secondsBetweenShots;
             Rigidbody rangedAttackForm = Instantiate(rangedProjectilePrefab, transform.position + transform.forward + transform.up, transform.rotation) as Rigidbody;
             rangedAttackForm.AddForce(transform.forward * rangedAttackSpeed);
             audioSource.clip = audioClips.audio_hit_1;
