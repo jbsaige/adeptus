@@ -4,6 +4,7 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
     public Actor BattleP1, BattleP2;
+    public int[] PlayerPower;
 
     private WorldManager WorldManager;
     private MenuManager MenuManager;
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     public void Start()
     {
         DontDestroyOnLoad(this);
+        PlayerPower = new int[2];
         MenuManager = GameObject.FindObjectOfType<MenuManager>();
         MenuManager.SetGameManager(this);
         TileManger = new TileManager();

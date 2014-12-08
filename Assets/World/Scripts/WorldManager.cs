@@ -35,7 +35,6 @@ public class WorldManager : MonoBehaviour
     [HideInInspector]
     public int CurrentPlayer = 1;
     [HideInInspector]
-    public int[] PlayerPower;
     public enum ZoomingMode { ZoomedIn, ZoomingIn, ZoomedOut, ZoomingOut };
     public ZoomingMode zoom = ZoomingMode.ZoomedOut;
     public enum SummoningMenuMode { SlidedIn, SlidingIn, SlidedOut, SlidingOut };
@@ -98,7 +97,6 @@ public class WorldManager : MonoBehaviour
         Highlighting = (GameObject)Instantiate(TileHighlight, new Vector3(0, -0.2f, 0), TileHighlight.transform.rotation);
         IamSpawning = new Actor();
         Camera.main.transform.position = new Vector3(cameraX, Camera.main.transform.position.y, cameraZ);
-        PlayerPower = new int[2];
         placedAdepts = new bool[2, 4];
         for (int a = 0; a < 2; a++)
         {
@@ -108,7 +106,16 @@ public class WorldManager : MonoBehaviour
             }
         }
         recalculateCanvasSize();
-        generateMap();
+        if (renderMode == RenderMode.FromStored)
+        {
+            regenerateMap();
+        }
+        else
+        {
+            generateMap();
+            placePowerWells();
+            Start_PlaceActors();
+        }
         Start_PanelSetup();
         Start_ButtonSetup(true);
     }
@@ -122,9 +129,9 @@ public class WorldManager : MonoBehaviour
         PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight);
         PanelSummonBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight * 2);
         InfoP1Power.GetComponent<Text>().color *= PlayerColor[0];
-        InfoP1Power.GetComponent<Text>().text = "Player 1 Power:\r\n" + PlayerPower[0];
+        InfoP1Power.GetComponent<Text>().text = "Player 1 Power:\r\n" + GameManager.PlayerPower[0];
         InfoP2Power.GetComponent<Text>().color *= PlayerColor[1];
-        InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + PlayerPower[1];
+        InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + GameManager.PlayerPower[1];
     }
 
     private void Start_ButtonSetup()
@@ -165,6 +172,41 @@ public class WorldManager : MonoBehaviour
         }
     }
 
+    private void regenerateMap()
+    {
+        GameObject tileHolder = new GameObject("TileHolder");
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int z = 0; z < zSize; z++)
+            {
+                Tiles oldTile = allTiles[x, z];
+                float xPos, zPos;
+                xPos = x * xOffset;
+                zPos = z * zOffset;
+                if (x % 2 == 1)
+                {
+                    zPos += zOffset * 0.5f;
+                }
+                //Create the new tile.
+                GameObject newTile = (GameObject)Instantiate(Tile, new Vector3(xPos, 0, zPos), Tile.transform.rotation);
+                //Enable interaction with the tile aspects of the tile.
+                Tiles tileInteracter = newTile.GetComponent<Tiles>();
+                tileInteracter.Manager = this;
+                tileInteracter.SetElement((int)oldTile.Element - 1);
+                tileInteracter.SetXandZ(x, z);
+                tileInteracter.transform.parent = tileHolder.transform;
+                allTiles[x, z] = tileInteracter;
+                placeNewActor(x, z, oldTile.Actor.characterType, oldTile.Actor.Element, oldTile.Actor.Player);
+                if (oldTile.hasPowerWell)
+                {
+                    GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(allTiles[x, z].transform.position.x, 0F, allTiles[x, z].transform.position.z), allTiles[x, z].transform.rotation);
+                    powerWell.transform.parent = allTiles[x, z].transform;
+                    powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
+                }
+            }
+        }
+    }
+
     private void generateMap()
     {
         GameObject tileHolder = new GameObject("TileHolder");
@@ -192,42 +234,75 @@ public class WorldManager : MonoBehaviour
                 placeNewActor(x, z, Actor.ActorType.None, 0, 0);
             }
         }
-        placePowerWells();
-        Start_PlaceActors();
     }
 
     private void placePowerWells()
     {
-        int x, z;
-        int[] powerWellX = new int[8] { 0, 2, 4, 6, xSize - 1, xSize - 3, xSize - 5, xSize - 7 };
-        int[] powerWellZ = new int[8] { 0, zSize - 3, 4, zSize - 7, zSize - 1, 2, zSize - 5, 6 };
-        if (renderMode == RenderMode.Pattern)
+        if (renderMode != RenderMode.FromStored)
         {
-            numPowerWells = 8;
+            int x, z;
+            int[] powerWellX = new int[8] { 0, 2, 4, 6, xSize - 1, xSize - 3, xSize - 5, xSize - 7 };
+            int[] powerWellZ = new int[8] { 0, zSize - 3, 4, zSize - 7, zSize - 1, 2, zSize - 5, 6 };
+            if (renderMode == RenderMode.Pattern)
+            {
+                numPowerWells = 8;
+            }
+            for (int i = 0; i < numPowerWells; i++)
+            {
+                if (renderMode == RenderMode.Random)
+                {
+                    x = (int)Random.Range(0, xSize - 1);
+                    z = (int)Random.Range(0, zSize - 1);
+                }
+                else
+                {
+                    x = powerWellX[i];
+                    z = powerWellZ[i];
+                }
+                allTiles[x, z].hasPowerWell = true;
+                GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(allTiles[x, z].transform.position.x, 0F, allTiles[x, z].transform.position.z), allTiles[x, z].transform.rotation);
+                powerWell.transform.parent = allTiles[x, z].transform;
+                powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
+            }
         }
-        for (int i = 0; i < numPowerWells; i++)
+        else
         {
-            if (renderMode == RenderMode.Random)
+            for (int x = 0; x < xSize; x++)
             {
-                x = (int)Random.Range(0, xSize - 1);
-                z = (int)Random.Range(0, zSize - 1);
+                for (int z = 0; z < zSize; z++)
+                {
+                    if (allTiles[x, z].hasPowerWell == true)
+                    {
+                        GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(allTiles[x, z].transform.position.x, 0F, allTiles[x, z].transform.position.z), allTiles[x, z].transform.rotation);
+                        powerWell.transform.parent = allTiles[x, z].transform;
+                        powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
+                    }
+                }
             }
-            else
-            {
-                x = powerWellX[i];
-                z = powerWellZ[i];
-            }
-            allTiles[x, z].hasPowerWell = true;
-            GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(allTiles[x, z].transform.position.x, 0F, allTiles[x, z].transform.position.z), allTiles[x, z].transform.rotation);
-            powerWell.transform.parent = allTiles[x, z].transform;
-            powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
         }
     }
 
     private void Start_PlaceActors()
     {
-        placeNewActor(3, 7, Actor.ActorType.Castle, ElementType.None, 1);
-        placeNewActor(19, 7, Actor.ActorType.Castle, ElementType.None, 2);
+        if (renderMode == RenderMode.FromStored)
+        {
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int z = 0; z < zSize; z++)
+                {
+                    Actor actor = allTiles[x, z].Actor;
+                    if (actor.characterType != Actor.ActorType.None)
+                    {
+                        placeNewActor(x, z, actor.characterType, actor.Element, actor.Player);
+                    }
+                }
+            }
+        }
+        else
+        {
+            placeNewActor(3, 7, Actor.ActorType.Castle, ElementType.None, 1);
+            placeNewActor(19, 7, Actor.ActorType.Castle, ElementType.None, 2);
+        }
     }
 
     public void cancelAction()
@@ -466,7 +541,7 @@ public class WorldManager : MonoBehaviour
                             ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell\r\n(" + powerOSpell.ToString() + "p)";
                             ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon\r\n(" + powerArmageddon.ToString() + "p)";
                             summonMode = SummoningMenuMode.SlidingIn;
-                            if (PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerMove)
                             {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
@@ -475,7 +550,7 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonMove.GetComponent<Button>().interactable = false;
                             }
-                            if (PlayerPower[CurrentPlayer - 1] >= powerOSpell)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerOSpell)
                             {
                                 //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonOSpell.GetComponent<Button>().interactable = true;
@@ -484,7 +559,7 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonOSpell.GetComponent<Button>().interactable = false;
                             }
-                            if (PlayerPower[CurrentPlayer - 1] >= powerDSpell)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerDSpell)
                             {
                                 //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonDSpell.GetComponent<Button>().interactable = true;
@@ -493,7 +568,7 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonDSpell.GetComponent<Button>().interactable = false;
                             }
-                            if (PlayerPower[CurrentPlayer - 1] >= powerSummonMonster)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerSummonMonster)
                             {
                                 ButtonSEE.GetComponent<Button>().interactable = true;
                                 ButtonSEA.GetComponent<Button>().interactable = true;
@@ -507,7 +582,7 @@ public class WorldManager : MonoBehaviour
                                 ButtonSMF.GetComponent<Button>().interactable = false;
                                 ButtonSMW.GetComponent<Button>().interactable = false;
                             }
-                            if (PlayerPower[CurrentPlayer - 1] >= powerSummonElemental)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerSummonElemental)
                             {
                                 ButtonSME.GetComponent<Button>().interactable = true;
                                 ButtonSMA.GetComponent<Button>().interactable = true;
@@ -521,7 +596,7 @@ public class WorldManager : MonoBehaviour
                                 ButtonSEF.GetComponent<Button>().interactable = false;
                                 ButtonSEW.GetComponent<Button>().interactable = false;
                             }
-                            if (PlayerPower[CurrentPlayer - 1] >= powerArmageddon)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerArmageddon)
                             {
                                 //ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonArmageddon.GetComponent<Button>().interactable = true;
@@ -537,7 +612,7 @@ public class WorldManager : MonoBehaviour
                         if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
                         {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
-                            if (PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerMove)
                             {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
@@ -553,7 +628,7 @@ public class WorldManager : MonoBehaviour
                         if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
                         {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
-                            if (PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerMove)
                             {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
@@ -833,17 +908,17 @@ public class WorldManager : MonoBehaviour
                     GameObject adept = allTiles[x, z].transform.Find("Adept").gameObject;
                     if (allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == CurrentPlayer)
                     {
-                        PlayerPower[CurrentPlayer - 1] += 10 - pendingPowerExpendature;
+                        GameManager.PlayerPower[CurrentPlayer - 1] += 10 - pendingPowerExpendature;
                     }
                 }
             }
         }
 
-        InfoP1Power.GetComponent<Text>().text = "Player 1 Power:\r\n" + PlayerPower[0];
-        InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + PlayerPower[1];
+        InfoP1Power.GetComponent<Text>().text = "Player 1 Power:\r\n" + GameManager.PlayerPower[0];
+        InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + GameManager.PlayerPower[1];
         showingTip = true;
         hideTipWhen = Time.time + zoomMaxSteps;
-        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s Turn!\r\nCurrent Power: " + PlayerPower[CurrentPlayer - 1].ToString();
+        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s Turn!\r\nCurrent Power: " + GameManager.PlayerPower[CurrentPlayer - 1].ToString();
         //PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
         //InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
     }
