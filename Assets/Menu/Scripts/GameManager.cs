@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     {
         this.BattleManager = battleManager;
         //This is for debug only
-        BattleManager.FightOver(true);
+        //BattleManager.FightOver(true);
     }
 
 }
