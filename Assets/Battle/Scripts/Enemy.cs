@@ -24,7 +24,8 @@ public class Enemy : Entity
     private Ai ai;
     private AudioSource audioSource;
     private GameController gameController;
-    private WeaponOne playerWeaponOne;
+    //private WeaponOne playerWeaponOne;
+    private PlayerController playerController;
     private PlayerStats playerOne;
     //private PlayerController playerOneController;
 
@@ -58,7 +59,8 @@ public class Enemy : Entity
         animator = GetComponent<Animator>();
         audioSource = gameObject.AddComponent<AudioSource>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        playerWeaponOne = GameObject.FindGameObjectWithTag("WeaponOne").GetComponent<WeaponOne>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        //playerWeaponOne = GameObject.FindGameObjectWithTag("WeaponOne").GetComponent<WeaponOne>();
         playerOne = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
         //playerOneController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GameGUI>();
@@ -147,66 +149,68 @@ public class Enemy : Entity
     {
         if (_isHit)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             //thisEnemy.TakeDamage(1);
             _isHit = false;
         }
 
         if (_isHitBySpit)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             //thisEnemy.TakeDamage(1);
             _isHitBySpit = false;
         }
 
         if (_isHitByRock)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             //thisEnemy.TakeDamage(1);
             _isHitByRock = false;
         }
 
         if (_isHitByWave)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             //thisEnemy.TakeDamage(1);
             _isHitByWave = false;
         }
 
         if (_isHitByBolt)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             _isHitByBolt = false;
         }
 
         if (_isHitByRoar)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             _isHitByRoar = false;
         }
 
         if (_isHitBySong)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             _isHitBySong = false;
         }
 
         if (_isHitByFireBurst)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             _isHitByFireBurst = false;
         }
 
         if (_isHitByDrain)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
+            Debug.Log("Hit by Drain");
+            playerOne.health++;
             playerOne.health++;
             _isHitByDrain = false;
         }
 
         if (_isHitByGaze)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             ai.followSpeed--;
             ai.wanderSpeed--;
             ai.patrolSpeed--;
@@ -220,19 +224,19 @@ public class Enemy : Entity
 
         if (_isHitByFireball)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             _isHitByFireball = false;
         }
 
         if (_isHitByAcidSpit)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             _isHitByAcidSpit = false;
         }
 
         if (_isHitByMagic)
         {
-            thisEnemy.TakeDamage(playerWeaponOne.damage);
+            thisEnemy.TakeDamage(playerController.weapons[0].damage);
             _isHitByMagic = false;
         }
         gui.SetEnemyHealth(thisEnemy.health / maxHealth, thisEnemy.health);
