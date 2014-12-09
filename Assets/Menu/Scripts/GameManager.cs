@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour
     private WorldManager WorldManager;
     private MenuManager MenuManager;
     private TileManager TileManger;
+    private LoadingManager LoadingManager;
     private WorldManager.RenderMode RenderMode;
     private GameController BattleManager;
     private bool WorldIsLoaded = false;
+    private string NextLevel;
 
     public void Start()
     {
@@ -30,7 +32,7 @@ public class GameManager : MonoBehaviour
     private void LoadMap(global::WorldManager.RenderMode mode)
     {
         this.RenderMode = mode;
-        Application.LoadLevel("World");
+        this.LoadLevel("World");
     }
 
     public void FinishLoad()
@@ -93,6 +95,18 @@ public class GameManager : MonoBehaviour
         this.BattleManager = battleManager;
         //This is for debug only
         //BattleManager.FightOver(true);
+    }
+
+    public void SetLoadingManager(LoadingManager loadingManager)
+    {
+        this.LoadingManager = loadingManager;
+        LoadingManager.LoadNext(NextLevel);
+    }
+
+    public void LoadLevel(string LevelName)
+    {
+        NextLevel = LevelName;
+        Application.LoadLevel("Loading");
     }
 
 }
