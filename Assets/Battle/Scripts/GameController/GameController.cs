@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour
     public GameObject enemyAdept;
     public GameObject enemySalamander;
     public GameObject enemyFirebird;
+    public GameObject enemyChimera;
     public GameObject enemyCastle;
 
     // Spawn Variables
