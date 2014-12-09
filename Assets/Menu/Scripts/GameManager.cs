@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public Actor BattleP1, BattleP2;
     public int[] PlayerPower;
+    public int CurrentPlayer = 1;
 
     private WorldManager WorldManager;
     private MenuManager MenuManager;
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
     private GameController BattleManager;
     private bool WorldIsLoaded = false;
     private string NextLevel;
+    private int BattleWinner = 0;
+
 
     public void Start()
     {
@@ -21,7 +24,9 @@ public class GameManager : MonoBehaviour
         PlayerPower = new int[2];
         MenuManager = GameObject.FindObjectOfType<MenuManager>();
         MenuManager.SetGameManager(this);
-        TileManger = new TileManager();
+        TileManger = gameObject.AddComponent<TileManager>();
+        BattleP1 = gameObject.AddComponent<Actor>();
+        BattleP2 = gameObject.AddComponent<Actor>();
     }
 
     /// <summary>
@@ -35,17 +40,38 @@ public class GameManager : MonoBehaviour
         this.LoadLevel("World");
     }
 
-    public void FinishLoad()
+    public void FinishLoad(WorldManager worldManager)
     {
-        WorldManager = FindObjectOfType<WorldManager>();
-        WorldManager.renderMode = this.RenderMode;
-        WorldManager.setGameManager(this);
+        worldManager.SetGameManager(this);
+        worldManager.renderMode = this.RenderMode;
         if (WorldIsLoaded)
         {
-            WorldManager.setAllTiles(TileManger.allTiles);
+            worldManager.setAllTiles(TileManger.allTiles);
         }
-        WorldManager.Start_SetupGame();
+        worldManager.Start_SetupGame();
+        if (BattleWinner > 3)
+        {
+            Debug.Log("Battle Winner: " + BattleWinner + "\r\nCurrent Player:" + CurrentPlayer);
+            if (BattleWinner == 1)
+            {
+                worldManager.destroyActorAt(this.BattleP2.x, this.BattleP2.z);
+                if (CurrentPlayer == BattleWinner)
+                {
+                    worldManager.moveActor(this.BattleP1.x, this.BattleP1.z, this.BattleP2.x, this.BattleP2.z);
+                }
+            }
+            else
+            {
+                worldManager.destroyActorAt(this.BattleP1.x, this.BattleP1.z);
+                if (CurrentPlayer == BattleWinner)
+                {
+                    worldManager.moveActor(this.BattleP2.x, this.BattleP2.z, this.BattleP1.x, this.BattleP1.z);
+                }
+            }
+            BattleWinner = 0;
+        }
         WorldIsLoaded = true;
+        WorldManager = worldManager;
     }
 
     public void loadRandomMap()
@@ -81,13 +107,25 @@ public class GameManager : MonoBehaviour
     public void ReturnFromBattle(int winner)
     {
         Debug.Log("Returning from battle");
+        BattleWinner = winner;
         this.loadStoredMap();
     }
 
-    public void LoadBattle(string BattleGroundName)
+    public void LoadBattle(Actor P1, Actor P2, string BattleGroundName)
     {
         TileManger.allTiles = WorldManager.getAllTiles();
-        Application.LoadLevel(BattleGroundName);
+        BattleP1 = TileManger.allTiles[P1.x, P1.z].Actor;
+        BattleP2 = TileManger.allTiles[P2.x, P2.z].Actor;
+        BattleP1.Player = P1.Player;
+        BattleP1.x = P1.x;
+        BattleP1.z = P1.z;
+        BattleP1.Element = P1.Element;
+        BattleP1.characterType = P1.characterType;
+        BattleP2.Player = P2.Player;
+        BattleP2.x = P2.x;
+        BattleP2.z = P2.z;
+        BattleP2.Element = P2.Element;
+        BattleP2.characterType = P2.characterType; Application.LoadLevel(BattleGroundName);
     }
 
     public void SetBattleManager(GameController battleManager)

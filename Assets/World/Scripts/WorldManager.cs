@@ -33,8 +33,6 @@ public class WorldManager : MonoBehaviour
     [HideInInspector]
     public bool isZoomed = false, Player1IsCPU = false, Player2IsCPU = false, isTutorial = true;
     [HideInInspector]
-    public int CurrentPlayer = 1;
-    [HideInInspector]
     public enum ZoomingMode { ZoomedIn, ZoomingIn, ZoomedOut, ZoomingOut };
     public ZoomingMode zoom = ZoomingMode.ZoomedOut;
     public enum SummoningMenuMode { SlidedIn, SlidingIn, SlidedOut, SlidingOut };
@@ -57,12 +55,12 @@ public class WorldManager : MonoBehaviour
     void Start()
     {
         GameManager = FindObjectOfType<GameManager>();
-        GameManager.FinishLoad();
+        GameManager.FinishLoad(this);
     }
 
-    public void setGameManager(GameManager manager)
+    public void SetGameManager(GameManager gameManager)
     {
-        this.GameManager = manager;
+        this.GameManager = gameManager;
     }
 
     public void setAllTiles(Tiles[,] tiles)
@@ -323,7 +321,6 @@ public class WorldManager : MonoBehaviour
 
     private void placeNewActor(int x, int z, Actor.ActorType type, ElementType element, int player)
     {
-        Debug.Log("Trying to spawn " + element.ToString() + type.ToString() + " at " + x.ToString() + "," + z.ToString() + " for player " + player.ToString());
         GameObject instantiatee = null;
         switch (type)
         {
@@ -352,7 +349,6 @@ public class WorldManager : MonoBehaviour
 
         GameObject CharacterObject = (GameObject)Instantiate(instantiatee, allTiles[x, z].transform.position, instantiatee.transform.rotation);
         CharacterObject.name = type.ToString();
-        Debug.Log("Setting Colors");
         //Some objects have SkinnedMeshRenderer, some have MeshRenderer.
         SkinnedMeshRenderer[] skMeshes = CharacterObject.GetComponentsInChildren<SkinnedMeshRenderer>();
         if (skMeshes != null && skMeshes.Length > 0)
@@ -374,10 +370,6 @@ public class WorldManager : MonoBehaviour
                     ColorActor(mats, player, (int)element);
                 }
             }
-            else
-            {
-                Debug.Log("MeshRender not found.");
-            }
         }
         Actor CharacterScript = CharacterObject.AddComponent<Actor>();
         CharacterScript.SetUp(type, x, z, (int)element, player, CharacterObject, this);
@@ -394,12 +386,10 @@ public class WorldManager : MonoBehaviour
             foreach (Material mat in mats)
             {
                 mat.color = primerColor * PlayerColor[player - 1] * ElementalColors[element];
-                Debug.Log("Color modified");
             }
         }
         else
         {
-            Debug.Log("Material not found.");
         }
     }
 
@@ -409,7 +399,7 @@ public class WorldManager : MonoBehaviour
         setUpZoomOut();
     }
 
-    private void moveActor(int oldX, int oldZ, int newX, int newZ)
+    public void moveActor(int oldX, int oldZ, int newX, int newZ)
     {
         Actor movingActor = allTiles[oldX, oldZ].GetComponentInChildren<Actor>();
         Actor emptyActor = allTiles[newX, newZ].GetComponentInChildren<Actor>();
@@ -443,10 +433,7 @@ public class WorldManager : MonoBehaviour
 
     private void triggerBattle(Actor P1Piece, Actor P2Piece, Tiles BattleTile)
     {
-        //TODO: Trigger the real battle.
-        GameManager.BattleP1 = P1Piece;
-        GameManager.BattleP2 = P2Piece;
-        GameManager.LoadBattle(BattleTile.Element.ToString());
+        GameManager.LoadBattle(P1Piece, P2Piece, BattleTile.Element.ToString());
     }
 
     private void adeptSummonAction(ElementType element, Actor.ActorType type)
@@ -534,14 +521,14 @@ public class WorldManager : MonoBehaviour
                         break;
                     case Actor.ActorType.Adept:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Adept";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
                         {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
                             ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell\r\n(" + powerDSpell.ToString() + "p)";
                             ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell\r\n(" + powerOSpell.ToString() + "p)";
                             ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon\r\n(" + powerArmageddon.ToString() + "p)";
                             summonMode = SummoningMenuMode.SlidingIn;
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove)
                             {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
@@ -550,7 +537,7 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonMove.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerOSpell)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerOSpell)
                             {
                                 //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonOSpell.GetComponent<Button>().interactable = true;
@@ -559,7 +546,7 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonOSpell.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerDSpell)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerDSpell)
                             {
                                 //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonDSpell.GetComponent<Button>().interactable = true;
@@ -568,7 +555,7 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonDSpell.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerSummonMonster)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSummonMonster)
                             {
                                 ButtonSEE.GetComponent<Button>().interactable = true;
                                 ButtonSEA.GetComponent<Button>().interactable = true;
@@ -582,7 +569,7 @@ public class WorldManager : MonoBehaviour
                                 ButtonSMF.GetComponent<Button>().interactable = false;
                                 ButtonSMW.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerSummonElemental)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSummonElemental)
                             {
                                 ButtonSME.GetComponent<Button>().interactable = true;
                                 ButtonSMA.GetComponent<Button>().interactable = true;
@@ -596,7 +583,7 @@ public class WorldManager : MonoBehaviour
                                 ButtonSEF.GetComponent<Button>().interactable = false;
                                 ButtonSEW.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerArmageddon)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerArmageddon)
                             {
                                 //ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonArmageddon.GetComponent<Button>().interactable = true;
@@ -609,10 +596,10 @@ public class WorldManager : MonoBehaviour
                         break;
                     case Actor.ActorType.Demon:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Demon";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
                         {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove)
                             {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
@@ -625,10 +612,10 @@ public class WorldManager : MonoBehaviour
                         break;
                     case Actor.ActorType.Monster:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Monster";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
                         {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
-                            if (GameManager.PlayerPower[CurrentPlayer - 1] >= powerMove)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove)
                             {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
@@ -641,27 +628,27 @@ public class WorldManager : MonoBehaviour
                         break;
                     case Actor.ActorType.Castle:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s Castle";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
                         {
-                            if (placedAdepts[CurrentPlayer - 1, 0] == false)
+                            if (placedAdepts[GameManager.CurrentPlayer - 1, 0] == false)
                             {
                                 ButtonAdeptE.GetComponentInChildren<Text>().text = "Spawn Earth Adept";
                                 ButtonAdeptE.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Earth));
                                 ButtonAdeptE.GetComponent<Button>().interactable = true;
                             }
-                            if (placedAdepts[CurrentPlayer - 1, 1] == false)
+                            if (placedAdepts[GameManager.CurrentPlayer - 1, 1] == false)
                             {
                                 ButtonAdeptA.GetComponentInChildren<Text>().text = "Spawn Air Adept";
                                 ButtonAdeptA.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Air));
                                 ButtonAdeptA.GetComponent<Button>().interactable = true;
                             }
-                            if (placedAdepts[CurrentPlayer - 1, 2] == false)
+                            if (placedAdepts[GameManager.CurrentPlayer - 1, 2] == false)
                             {
                                 ButtonAdeptF.GetComponentInChildren<Text>().text = "Spawn Fire Adept";
                                 ButtonAdeptF.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Fire));
                                 ButtonAdeptF.GetComponent<Button>().interactable = true;
                             }
-                            if (placedAdepts[CurrentPlayer - 1, 3] == false)
+                            if (placedAdepts[GameManager.CurrentPlayer - 1, 3] == false)
                             {
                                 ButtonAdeptW.GetComponentInChildren<Text>().text = "Spawn Water Adept";
                                 ButtonAdeptW.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Water));
@@ -693,7 +680,7 @@ public class WorldManager : MonoBehaviour
                 {
                     //This hex is empty.  Place the new thing here.
                     Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
-                    placeNewActor(tile.x, tile.z, IamSpawning.characterType, IamSpawning.Element, CurrentPlayer);
+                    placeNewActor(tile.x, tile.z, IamSpawning.characterType, IamSpawning.Element, GameManager.CurrentPlayer);
                     gameMode = GameMode.Default;
                     changePlayer();
                 }
@@ -706,7 +693,7 @@ public class WorldManager : MonoBehaviour
                     changePlayer();
                 }
             }
-            else if (tile.GetComponentInChildren<Actor>().Player == CurrentPlayer)
+            else if (tile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
             {
                 //The player clicked on their own piece.
                 if (gameMode == GameMode.CastSpell)
@@ -720,7 +707,7 @@ public class WorldManager : MonoBehaviour
                     gameMode = GameMode.Default;
                 }
             }
-            else// if (tile.GetComponentInChildren<Actor>().Player != CurrentPlayer)
+            else// if (tile.GetComponentInChildren<Actor>().Player != GameManager.CurrentPlayer)
             {//The above else if appears redundant, maybe use else.
                 //The player clicked on an oppoent's piece.
                 if (gameMode == GameMode.CastSpell)
@@ -731,8 +718,9 @@ public class WorldManager : MonoBehaviour
                 {
                     //The player wants to battle.
                     //TODO: Trigger battle.
-                    Debug.Log("Trigger Battle Here!");
-                    triggerBattle(selectedTile.GetComponentInChildren<Actor>(), tile.GetComponentInChildren<Actor>(), tile);
+                    Actor P1 = selectedTile.GetComponentInChildren<Actor>();
+                    Actor P2 = tile.GetComponentInChildren<Actor>();
+                    triggerBattle(P1, P2, tile);
                 }
             }
         }
@@ -897,7 +885,7 @@ public class WorldManager : MonoBehaviour
 
     public void changePlayer()
     {
-        CurrentPlayer = (CurrentPlayer == 1) ? 2 : 1;
+        GameManager.CurrentPlayer = (GameManager.CurrentPlayer == 1) ? 2 : 1;
 
         for (int x = 0; x < xSize; x++)
         {
@@ -906,9 +894,9 @@ public class WorldManager : MonoBehaviour
                 if (allTiles[x, z].transform.Find("Adept") != null)
                 {
                     GameObject adept = allTiles[x, z].transform.Find("Adept").gameObject;
-                    if (allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == CurrentPlayer)
+                    if (allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == GameManager.CurrentPlayer)
                     {
-                        GameManager.PlayerPower[CurrentPlayer - 1] += 10 - pendingPowerExpendature;
+                        GameManager.PlayerPower[GameManager.CurrentPlayer - 1] += 10 - pendingPowerExpendature;
                     }
                 }
             }
@@ -918,7 +906,7 @@ public class WorldManager : MonoBehaviour
         InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + GameManager.PlayerPower[1];
         showingTip = true;
         hideTipWhen = Time.time + zoomMaxSteps;
-        InfoTips.GetComponent<Text>().text = "Player " + CurrentPlayer + "'s Turn!\r\nCurrent Power: " + GameManager.PlayerPower[CurrentPlayer - 1].ToString();
+        InfoTips.GetComponent<Text>().text = "Player " + GameManager.CurrentPlayer + "'s Turn!\r\nCurrent Power: " + GameManager.PlayerPower[GameManager.CurrentPlayer - 1].ToString();
         //PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
         //InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
     }
