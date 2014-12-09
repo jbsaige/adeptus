@@ -17,11 +17,13 @@ public class GameController : MonoBehaviour
     public GameObject playerWraith;
     public GameObject playerGorgon;
     public GameObject playerChimera;
+    public GameObject playerCastle;
     
     // The enemy pieces
     public GameObject enemyAdept;
     public GameObject enemySalamander;
     public GameObject enemyFirebird;
+    public GameObject enemyCastle;
 
     // Spawn Variables
     public Vector3 playerSpawnValues;
@@ -60,10 +62,13 @@ public class GameController : MonoBehaviour
                 SpawnPlayerAdept();
                 break;
             case Actor.ActorType.Demon:
+                SpawnPlayerGorgon();
                 break;
             case Actor.ActorType.Monster:
+                SpawnPlayerSalamander();
                 break;
             case Actor.ActorType.Castle:
+                SpawnPlayerCastle();
                 break;
             default:
                 break;
@@ -78,11 +83,13 @@ public class GameController : MonoBehaviour
                 SpawnEnemyAdept();
                 break;
             case Actor.ActorType.Demon:
+                SpawnEnemyChimera();
                 break;
             case Actor.ActorType.Monster:
                 SpawnEnemySalamander();
                 break;
             case Actor.ActorType.Castle:
+                SpawnEnemyCastle();
                 break;
             default:
                 break;
@@ -118,6 +125,27 @@ public class GameController : MonoBehaviour
         Instantiate(playerAdept, spawnPosition, spawnRotation);
     }
 
+    void SpawnPlayerGorgon()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerGorgon, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerSalamander()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerSalamander, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerCastle()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerCastle, spawnPosition, spawnRotation);
+    }
+
     void SpawnEnemyAdept()
     {
         Vector3 spawnPosition = new Vector3(enemySpawnValues.x, enemySpawnValues.y, enemySpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
@@ -130,6 +158,20 @@ public class GameController : MonoBehaviour
         Vector3 spawnPosition = new Vector3(enemySpawnValues.x, enemySpawnValues.y, enemySpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
         Quaternion spawnRotation = Quaternion.identity;
         Instantiate(enemySalamander, spawnPosition, spawnRotation);
+    }
+
+    void SpawnEnemyChimera()
+    {
+        Vector3 spawnPosition = new Vector3(enemySpawnValues.x, enemySpawnValues.y, enemySpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(enemyChimera, spawnPosition, spawnRotation);
+    }
+
+    void SpawnEnemyCastle()
+    {
+        Vector3 spawnPosition = new Vector3(enemySpawnValues.x, enemySpawnValues.y, enemySpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(enemyCastle, spawnPosition, spawnRotation);
     }
 
 }
