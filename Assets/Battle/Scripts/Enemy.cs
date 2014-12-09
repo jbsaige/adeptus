@@ -202,6 +202,8 @@ public class Enemy : Entity
         if (_isHitByDrain)
         {
             thisEnemy.TakeDamage(playerController.weapons[0].damage);
+            Debug.Log("Hit by Drain");
+            playerOne.health++;
             playerOne.health++;
             _isHitByDrain = false;
         }

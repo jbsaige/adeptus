@@ -119,9 +119,17 @@ public class PlayerStats : Entity
 
         if (_isHitByDrain)
         {
-            thisPlayer.TakeDamage(1);
-            enemy.health++;
-            _isHitByDrain = false;
+            if(enemy.name.Contains("EnemyWraith"))
+            {
+                thisPlayer.TakeDamage(2);
+                enemy.health++;
+                enemy.health++;
+                _isHitByDrain = false;
+            }
+            else
+            {
+                _isHitByDrain = false;
+            }
         }
 
         if (_isHitByGaze)

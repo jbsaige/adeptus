@@ -47,13 +47,18 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         cam = Camera.main;
+        
         // can put an switch statement here where it equips the weapon corresponding to the type of creature
         //  alternate is to make a script for each creature for it's weapons/defenses
         EquipWeapon(0);
         GameObject wraithPlayer = GameObject.Find("Wraith");
+        
         if (wraithPlayer != null)
         {
             wraithPlayer.renderer.enabled = false;
+            //myscript = wraithPlayer.GetComponent<Breadcrumbs>();
+            //wraithPlayer.GetComponent<Breadcrumbs.cs>.enabled = false;
+            
         }
     }
 

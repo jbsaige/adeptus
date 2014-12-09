@@ -63,7 +63,27 @@ public class GameController : MonoBehaviour
                 SpawnPlayerAdept();
                 break;
             case Actor.ActorType.Demon:
-                SpawnPlayerGorgon();
+                if (PlayerElement == WorldManager.ElementType.Water)
+                {
+                    SpawnPlayerGorgon();
+                }
+                else if (PlayerElement == WorldManager.ElementType.Air)
+                {
+                    SpawnPlayerWraith();
+                }
+                else if (PlayerElement == WorldManager.ElementType.Earth)
+                {
+                    SpawnPlayerJuggernaut();
+                }
+                else if (PlayerElement == WorldManager.ElementType.Fire)
+                {
+                    SpawnPlayerChimera();
+                }
+                else
+                {
+                    Debug.Log("No Element Type");
+                    SpawnPlayerGorgon();
+                }
                 break;
             case Actor.ActorType.Monster:
                 SpawnPlayerSalamander();
@@ -126,11 +146,81 @@ public class GameController : MonoBehaviour
         Instantiate(playerAdept, spawnPosition, spawnRotation);
     }
 
+    void SpawnPlayerGiant()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerGiant, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerKraken()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerKraken, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerThunderbird()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerThunderbird, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerBehemoth()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerBehemoth, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerSiren()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerSiren, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerDjinn()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerDjinn, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerFirebird()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerFirebird, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerJuggernaut()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerJuggernaut, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerWraith()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerWraith, spawnPosition, spawnRotation);
+    }
+
     void SpawnPlayerGorgon()
     {
         Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
         Quaternion spawnRotation = Quaternion.identity;
         Instantiate(playerGorgon, spawnPosition, spawnRotation);
+    }
+
+    void SpawnPlayerChimera()
+    {
+        Vector3 spawnPosition = new Vector3(playerSpawnValues.x, playerSpawnValues.y, playerSpawnValues.z);  //    Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(playerChimera, spawnPosition, spawnRotation);
     }
 
     void SpawnPlayerSalamander()
