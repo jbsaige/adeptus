@@ -4,6 +4,7 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
     public Actor BattleP1, BattleP2;
+    public Vector2 P1Coord, P2Coord;
     public int[] PlayerPower;
     public int CurrentPlayer = 1;
 
@@ -42,6 +43,25 @@ public class GameManager : MonoBehaviour
 
     public void FinishLoad(WorldManager worldManager)
     {
+        if (BattleWinner > 0)
+        {
+            Debug.Log("Battle Winner: " + BattleWinner + "\r\nCurrent Player:" + CurrentPlayer);
+            if (BattleWinner == 1)
+            {
+                TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P2Coord.x, (int)P2Coord.y, (int)WorldManager.ElementType.None, 0, WorldManager.None, worldManager);
+            }
+            else
+            {
+                TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P1Coord.x, (int)P1Coord.y, (int)WorldManager.ElementType.None, 0, WorldManager.None, worldManager);
+            }
+            if (CurrentPlayer == BattleWinner)
+            {
+                Actor temp = TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor;
+                TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor = TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor;
+                TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor = temp;
+            }
+            BattleWinner = 0;
+        }
         worldManager.SetGameManager(this);
         worldManager.renderMode = this.RenderMode;
         if (WorldIsLoaded)
@@ -49,29 +69,9 @@ public class GameManager : MonoBehaviour
             worldManager.setAllTiles(TileManger.allTiles);
         }
         worldManager.Start_SetupGame();
-        if (BattleWinner > 3)
-        {
-            Debug.Log("Battle Winner: " + BattleWinner + "\r\nCurrent Player:" + CurrentPlayer);
-            if (BattleWinner == 1)
-            {
-                worldManager.destroyActorAt(this.BattleP2.x, this.BattleP2.z);
-                if (CurrentPlayer == BattleWinner)
-                {
-                    worldManager.moveActor(this.BattleP1.x, this.BattleP1.z, this.BattleP2.x, this.BattleP2.z);
-                }
-            }
-            else
-            {
-                worldManager.destroyActorAt(this.BattleP1.x, this.BattleP1.z);
-                if (CurrentPlayer == BattleWinner)
-                {
-                    worldManager.moveActor(this.BattleP2.x, this.BattleP2.z, this.BattleP1.x, this.BattleP1.z);
-                }
-            }
-            BattleWinner = 0;
-        }
         WorldIsLoaded = true;
         WorldManager = worldManager;
+        WorldManager.changePlayer();
     }
 
     public void loadRandomMap()
@@ -104,10 +104,14 @@ public class GameManager : MonoBehaviour
         return TileManger.allTiles;
     }
 
-    public void ReturnFromBattle(int winner)
+    public void ReturnFromBattle(int winner, int P1X, int P1Z, int P2X, int P2Z)
     {
         Debug.Log("Returning from battle");
         BattleWinner = winner;
+        BattleP1.x = P1X;
+        BattleP1.z = P1Z;
+        BattleP2.x = P2X;
+        BattleP2.z = P2Z;
         this.loadStoredMap();
     }
 
@@ -116,16 +120,19 @@ public class GameManager : MonoBehaviour
         TileManger.allTiles = WorldManager.getAllTiles();
         BattleP1 = TileManger.allTiles[P1.x, P1.z].Actor;
         BattleP2 = TileManger.allTiles[P2.x, P2.z].Actor;
-        BattleP1.Player = P1.Player;
-        BattleP1.x = P1.x;
-        BattleP1.z = P1.z;
-        BattleP1.Element = P1.Element;
-        BattleP1.characterType = P1.characterType;
-        BattleP2.Player = P2.Player;
-        BattleP2.x = P2.x;
-        BattleP2.z = P2.z;
-        BattleP2.Element = P2.Element;
-        BattleP2.characterType = P2.characterType; Application.LoadLevel(BattleGroundName);
+        //BattleP1.Player = P1.Player;
+        //BattleP1.x = P1.x;
+        //BattleP1.z = P1.z;
+        //BattleP1.Element = P1.Element;
+        //BattleP1.characterType = P1.characterType;
+        //BattleP2.Player = P2.Player;
+        //BattleP2.x = P2.x;
+        //BattleP2.z = P2.z;
+        //BattleP2.Element = P2.Element;
+        //BattleP2.characterType = P2.characterType;
+        P1Coord = new Vector2(BattleP1.x, BattleP1.z);
+        P2Coord = new Vector2(BattleP2.x, BattleP2.z);
+        Application.LoadLevel(BattleGroundName);
     }
 
     public void SetBattleManager(GameController battleManager)

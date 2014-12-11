@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour
 
     private Actor.ActorType PlayerType, EnemyType;
     private WorldManager.ElementType PlayerElement, EnemyElement;
+    private int PlayerX, PlayerY, EnemyX, EnemyY;
 
     private GameManager GameManager;
 
@@ -51,8 +52,12 @@ public class GameController : MonoBehaviour
     {
         PlayerType = GameManager.BattleP1.characterType;
         PlayerElement = GameManager.BattleP1.Element;
+        PlayerX = GameManager.BattleP1.x;
+        PlayerY = GameManager.BattleP1.z;
         EnemyType = GameManager.BattleP2.characterType;
         EnemyElement = GameManager.BattleP2.Element;
+        EnemyX = GameManager.BattleP2.x;
+        EnemyY = GameManager.BattleP2.z;
 
         switch (PlayerType)
         {
@@ -129,11 +134,11 @@ public class GameController : MonoBehaviour
         if (PlayerWon)
         {
             Debug.Log("player won");
-            GameManager.ReturnFromBattle(1);
+            GameManager.ReturnFromBattle(1, PlayerX, PlayerY, EnemyX, EnemyY);
         }
         else
         {
-            GameManager.ReturnFromBattle(2);
+            GameManager.ReturnFromBattle(2, PlayerX, PlayerY, EnemyX, EnemyY);
         }
     }
 

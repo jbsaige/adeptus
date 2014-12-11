@@ -2,7 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class LoadingManager : MonoBehaviour {
+public class LoadingManager : MonoBehaviour
+{
 
     public Canvas Canvas;
     public GameObject[] TextDisplays;
