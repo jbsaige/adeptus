@@ -3,31 +3,49 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    [HideInInspector]
     public Actor BattleP1, BattleP2;
+    [HideInInspector]
     public Vector2 P1Coord, P2Coord;
+    [HideInInspector]
     public int[] PlayerPower;
-    public int CurrentPlayer = 1;
+    [HideInInspector]
+    public bool[] PlayerIsAI;
+    [HideInInspector]
+    public WorldManager WorldManager;
+    [HideInInspector]
+    public MenuManager MenuManager;
+    [HideInInspector]
+    public TileManager TileManger;
+    [HideInInspector]
+    public LoadingManager LoadingManager;
+    [HideInInspector]
+    public WorldManager.RenderMode RenderMode;
+    [HideInInspector]
+    public GameController BattleManager;
+    [HideInInspector]
+    public AIHelper AIHelper;
+    [HideInInspector]
+    public bool WorldIsLoaded = false;
+    [HideInInspector]
+    public string NextLevel;
+    [HideInInspector]
+    public int BattleWinner = 0, roundNumber = 0, CurrentPlayer = 0;
 
-    private WorldManager WorldManager;
-    private MenuManager MenuManager;
-    private TileManager TileManger;
-    private LoadingManager LoadingManager;
-    private WorldManager.RenderMode RenderMode;
-    private GameController BattleManager;
-    private bool WorldIsLoaded = false;
-    private string NextLevel;
-    private int BattleWinner = 0;
-
+    private bool firstWorldLoad = true;
 
     public void Start()
     {
         DontDestroyOnLoad(this);
-        PlayerPower = new int[2];
+        PlayerPower = new int[2] { 0, 0 };
+        PlayerIsAI = new bool[2] { false, true };
         MenuManager = GameObject.FindObjectOfType<MenuManager>();
         MenuManager.SetGameManager(this);
         TileManger = gameObject.AddComponent<TileManager>();
         BattleP1 = gameObject.AddComponent<Actor>();
         BattleP2 = gameObject.AddComponent<Actor>();
+        AIHelper = gameObject.AddComponent<AIHelper>();
+        AIHelper.GameManager = this;
     }
 
     /// <summary>
@@ -41,6 +59,11 @@ public class GameManager : MonoBehaviour
         this.LoadLevel("World");
     }
 
+    private void OnLevelWasLoaded(int level)
+    {
+
+    }
+
     public void FinishLoad(WorldManager worldManager)
     {
         if (BattleWinner > 0)
@@ -48,11 +71,11 @@ public class GameManager : MonoBehaviour
             Debug.Log("Battle Winner: " + BattleWinner + "\r\nCurrent Player:" + CurrentPlayer);
             if (BattleWinner == 1)
             {
-                TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P2Coord.x, (int)P2Coord.y, (int)WorldManager.ElementType.None, 0, WorldManager.None, worldManager);
+                TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P2Coord.x, (int)P2Coord.y, (int)WorldManager.ElementType.None, 0, worldManager.None, worldManager);
             }
             else
             {
-                TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P1Coord.x, (int)P1Coord.y, (int)WorldManager.ElementType.None, 0, WorldManager.None, worldManager);
+                TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P1Coord.x, (int)P1Coord.y, (int)WorldManager.ElementType.None, 0, worldManager.None, worldManager);
             }
             if (CurrentPlayer == BattleWinner)
             {
@@ -120,16 +143,6 @@ public class GameManager : MonoBehaviour
         TileManger.allTiles = WorldManager.getAllTiles();
         BattleP1 = TileManger.allTiles[P1.x, P1.z].Actor;
         BattleP2 = TileManger.allTiles[P2.x, P2.z].Actor;
-        //BattleP1.Player = P1.Player;
-        //BattleP1.x = P1.x;
-        //BattleP1.z = P1.z;
-        //BattleP1.Element = P1.Element;
-        //BattleP1.characterType = P1.characterType;
-        //BattleP2.Player = P2.Player;
-        //BattleP2.x = P2.x;
-        //BattleP2.z = P2.z;
-        //BattleP2.Element = P2.Element;
-        //BattleP2.characterType = P2.characterType;
         P1Coord = new Vector2(BattleP1.x, BattleP1.z);
         P2Coord = new Vector2(BattleP2.x, BattleP2.z);
         Application.LoadLevel(BattleGroundName);
@@ -138,8 +151,6 @@ public class GameManager : MonoBehaviour
     public void SetBattleManager(GameController battleManager)
     {
         this.BattleManager = battleManager;
-        //This is for debug only
-        //BattleManager.FightOver(true);
     }
 
     public void SetLoadingManager(LoadingManager loadingManager)

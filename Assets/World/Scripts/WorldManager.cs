@@ -14,9 +14,10 @@ public class WorldManager : MonoBehaviour
     public GameObject ButtonSME, ButtonSMA, ButtonSMF, ButtonSMW, ButtonSEE, ButtonSEA, ButtonSEF, ButtonSEW;
     public GameObject Castle, Adept, Demon, Monster, None;
     public GameObject[] TextDisplays;
-    public Material texEarth, texAir, texFire, texWater, texVoid;
+    public Material texEarth, texAir, texFire, texWater, texVoid, transMat;
+    public Shader transShader;
     public GUISkin mySkin;
-    public float xOffset, zOffset, cameraX, cameraZ, cameraFOV, zoomMaxSteps, zoomFOV;
+    public float xOffset, zOffset, cameraX, cameraY, cameraZ, cameraFOV, zoomMaxSteps, zoomFOV, zoomY;
     public int xSize, zSize, numPowerWells, powerSummonMonster, powerSummonElemental, powerArmageddon, powerOSpell, powerDSpell, powerMove;
     public enum RenderMode { Pattern, Random, StripeH, StripeV, FromStored };
     public RenderMode renderMode;
@@ -38,12 +39,12 @@ public class WorldManager : MonoBehaviour
     public enum SummoningMenuMode { SlidedIn, SlidingIn, SlidedOut, SlidingOut };
     public SummoningMenuMode summonMode = SummoningMenuMode.SlidedOut;
     [HideInInspector]
-    private float zsX, zsZ, zsFOV, ztX, ztZ, ztFOV, zoomStep, zoomStart, xDiff, zDiff, fovDiff;
+    private float zsX, zsY, zsZ, zsFOV, ztX, ztY, ztZ, ztFOV, zoomStep, zoomStart, xDiff, yDiff, zDiff, fovDiff;
     private float canvasWidth, canvasHeight, panelWidth, panelHeight, panelAnchorX, panelAnchorY;
     private int fontSize, pendingPowerExpendature;
-    private bool[,] placedAdepts;
+    [HideInInspector]
+    public bool[,] placedAdepts;
     private Tiles selectedTile;
-    private Tiles[,] allTiles;
     private Actor IamSpawning;
     public Color[] PlayerColor;
     public Color[] ElementalColors;
@@ -65,12 +66,12 @@ public class WorldManager : MonoBehaviour
 
     public void setAllTiles(Tiles[,] tiles)
     {
-        this.allTiles = tiles;
+        GameManager.TileManger.allTiles = tiles;
     }
 
     public Tiles[,] getAllTiles()
     {
-        return this.allTiles;
+        return GameManager.TileManger.allTiles;
     }
 
     public void Start_SetupGame()
@@ -87,9 +88,9 @@ public class WorldManager : MonoBehaviour
         {
             powerSummonMonster = 50;
         }
-        if (allTiles == null)
+        if (GameManager.TileManger.allTiles == null)
         {
-            allTiles = new Tiles[xSize, zSize];
+            GameManager.TileManger.allTiles = new Tiles[xSize, zSize];
         }
         mats = new Material[4] { texEarth, texAir, texFire, texWater };
         Highlighting = (GameObject)Instantiate(TileHighlight, new Vector3(0, -0.2f, 0), TileHighlight.transform.rotation);
@@ -123,9 +124,7 @@ public class WorldManager : MonoBehaviour
         PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(-panelWidth, 0f);
         PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(panelWidth, 0f);
         PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight);
-        PanelSummonTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight * 2);
         PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight);
-        PanelSummonBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight * 2);
         InfoP1Power.GetComponent<Text>().color *= PlayerColor[0];
         InfoP1Power.GetComponent<Text>().text = "Player 1 Power:\r\n" + GameManager.PlayerPower[0];
         InfoP2Power.GetComponent<Text>().color *= PlayerColor[1];
@@ -177,7 +176,7 @@ public class WorldManager : MonoBehaviour
         {
             for (int z = 0; z < zSize; z++)
             {
-                Tiles oldTile = allTiles[x, z];
+                Tiles oldTile = GameManager.TileManger.allTiles[x, z];
                 float xPos, zPos;
                 xPos = x * xOffset;
                 zPos = z * zOffset;
@@ -193,12 +192,12 @@ public class WorldManager : MonoBehaviour
                 tileInteracter.SetElement((int)oldTile.Element - 1);
                 tileInteracter.SetXandZ(x, z);
                 tileInteracter.transform.parent = tileHolder.transform;
-                allTiles[x, z] = tileInteracter;
+                GameManager.TileManger.allTiles[x, z] = tileInteracter;
                 placeNewActor(x, z, oldTile.Actor.characterType, oldTile.Actor.Element, oldTile.Actor.Player);
                 if (oldTile.hasPowerWell)
                 {
-                    GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(allTiles[x, z].transform.position.x, 0F, allTiles[x, z].transform.position.z), allTiles[x, z].transform.rotation);
-                    powerWell.transform.parent = allTiles[x, z].transform;
+                    GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(GameManager.TileManger.allTiles[x, z].transform.position.x, 0F, GameManager.TileManger.allTiles[x, z].transform.position.z), GameManager.TileManger.allTiles[x, z].transform.rotation);
+                    powerWell.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
                     powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
                 }
             }
@@ -207,6 +206,7 @@ public class WorldManager : MonoBehaviour
 
     private void generateMap()
     {
+        GameManager.CurrentPlayer = 0;
         GameObject tileHolder = new GameObject("TileHolder");
         for (int x = 0; x < xSize; x++)
         {
@@ -228,7 +228,7 @@ public class WorldManager : MonoBehaviour
                 tileInteracter.SetElement(chosenElement);
                 tileInteracter.SetXandZ(x, z);
                 tileInteracter.transform.parent = tileHolder.transform;
-                allTiles[x, z] = tileInteracter;
+                GameManager.TileManger.allTiles[x, z] = tileInteracter;
                 placeNewActor(x, z, Actor.ActorType.None, 0, 0);
             }
         }
@@ -257,9 +257,9 @@ public class WorldManager : MonoBehaviour
                     x = powerWellX[i];
                     z = powerWellZ[i];
                 }
-                allTiles[x, z].hasPowerWell = true;
-                GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(allTiles[x, z].transform.position.x, 0F, allTiles[x, z].transform.position.z), allTiles[x, z].transform.rotation);
-                powerWell.transform.parent = allTiles[x, z].transform;
+                GameManager.TileManger.allTiles[x, z].hasPowerWell = true;
+                GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(GameManager.TileManger.allTiles[x, z].transform.position.x, 0F, GameManager.TileManger.allTiles[x, z].transform.position.z), GameManager.TileManger.allTiles[x, z].transform.rotation);
+                powerWell.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
                 powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
             }
         }
@@ -269,10 +269,10 @@ public class WorldManager : MonoBehaviour
             {
                 for (int z = 0; z < zSize; z++)
                 {
-                    if (allTiles[x, z].hasPowerWell == true)
+                    if (GameManager.TileManger.allTiles[x, z].hasPowerWell == true)
                     {
-                        GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(allTiles[x, z].transform.position.x, 0F, allTiles[x, z].transform.position.z), allTiles[x, z].transform.rotation);
-                        powerWell.transform.parent = allTiles[x, z].transform;
+                        GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(GameManager.TileManger.allTiles[x, z].transform.position.x, 0F, GameManager.TileManger.allTiles[x, z].transform.position.z), GameManager.TileManger.allTiles[x, z].transform.rotation);
+                        powerWell.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
                         powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
                     }
                 }
@@ -288,7 +288,7 @@ public class WorldManager : MonoBehaviour
             {
                 for (int z = 0; z < zSize; z++)
                 {
-                    Actor actor = allTiles[x, z].Actor;
+                    Actor actor = GameManager.TileManger.allTiles[x, z].Actor;
                     if (actor.characterType != Actor.ActorType.None)
                     {
                         placeNewActor(x, z, actor.characterType, actor.Element, actor.Player);
@@ -319,7 +319,7 @@ public class WorldManager : MonoBehaviour
         setUpZoomOut();
     }
 
-    private void placeNewActor(int x, int z, Actor.ActorType type, ElementType element, int player)
+    public void placeNewActor(int x, int z, Actor.ActorType type, ElementType element, int player)
     {
         GameObject instantiatee = null;
         switch (type)
@@ -342,12 +342,12 @@ public class WorldManager : MonoBehaviour
                 instantiatee = None;
                 break;
         }
-        if (allTiles[x, z].transform.FindChild("None") != null)
+        if (GameManager.TileManger.allTiles[x, z].transform.FindChild("None") != null)
         {
-            DestroyImmediate(allTiles[x, z].transform.FindChild("None").gameObject);
+            DestroyImmediate(GameManager.TileManger.allTiles[x, z].transform.FindChild("None").gameObject);
         }
 
-        GameObject CharacterObject = (GameObject)Instantiate(instantiatee, allTiles[x, z].transform.position, instantiatee.transform.rotation);
+        GameObject CharacterObject = (GameObject)Instantiate(instantiatee, GameManager.TileManger.allTiles[x, z].transform.position, instantiatee.transform.rotation);
         CharacterObject.name = type.ToString();
         //Some objects have SkinnedMeshRenderer, some have MeshRenderer.
         SkinnedMeshRenderer[] skMeshes = CharacterObject.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -374,8 +374,8 @@ public class WorldManager : MonoBehaviour
         Actor CharacterScript = CharacterObject.AddComponent<Actor>();
         CharacterScript.SetUp(type, x, z, (int)element, player, CharacterObject, this);
 
-        CharacterObject.transform.parent = allTiles[x, z].transform;
-        allTiles[x, z].Actor = CharacterScript;
+        CharacterObject.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
+        GameManager.TileManger.allTiles[x, z].Actor = CharacterScript;
     }
 
     private void ColorActor(Material[] mats, int player, int element)
@@ -401,17 +401,17 @@ public class WorldManager : MonoBehaviour
 
     public void moveActor(int oldX, int oldZ, int newX, int newZ)
     {
-        Actor movingActor = allTiles[oldX, oldZ].GetComponentInChildren<Actor>();
-        Actor emptyActor = allTiles[newX, newZ].GetComponentInChildren<Actor>();
+        Actor movingActor = GameManager.TileManger.allTiles[oldX, oldZ].GetComponentInChildren<Actor>();
+        Actor emptyActor = GameManager.TileManger.allTiles[newX, newZ].GetComponentInChildren<Actor>();
         //Update the transform parents
-        movingActor.transform.parent = allTiles[newX, newZ].transform;
-        emptyActor.transform.parent = allTiles[oldX, oldZ].transform;
+        movingActor.transform.parent = GameManager.TileManger.allTiles[newX, newZ].transform;
+        emptyActor.transform.parent = GameManager.TileManger.allTiles[oldX, oldZ].transform;
         //Update the Tiles.Actor information.
-        allTiles[oldX, oldZ].Actor = emptyActor;
-        allTiles[newX, newZ].Actor = movingActor;
+        GameManager.TileManger.allTiles[oldX, oldZ].Actor = emptyActor;
+        GameManager.TileManger.allTiles[newX, newZ].Actor = movingActor;
         //Do the actual move.
         movingActor.Move(newX, newZ);
-        movingActor.transform.position = allTiles[newX, newZ].transform.position;
+        movingActor.transform.position = GameManager.TileManger.allTiles[newX, newZ].transform.position;
     }
 
     public void destroyActor(Actor actor)
@@ -425,7 +425,7 @@ public class WorldManager : MonoBehaviour
 
     public void destroyActorAt(int x, int z)
     {
-        Actor actor = allTiles[x, z].GetComponentInChildren<Actor>();
+        Actor actor = GameManager.TileManger.allTiles[x, z].GetComponentInChildren<Actor>();
         Destroy(actor);
         //Required to keep the consistancy.
         placeNewActor(x, z, Actor.ActorType.None, 0, 0);
@@ -488,7 +488,7 @@ public class WorldManager : MonoBehaviour
         }
         else if (renderMode == RenderMode.FromStored)
         {
-            return (int)(allTiles[x, z].Element) - 1;
+            return (int)(GameManager.TileManger.allTiles[x, z].Element) - 1;
         }
         else
         {
@@ -664,8 +664,10 @@ public class WorldManager : MonoBehaviour
                 zoom = ZoomingMode.ZoomingIn;
                 ztX = tile.transform.position.x;
                 ztZ = tile.transform.position.z;
+                ztY = zoomY;
                 ztFOV = zoomFOV;
                 zsX = Camera.main.transform.position.x;
+                zsY = Camera.main.transform.position.y;
                 zsZ = Camera.main.transform.position.z;
                 zsFOV = Camera.main.fieldOfView;
                 setUpZoom();
@@ -734,9 +736,11 @@ public class WorldManager : MonoBehaviour
         }
         zoom = ZoomingMode.ZoomingOut;
         ztX = cameraX;
+        ztY = cameraY;
         ztZ = cameraZ;
         ztFOV = cameraFOV;
         zsX = Camera.main.transform.position.x;
+        zsY = Camera.main.transform.position.y;
         zsZ = Camera.main.transform.position.z;
         zsFOV = Camera.main.fieldOfView;
         setUpZoom();
@@ -759,6 +763,7 @@ public class WorldManager : MonoBehaviour
     {
         xDiff = zsX - ztX;
         zDiff = zsZ - ztZ;
+        yDiff = zsY - ztY;
         fovDiff = zsFOV - ztFOV;
         zoomStart = Time.time;
     }
@@ -769,22 +774,18 @@ public class WorldManager : MonoBehaviour
         canvasHeight = Canvas.transform.position.y * 2;
         panelWidth = canvasWidth * 0.25F;
         panelHeight = canvasHeight * 0.25F;
-        fontSize = (int)(canvasWidth * 0.025f);
+        fontSize = (int)(canvasWidth * 0.02f);
         for (int i = 0; i < TextDisplays.Length; i++)
         {
             TextDisplays[i].GetComponent<Text>().fontSize = fontSize;
         }
+        InfoTips.GetComponent<Text>().fontSize = InfoTips.GetComponent<Text>().fontSize * 2;
         if (zoom == ZoomingMode.ZoomedOut)
         {
             PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(-panelWidth, 0f);
             PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(panelWidth, 0f);
             PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight);
             PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight);
-        }
-        if (summonMode == SummoningMenuMode.SlidedOut)
-        {
-            PanelSummonTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight * 2);
-            PanelSummonBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight * 2);
         }
     }
 
@@ -796,6 +797,10 @@ public class WorldManager : MonoBehaviour
             PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
             InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
             showingTip = false;
+            if (GameManager.PlayerIsAI[GameManager.CurrentPlayer - 1])
+            {
+                GameManager.AIHelper.MakeDecision();
+            }
         }
         else if (showingTip == true)
         {
@@ -828,7 +833,7 @@ public class WorldManager : MonoBehaviour
                 float timeStep = (Time.time - zoomStart) / zoomMaxSteps;
                 float bezier = BezierBlend(timeStep);
                 Camera.main.fieldOfView = zsFOV - (fovDiff * bezier);
-                Camera.main.transform.position = new Vector3(zsX - (xDiff * bezier), Camera.main.transform.position.y, zsZ - (zDiff * bezier));
+                Camera.main.transform.position = new Vector3(zsX - (xDiff * bezier), zsY - (yDiff * bezier), zsZ - (zDiff * bezier));
                 float x, y, y2;
                 if (zoom == ZoomingMode.ZoomingIn)
                 {
@@ -848,8 +853,6 @@ public class WorldManager : MonoBehaviour
                 PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y);
                 if (summonMode == SummoningMenuMode.SlidingIn || summonMode == SummoningMenuMode.SlidingOut)
                 {
-                    PanelSummonTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -y2);
-                    PanelSummonBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y2);
                 }
             }
             else
@@ -885,16 +888,21 @@ public class WorldManager : MonoBehaviour
 
     public void changePlayer()
     {
-        GameManager.CurrentPlayer = (GameManager.CurrentPlayer == 1) ? 2 : 1;
+        GameManager.CurrentPlayer++;
+        if (GameManager.CurrentPlayer == 3)
+        {
+            GameManager.roundNumber++;
+            GameManager.CurrentPlayer = 1;
+        }
 
         for (int x = 0; x < xSize; x++)
         {
             for (int z = 0; z < zSize; z++)
             {
-                if (allTiles[x, z].transform.Find("Adept") != null)
+                if (GameManager.TileManger.allTiles[x, z].transform.Find("Adept") != null)
                 {
-                    GameObject adept = allTiles[x, z].transform.Find("Adept").gameObject;
-                    if (allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == GameManager.CurrentPlayer)
+                    GameObject adept = GameManager.TileManger.allTiles[x, z].transform.Find("Adept").gameObject;
+                    if (GameManager.TileManger.allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == GameManager.CurrentPlayer)
                     {
                         GameManager.PlayerPower[GameManager.CurrentPlayer - 1] += 10 - pendingPowerExpendature;
                     }
@@ -906,9 +914,16 @@ public class WorldManager : MonoBehaviour
         InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + GameManager.PlayerPower[1];
         showingTip = true;
         hideTipWhen = Time.time + zoomMaxSteps;
-        InfoTips.GetComponent<Text>().text = "Player " + GameManager.CurrentPlayer + "'s Turn!\r\nCurrent Power: " + GameManager.PlayerPower[GameManager.CurrentPlayer - 1].ToString();
-        //PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
-        //InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
+        //InfoTips.GetComponent<Text>().text = "Player " + GameManager.CurrentPlayer + "'s Turn!\r\nCurrent Power: " + GameManager.PlayerPower[GameManager.CurrentPlayer - 1].ToString();
+        //Since this is a single player game now, let's change the verbage.
+        if (GameManager.CurrentPlayer == 1)
+        {
+            InfoTips.GetComponent<Text>().text = "Your Turn!\r\nCurrent Power: " + GameManager.PlayerPower[0];
+        }
+        else
+        {
+            InfoTips.GetComponent<Text>().text = "Computer's Turn!\r\nCurrent Power: " + GameManager.PlayerPower[1];
+        }
     }
 
 }

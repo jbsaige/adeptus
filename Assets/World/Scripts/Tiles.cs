@@ -14,6 +14,8 @@ public class Tiles : MonoBehaviour
     {
         this.Element = (WorldManager.ElementType)element + 1;
         this.GetComponent<MeshRenderer>().material = Manager.mats[element];
+        //this.GetComponent<MeshRenderer>().material.Lerp(Manager.mats[element], Manager.transMat, 0.01f);
+        //this.GetComponent<MeshRenderer>().material.shader = Manager.transShader;
     }
 
     public void SetXandZ(int x, int z)
