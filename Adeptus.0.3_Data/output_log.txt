@@ -1,0 +1,1365 @@
+Initialize engine version: 4.6.2f1 (bd99309c2ad7)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: Intel(R) HD Graphics (ID=0x156)
+    Vendor:   Intel
+    VRAM:     128 MB
+Default GameObject Tag: Player already registered
+ 
+(Filename:  Line: 67)
+
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\Assembly-UnityScript.dll (this message is harmless)
+Loading C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
+Platform assembly: C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.488 seconds
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
+<RI> Initializing input.
+XInput1_3.dll not found.
+<RI> Input initialized.
+Platform assembly: C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\School\CS 4650\_Team\UnityProject\master\Adeptus.0.3_Data\Managed\System.dll (this message is harmless)
+UnloadTime: 5.526194 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 209.
+Total: 1.177993 ms (FindLiveObjects: 0.013114 ms CreateObjectMapping: 0.011403 ms MarkObjects: 0.182457 ms  DeleteObjects: 0.011973 ms)
+
+UnloadTime: 0.598119 ms
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 1089.
+Total: 1.560585 ms (FindLiveObjects: 0.054737 ms CreateObjectMapping: 0.025087 ms MarkObjects: 0.596409 ms  DeleteObjects: 0.010263 ms)
+
+The AI is making a decision.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+UnloadTime: 7.808058 ms
+NullReferenceException: Object reference not set to an instance of an object
+  at LastPlayerSighting.Awake () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 14 unused Assets to reduce memory usage. Loaded Objects now: 2021.
+Total: 2.130766 ms (FindLiveObjects: 0.089518 ms CreateObjectMapping: 0.035921 ms MarkObjects: 0.949921 ms  DeleteObjects: 0.096930 ms)
+
+IndexOutOfRangeException: Array index is out of range.
+  at Enemy.EquipWeapon (Int32 i) [0x00000] in <filename unknown>:0 
+  at Enemy.Start () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+36
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+36
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+32
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+32
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+28
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+28
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+24
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+20
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+16
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+12
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+8
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+4
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+ArgumentException: The prefab you want to instantiate is null.
+  at UnityEngine.Object.CheckNullArgument (System.Object arg, System.String message) [0x00000] in <filename unknown>:0 
+  at UnityEngine.Object.Instantiate (UnityEngine.Object original, Vector3 position, Quaternion rotation) [0x00000] in <filename unknown>:0 
+  at Enemy.Attack () [0x00000] in <filename unknown>:0 
+  at Enemy.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.Attack () [0x00000] in <filename unknown>:0 
+  at DemoEnemyControls.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+NullReferenceException: Object reference not set to an instance of an object
+  at WeaponOne.RangedAttack () [0x00000] in <filename unknown>:0 
+  at PlayerController.Update () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Dead
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+player won
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Returning from battle
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+The referenced script on this Behaviour is missing!
+ 
+(Filename:  Line: 1769)
+
+UnloadTime: 2.935862 ms
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 44 unused Assets to reduce memory usage. Loaded Objects now: 1925.
+Total: 6.533134 ms (FindLiveObjects: 0.140834 ms CreateObjectMapping: 0.051316 ms MarkObjects: 1.110712 ms  DeleteObjects: 4.128110 ms)
+
+UnloadTime: 0.778297 ms
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 1033 unused Assets to reduce memory usage. Loaded Objects now: 1094.
+Total: 6.153963 ms (FindLiveObjects: 0.103772 ms CreateObjectMapping: 0.051886 ms MarkObjects: 0.765182 ms  DeleteObjects: 4.294033 ms)
+
+Battle Winner: 1
+Current Player:1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The AI is making a decision.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+The AI is making a decision.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+

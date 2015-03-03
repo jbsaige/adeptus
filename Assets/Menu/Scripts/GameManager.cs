@@ -28,9 +28,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool WorldIsLoaded = false;
     [HideInInspector]
+    public bool[,] placedAdepts;
+    [HideInInspector]
     public string NextLevel;
     [HideInInspector]
     public int BattleWinner = 0, roundNumber = 0, CurrentPlayer = 0;
+    [HideInInspector]
+    public bool TutorialEnabled = true;
 
     private bool firstWorldLoad = true;
 

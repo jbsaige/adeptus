@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Actor : MonoBehaviour
 {
-    public int Player, x, z;
+    public int Player, x, z, HP;
     public WorldManager.ElementType Element;
     public ActorType characterType;
     public enum ActorType { None, Adept, Demon, Monster, Castle };

@@ -9,6 +9,7 @@ public class Tiles : MonoBehaviour
     public bool hasPowerWell = false;
     public Actor Actor;
     private bool iAmHighLighted;
+    WorldManager.ElementType otherElement;
 
     public void SetElement(int element)
     {
@@ -16,6 +17,26 @@ public class Tiles : MonoBehaviour
         this.GetComponent<MeshRenderer>().material = Manager.mats[element];
         //this.GetComponent<MeshRenderer>().material.Lerp(Manager.mats[element], Manager.transMat, 0.01f);
         //this.GetComponent<MeshRenderer>().material.shader = Manager.transShader;
+        if (Element == WorldManager.ElementType.Air)
+        {
+            otherElement = WorldManager.ElementType.Fire;
+        }
+        else if (Element == WorldManager.ElementType.Fire)
+        {
+            otherElement = WorldManager.ElementType.Water;
+        }
+        else if (Element == WorldManager.ElementType.Water)
+        {
+            otherElement = WorldManager.ElementType.Earth;
+        }
+        else if (Element == WorldManager.ElementType.Earth)
+        {
+            otherElement = WorldManager.ElementType.Air;
+        }
+        else
+        {
+            otherElement = WorldManager.ElementType.None;
+        }
     }
 
     public void SetXandZ(int x, int z)
