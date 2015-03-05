@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour
 
     private Actor.ActorType PlayerType, EnemyType;
     private WorldManager.ElementType PlayerElement, EnemyElement;
-    private int PlayerX, PlayerY, EnemyX, EnemyY;
+    private int PlayerX, PlayerY, EnemyX, EnemyY, PlayerHP, EnemyHP;
 
     private GameManager GameManager;
 
@@ -58,6 +58,8 @@ public class GameController : MonoBehaviour
         EnemyElement = GameManager.BattleP2.Element;
         EnemyX = GameManager.BattleP2.x;
         EnemyY = GameManager.BattleP2.z;
+        PlayerHP = GameManager.BattleP1.HP;
+        EnemyHP = GameManager.BattleP2.HP;
 
         switch (PlayerType)
         {
