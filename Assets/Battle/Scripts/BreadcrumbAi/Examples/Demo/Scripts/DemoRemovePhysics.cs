@@ -4,7 +4,7 @@ using System.Collections;
 public class DemoRemovePhysics : MonoBehaviour {
 
 	void Update(){
-		if(rigidbody.IsSleeping()){
+		if(GetComponent<Rigidbody>().IsSleeping()){
 			DestroyPhysics();
 		} 
 	}

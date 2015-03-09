@@ -24,7 +24,7 @@ public class EnemyShooting : MonoBehaviour
 	{
 		anim = GetComponent<Animator>();
 		laserShotLine = GetComponentInChildren<LineRenderer>();
-		laserShotLight = laserShotLine.gameObject.light;
+		laserShotLight = laserShotLine.gameObject.GetComponent<Light>();
 		col = GetComponent<SphereCollider>();
 		player = GameObject.FindGameObjectWithTag(Tags.player).transform;
 		playerHealth = player.gameObject.GetComponent<PlayerStats>();

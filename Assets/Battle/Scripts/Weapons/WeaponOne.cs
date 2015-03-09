@@ -73,7 +73,7 @@ public class WeaponOne : MonoBehaviour
 
             nextPossibleShootTime = Time.time + secondsBetweenShots;
 
-            audio.Play();
+            GetComponent<AudioSource>().Play();
 
             if (tracerRound)
             {

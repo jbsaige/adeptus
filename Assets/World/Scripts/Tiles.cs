@@ -52,7 +52,7 @@ public class Tiles : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hitInfo;
 
-        if (this.collider.Raycast(ray, out hitInfo, Mathf.Infinity) && this.Manager.zoom == WorldManager.ZoomingMode.ZoomedOut)
+        if (this.GetComponent<Collider>().Raycast(ray, out hitInfo, Mathf.Infinity) && this.Manager.zoom == WorldManager.ZoomingMode.ZoomedOut)
         {
             this.Manager.Highlighting.transform.position = new Vector3(this.transform.position.x, -0.2f, this.transform.position.z);
             this.Manager.HighlightedTile = this;

@@ -137,8 +137,8 @@ public class DemoPlayerControls : MonoBehaviour {
 			}
 			
 			Vector3 targetDirection = new Vector3(v+h,0,v+ -h);
-			rigidbody.MovePosition(rigidbody.position + targetDirection * speed * Time.deltaTime);
-			rigidbody.MoveRotation(Quaternion.LookRotation(targetDirection));
+			GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + targetDirection * speed * Time.deltaTime);
+			GetComponent<Rigidbody>().MoveRotation(Quaternion.LookRotation(targetDirection));
 			
 			animTop.SetBool(animRun, true);
 			animBottom.SetBool(animRun, true);
@@ -146,7 +146,7 @@ public class DemoPlayerControls : MonoBehaviour {
 			
 		} else {
 			if(!_stoppedMoving){
-				rigidbody.rotation = top.rotation;
+				GetComponent<Rigidbody>().rotation = top.rotation;
 			}
 			_stoppedMoving = true;
 			

@@ -17,7 +17,7 @@ public class DemoDestroyObject : MonoBehaviour {
 	public void Destruction(Vector3 explodePos, float force){
 		GameObject pieces = Instantiate(objectPrefab, transform.position, transform.rotation) as GameObject;
 		foreach(Transform child in pieces.transform){
-			child.gameObject.rigidbody.AddExplosionForce(force,explodePos,5f);
+			child.gameObject.GetComponent<Rigidbody>().AddExplosionForce(force,explodePos,5f);
 		}
 		Destroy (gameObject);
 	}

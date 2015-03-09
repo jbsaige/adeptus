@@ -67,7 +67,7 @@ namespace BreadcrumbAi{
 				if(ai._IsAir){
 					ai._IsGround = false;
 					ai._CanHover = false;
-					if(ai.rigidbody.useGravity){
+					if(ai.GetComponent<Rigidbody>().useGravity){
 						EditorGUILayout.HelpBox("Note: Air enemies should have Gravity turned off.", MessageType.Info);
 					}
 				}

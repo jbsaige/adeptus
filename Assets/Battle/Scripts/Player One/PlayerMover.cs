@@ -22,21 +22,21 @@ public class PlayerMover : MonoBehaviour
         float moveVertical = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        rigidbody.velocity = movement * speed;
+        GetComponent<Rigidbody>().velocity = movement * speed;
 
         if (moveHorizontal != 0f || moveVertical != 0f)
         {
             Rotating(moveHorizontal, moveVertical);
-            rigidbody.position = new Vector3
+            GetComponent<Rigidbody>().position = new Vector3
             (
-                Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
+                Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax),
                 0.0f,
-                Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
+                Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
             );
         }
         else
         {
-            rigidbody.velocity = Vector3.zero;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
     }
 
@@ -44,8 +44,8 @@ public class PlayerMover : MonoBehaviour
     {
         Vector3 targetDirection = new Vector3(horizontal, 0f, vertical);
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
-        Quaternion newRotation = Quaternion.Lerp(rigidbody.rotation, targetRotation, turnSmoothing * Time.deltaTime);
-        rigidbody.MoveRotation(newRotation);
+        Quaternion newRotation = Quaternion.Lerp(GetComponent<Rigidbody>().rotation, targetRotation, turnSmoothing * Time.deltaTime);
+        GetComponent<Rigidbody>().MoveRotation(newRotation);
     }
 	
 }

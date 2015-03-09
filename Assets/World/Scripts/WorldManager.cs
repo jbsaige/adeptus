@@ -8,7 +8,7 @@ public class WorldManager : MonoBehaviour
 
     public GameObject Tile, TileHighlight, PowerWell;
     public Canvas Canvas;
-    public GameObject PanelLeft, PanelRight, PanelTop, PanelBottom, PanelTips, PanelSummonTop, PanelSummonBottom, TutorialPanel, TutorialText;
+    public GameObject PanelLeft, PanelRight, PanelTop, PanelBottom, PanelTips, PanelSummonTop, PanelSummonBottom, TutorialPanel, TutorialImage, TutorialText;
     public GameObject InfoZone, InfoUnit, InfoP1Power, InfoP2Power, InfoTips;
     public GameObject ButtonCancel, ButtonZoomOut, ButtonArmageddon, ButtonMove, ButtonOSpell, ButtonDSpell, ButtonAdeptE, ButtonAdeptA, ButtonAdeptF, ButtonAdeptW;
     public GameObject ButtonSME, ButtonSMA, ButtonSMF, ButtonSMW, ButtonSEE, ButtonSEA, ButtonSEF, ButtonSEW;
@@ -84,34 +84,43 @@ public class WorldManager : MonoBehaviour
     private GameManager GameManager;
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         GameManager = FindObjectOfType<GameManager>();
         GameManager.FinishLoad(this);
     }
 
-    public void SetGameManager(GameManager gameManager) {
+    public void SetGameManager(GameManager gameManager)
+    {
         this.GameManager = gameManager;
     }
 
-    public void setAllTiles(Tiles[,] tiles) {
+    public void setAllTiles(Tiles[,] tiles)
+    {
         GameManager.TileManger.allTiles = tiles;
     }
 
-    public Tiles[,] getAllTiles() {
+    public Tiles[,] getAllTiles()
+    {
         return GameManager.TileManger.allTiles;
     }
 
-    public void Start_SetupGame() {
-        if (powerArmageddon < 1) {
+    public void Start_SetupGame()
+    {
+        if (powerArmageddon < 1)
+        {
             powerArmageddon = 1000;
         }
-        if (powerSummonElemental < 1) {
+        if (powerSummonElemental < 1)
+        {
             powerSummonElemental = 100;
         }
-        if (powerSummonMonster < 1) {
+        if (powerSummonMonster < 1)
+        {
             powerSummonMonster = 50;
         }
-        if (GameManager.TileManger.allTiles == null) {
+        if (GameManager.TileManger.allTiles == null)
+        {
             GameManager.TileManger.allTiles = new Tiles[xSize, zSize];
         }
         mats = new Material[4] { texEarth, texAir, texFire, texWater };
@@ -119,15 +128,20 @@ public class WorldManager : MonoBehaviour
         IamSpawning = new Actor();
         Camera.main.transform.position = new Vector3(cameraX, Camera.main.transform.position.y, cameraZ);
         GameManager.placedAdepts = new bool[2, 4];
-        for (int a = 0; a < 2; a++) {
-            for (int b = 0; b < 4; b++) {
+        for (int a = 0; a < 2; a++)
+        {
+            for (int b = 0; b < 4; b++)
+            {
                 GameManager.placedAdepts[a, b] = false;
             }
         }
         recalculateCanvasSize();
-        if (renderMode == RenderMode.FromStored) {
+        if (renderMode == RenderMode.FromStored)
+        {
             regenerateMap();
-        } else {
+        }
+        else
+        {
             generateMap();
             placePowerWells();
             Start_PlaceActors();
@@ -136,7 +150,8 @@ public class WorldManager : MonoBehaviour
         Start_ButtonSetup(true);
     }
 
-    private void Start_PanelSetup() {
+    private void Start_PanelSetup()
+    {
         PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(-panelWidth, 0f);
         PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(panelWidth, 0f);
         PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight);
@@ -147,15 +162,18 @@ public class WorldManager : MonoBehaviour
         InfoP2Power.GetComponent<Text>().text = "Player 2 Power:\r\n" + GameManager.PlayerPower[1];
     }
 
-    private void Start_ButtonSetup() {
+    private void Start_ButtonSetup()
+    {
         Start_ButtonSetup(false);
     }
 
-    private void Start_ButtonSetup(bool RunFirstTime) {
+    private void Start_ButtonSetup(bool RunFirstTime)
+    {
         Button[] ButtonsLeft = PanelLeft.GetComponentsInChildren<Button>();
         Button[] ButtonsRight = PanelRight.GetComponentsInChildren<Button>();
         Button[] Buttons = ButtonsLeft.Concat(ButtonsRight).ToArray();
-        foreach (Button button in Buttons) {
+        foreach (Button button in Buttons)
+        {
             button.GetComponentInChildren<Text>().text = "";
             button.interactable = false;
             button.onClick.RemoveAllListeners();
@@ -170,15 +188,19 @@ public class WorldManager : MonoBehaviour
         ButtonZoomOut.GetComponent<Button>().interactable = true;
     }
 
-    private void regenerateMap() {
+    private void regenerateMap()
+    {
         GameObject tileHolder = new GameObject("TileHolder");
-        for (int x = 0; x < xSize; x++) {
-            for (int z = 0; z < zSize; z++) {
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int z = 0; z < zSize; z++)
+            {
                 Tiles oldTile = GameManager.TileManger.allTiles[x, z];
                 float xPos, zPos;
                 xPos = x * xOffset;
                 zPos = z * zOffset;
-                if (x % 2 == 1) {
+                if (x % 2 == 1)
+                {
                     zPos += zOffset * 0.5f;
                 }
                 //Create the new tile.
@@ -191,7 +213,8 @@ public class WorldManager : MonoBehaviour
                 tileInteracter.transform.parent = tileHolder.transform;
                 GameManager.TileManger.allTiles[x, z] = tileInteracter;
                 placeNewActor(x, z, oldTile.Actor.characterType, oldTile.Actor.Element, oldTile.Actor.Player);
-                if (oldTile.hasPowerWell) {
+                if (oldTile.hasPowerWell)
+                {
                     GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(GameManager.TileManger.allTiles[x, z].transform.position.x, 0F, GameManager.TileManger.allTiles[x, z].transform.position.z), GameManager.TileManger.allTiles[x, z].transform.rotation);
                     powerWell.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
                     powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
@@ -200,18 +223,22 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    [ExecuteInEditMode]
-    public void generateMap() {
-        if (GameManager != null) {
+    public void generateMap()
+    {
+        if (GameManager != null)
+        {
             GameManager.CurrentPlayer = 0;
         }
         GameObject tileHolder = new GameObject("TileHolder");
-        for (int x = 0; x < xSize; x++) {
-            for (int z = 0; z < zSize; z++) {
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int z = 0; z < zSize; z++)
+            {
                 float xPos, zPos;
                 xPos = x * xOffset;
                 zPos = z * zOffset;
-                if (x % 2 == 1) {
+                if (x % 2 == 1)
+                {
                     zPos += zOffset * 0.5f;
                 }
                 //Create the new tile.
@@ -229,19 +256,26 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    private void placePowerWells() {
-        if (renderMode != RenderMode.FromStored) {
+    private void placePowerWells()
+    {
+        if (renderMode != RenderMode.FromStored)
+        {
             int x, z;
             int[] powerWellX = new int[8] { 0, 2, 4, 6, xSize - 1, xSize - 3, xSize - 5, xSize - 7 };
             int[] powerWellZ = new int[8] { 0, zSize - 3, 4, zSize - 7, zSize - 1, 2, zSize - 5, 6 };
-            if (renderMode == RenderMode.Pattern) {
+            if (renderMode == RenderMode.Pattern)
+            {
                 numPowerWells = 8;
             }
-            for (int i = 0; i < numPowerWells; i++) {
-                if (renderMode == RenderMode.Random) {
+            for (int i = 0; i < numPowerWells; i++)
+            {
+                if (renderMode == RenderMode.Random)
+                {
                     x = (int)Random.Range(0, xSize - 1);
                     z = (int)Random.Range(0, zSize - 1);
-                } else {
+                }
+                else
+                {
                     x = powerWellX[i];
                     z = powerWellZ[i];
                 }
@@ -250,10 +284,15 @@ public class WorldManager : MonoBehaviour
                 powerWell.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
                 powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
             }
-        } else {
-            for (int x = 0; x < xSize; x++) {
-                for (int z = 0; z < zSize; z++) {
-                    if (GameManager.TileManger.allTiles[x, z].hasPowerWell == true) {
+        }
+        else
+        {
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int z = 0; z < zSize; z++)
+                {
+                    if (GameManager.TileManger.allTiles[x, z].hasPowerWell == true)
+                    {
                         GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(GameManager.TileManger.allTiles[x, z].transform.position.x, 0F, GameManager.TileManger.allTiles[x, z].transform.position.z), GameManager.TileManger.allTiles[x, z].transform.rotation);
                         powerWell.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
                         powerWell.name = "PowerWell[" + x.ToString() + "," + z.ToString() + "]";
@@ -263,39 +302,50 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    private void Start_PlaceActors() {
-        if (renderMode == RenderMode.FromStored) {
-            for (int x = 0; x < xSize; x++) {
-                for (int z = 0; z < zSize; z++) {
+    private void Start_PlaceActors()
+    {
+        if (renderMode == RenderMode.FromStored)
+        {
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int z = 0; z < zSize; z++)
+                {
                     Actor actor = GameManager.TileManger.allTiles[x, z].Actor;
-                    if (actor.characterType != Actor.ActorType.None) {
+                    if (actor.characterType != Actor.ActorType.None)
+                    {
                         placeNewActor(x, z, actor.characterType, actor.Element, actor.Player);
                     }
                 }
             }
-        } else {
+        }
+        else
+        {
             placeNewActor(3, 7, Actor.ActorType.Castle, ElementType.None, 1);
             placeNewActor(19, 7, Actor.ActorType.Castle, ElementType.None, 2);
         }
     }
 
-    public void cancelAction() {
+    public void cancelAction()
+    {
         gameMode = GameMode.Default;
         Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
         ButtonCancel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
         pendingPowerExpendature = 0;
     }
 
-    public void placeAdept(ElementType Type) {
+    public void placeAdept(ElementType Type)
+    {
         gameMode = GameMode.PlaceSpawn;
         IamSpawning.characterType = Actor.ActorType.Adept;
         IamSpawning.Element = Type;
         setUpZoomOut();
     }
 
-    public void placeNewActor(int x, int z, Actor.ActorType type, ElementType element, int player) {
+    public void placeNewActor(int x, int z, Actor.ActorType type, ElementType element, int player)
+    {
         GameObject instantiatee = null;
-        switch (type) {
+        switch (type)
+        {
             case Actor.ActorType.Adept:
                 instantiatee = Adept;
                 GameManager.placedAdepts[player - 1, ((int)element) - 1] = true;
@@ -314,7 +364,8 @@ public class WorldManager : MonoBehaviour
                 instantiatee = None;
                 break;
         }
-        if (GameManager.TileManger.allTiles[x, z].transform.FindChild("None") != null) {
+        if (GameManager.TileManger.allTiles[x, z].transform.FindChild("None") != null)
+        {
             DestroyImmediate(GameManager.TileManger.allTiles[x, z].transform.FindChild("None").gameObject);
         }
 
@@ -322,15 +373,21 @@ public class WorldManager : MonoBehaviour
         CharacterObject.name = type.ToString();
         //Some objects have SkinnedMeshRenderer, some have MeshRenderer.
         SkinnedMeshRenderer[] skMeshes = CharacterObject.GetComponentsInChildren<SkinnedMeshRenderer>();
-        if (skMeshes != null && skMeshes.Length > 0) {
-            foreach (SkinnedMeshRenderer mesh in skMeshes) {
+        if (skMeshes != null && skMeshes.Length > 0)
+        {
+            foreach (SkinnedMeshRenderer mesh in skMeshes)
+            {
                 Material[] mats = mesh.materials;
                 ColorActor(mats, player, (int)element);
             }
-        } else {
+        }
+        else
+        {
             MeshRenderer[] meshes = CharacterObject.GetComponentsInChildren<MeshRenderer>();
-            if (meshes != null && meshes.Length > 0) {
-                foreach (MeshRenderer mesh in meshes) {
+            if (meshes != null && meshes.Length > 0)
+            {
+                foreach (MeshRenderer mesh in meshes)
+                {
                     Material[] mats = mesh.materials;
                     ColorActor(mats, player, (int)element);
                 }
@@ -343,22 +400,29 @@ public class WorldManager : MonoBehaviour
         GameManager.TileManger.allTiles[x, z].Actor = CharacterScript;
     }
 
-    private void ColorActor(Material[] mats, int player, int element) {
+    private void ColorActor(Material[] mats, int player, int element)
+    {
         Color primerColor = new Color(1f, 1f, 1f);
-        if (mats != null && mats.Length > 0) {
-            foreach (Material mat in mats) {
+        if (mats != null && mats.Length > 0)
+        {
+            foreach (Material mat in mats)
+            {
                 mat.color = primerColor * PlayerColor[player - 1] * ElementalColors[element];
             }
-        } else {
+        }
+        else
+        {
         }
     }
 
-    private void moveActor() {
+    private void moveActor()
+    {
         gameMode = GameMode.MoveSpawn;
         setUpZoomOut();
     }
 
-    public void moveActor(int oldX, int oldZ, int newX, int newZ) {
+    public void moveActor(int oldX, int oldZ, int newX, int newZ)
+    {
         Actor movingActor = GameManager.TileManger.allTiles[oldX, oldZ].GetComponentInChildren<Actor>();
         Actor emptyActor = GameManager.TileManger.allTiles[newX, newZ].GetComponentInChildren<Actor>();
         //Update the transform parents
@@ -372,7 +436,8 @@ public class WorldManager : MonoBehaviour
         movingActor.transform.position = GameManager.TileManger.allTiles[newX, newZ].transform.position;
     }
 
-    public void destroyActor(Actor actor) {
+    public void destroyActor(Actor actor)
+    {
         int x = actor.x;
         int z = actor.z;
         Destroy(actor);
@@ -380,18 +445,21 @@ public class WorldManager : MonoBehaviour
         placeNewActor(x, z, Actor.ActorType.None, 0, 0);
     }
 
-    public void destroyActorAt(int x, int z) {
+    public void destroyActorAt(int x, int z)
+    {
         Actor actor = GameManager.TileManger.allTiles[x, z].GetComponentInChildren<Actor>();
         Destroy(actor);
         //Required to keep the consistancy.
         placeNewActor(x, z, Actor.ActorType.None, 0, 0);
     }
 
-    public void triggerBattle(Actor P1Piece, Actor P2Piece, Tiles BattleTile) {
+    public void triggerBattle(Actor P1Piece, Actor P2Piece, Tiles BattleTile)
+    {
         GameManager.LoadBattle(P1Piece, P2Piece, BattleTile.Element.ToString());
     }
 
-    private void adeptSummonAction(ElementType element, Actor.ActorType type) {
+    private void adeptSummonAction(ElementType element, Actor.ActorType type)
+    {
         IamSpawning.characterType = type;
         IamSpawning.Element = element;
         pendingPowerExpendature = -50;
@@ -399,83 +467,118 @@ public class WorldManager : MonoBehaviour
         setUpZoomOut();
     }
 
-    private void finishAdeptSummonAction() {
+    private void finishAdeptSummonAction()
+    {
 
     }
 
-    private int colorPicker(int x, int z) {
-        if (renderMode == RenderMode.StripeH) {
+    private int colorPicker(int x, int z)
+    {
+        if (renderMode == RenderMode.StripeH)
+        {
 
             return (z % mats.Length);
-        } else if (renderMode == RenderMode.StripeV) {
+        }
+        else if (renderMode == RenderMode.StripeV)
+        {
             return (x % mats.Length);
-        } else if (renderMode == RenderMode.Pattern) {
+        }
+        else if (renderMode == RenderMode.Pattern)
+        {
             int value, distToE, distToN, distToW, distToS;
             distToE = xSize - x - 1;
             distToN = zSize - z - 1;
             distToS = z;
             distToW = x;
-            if (distToE < distToN && distToE < distToS && distToE < distToW) {
+            if (distToE < distToN && distToE < distToS && distToE < distToW)
+            {
                 value = distToE;
-            } else if (distToN < distToS && distToN < distToW) {
+            }
+            else if (distToN < distToS && distToN < distToW)
+            {
                 value = distToN;
-            } else if (distToS < distToW) {
+            }
+            else if (distToS < distToW)
+            {
                 value = distToS;
-            } else {
+            }
+            else
+            {
                 value = distToW;
             }
             return (((int)value / 2) % mats.Length);
-        } else if (renderMode == RenderMode.FromStored) {
+        }
+        else if (renderMode == RenderMode.FromStored)
+        {
             return (int)(GameManager.TileManger.allTiles[x, z].Element) - 1;
-        } else {
+        }
+        else
+        {
             return Random.Range(0, mats.Length);
         }
     }
 
-    public void zoomOnToTile(Tiles tile) {
-        if (gameMode == GameMode.Default) {
-            if (zoom == ZoomingMode.ZoomedOut) {
+    public void zoomOnToTile(Tiles tile)
+    {
+        if (gameMode == GameMode.Default)
+        {
+            if (zoom == ZoomingMode.ZoomedOut)
+            {
                 selectedTile = tile;
                 Start_ButtonSetup(false);
                 InfoZone.GetComponent<Text>().text = selectedTile.Element.ToString() + " Zone";
-                if (selectedTile.hasPowerWell) {
+                if (selectedTile.hasPowerWell)
+                {
                     InfoZone.GetComponent<Text>().text += " with Magic Source";
                 }
                 string elementName = "";
-                if (selectedTile.GetComponentInChildren<Actor>().Element != ElementType.None) {
+                if (selectedTile.GetComponentInChildren<Actor>().Element != ElementType.None)
+                {
                     elementName = selectedTile.GetComponentInChildren<Actor>().Element.ToString();
                 }
-                switch (selectedTile.GetComponentInChildren<Actor>().characterType) {
+                switch (selectedTile.GetComponentInChildren<Actor>().characterType)
+                {
                     case Actor.ActorType.None:
                         InfoUnit.GetComponent<Text>().text = "This zone is empty";
                         break;
                     case Actor.ActorType.Adept:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Adept";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer) {
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
+                        {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
                             ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell\r\n(" + powerDSpell.ToString() + "p)";
                             ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell\r\n(" + powerOSpell.ToString() + "p)";
                             ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon\r\n(" + powerArmageddon.ToString() + "p)";
                             summonMode = SummoningMenuMode.SlidingIn;
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove)
+                            {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonMove.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerOSpell) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerOSpell)
+                            {
                                 //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonOSpell.GetComponent<Button>().interactable = true;
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonOSpell.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerDSpell) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerDSpell)
+                            {
                                 //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonDSpell.GetComponent<Button>().interactable = true;
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonDSpell.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSummonMonster) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSummonMonster)
+                            {
                                 ButtonSEE.GetComponent<Button>().interactable = true;
                                 ButtonSEA.GetComponent<Button>().interactable = true;
                                 ButtonSEF.GetComponent<Button>().interactable = true;
@@ -488,13 +591,16 @@ public class WorldManager : MonoBehaviour
                                 ButtonSEA.GetComponentInChildren<Text>().text = "Summon Air Elemental";
                                 ButtonSEF.GetComponentInChildren<Text>().text = "Summon Fire Elemental";
                                 ButtonSEW.GetComponentInChildren<Text>().text = "Summon Water Elemental";
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonSME.GetComponent<Button>().interactable = false;
                                 ButtonSMA.GetComponent<Button>().interactable = false;
                                 ButtonSMF.GetComponent<Button>().interactable = false;
                                 ButtonSMW.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSummonElemental) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSummonElemental)
+                            {
                                 ButtonSME.GetComponent<Button>().interactable = true;
                                 ButtonSMA.GetComponent<Button>().interactable = true;
                                 ButtonSMF.GetComponent<Button>().interactable = true;
@@ -507,63 +613,81 @@ public class WorldManager : MonoBehaviour
                                 ButtonSMA.GetComponentInChildren<Text>().text = "Summon Air Monster";
                                 ButtonSMF.GetComponentInChildren<Text>().text = "Summon Fire Monster";
                                 ButtonSMW.GetComponentInChildren<Text>().text = "Summon Water Monster";
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonSEE.GetComponent<Button>().interactable = false;
                                 ButtonSEA.GetComponent<Button>().interactable = false;
                                 ButtonSEF.GetComponent<Button>().interactable = false;
                                 ButtonSEW.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerArmageddon) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerArmageddon)
+                            {
                                 //ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonArmageddon.GetComponent<Button>().interactable = true;
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonArmageddon.GetComponent<Button>().interactable = false;
                             }
                         }
                         break;
                     case Actor.ActorType.Demon:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Demon";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer) {
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
+                        {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove)
+                            {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonMove.GetComponent<Button>().interactable = false;
                             }
                         }
                         break;
                     case Actor.ActorType.Monster:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s " + elementName + " Monster";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer) {
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
+                        {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove) {
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove)
+                            {
                                 ButtonMove.GetComponent<Button>().onClick.AddListener(() => moveActor());
                                 ButtonMove.GetComponent<Button>().interactable = true;
-                            } else {
+                            }
+                            else
+                            {
                                 ButtonMove.GetComponent<Button>().interactable = false;
                             }
                         }
                         break;
                     case Actor.ActorType.Castle:
                         InfoUnit.GetComponent<Text>().text = "Player " + selectedTile.GetComponentInChildren<Actor>().Player.ToString() + "'s Castle";
-                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer) {
-                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 0] == false) {
+                        if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
+                        {
+                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 0] == false)
+                            {
                                 ButtonAdeptE.GetComponentInChildren<Text>().text = "Spawn Earth Adept";
                                 ButtonAdeptE.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Earth));
                                 ButtonAdeptE.GetComponent<Button>().interactable = true;
                             }
-                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 1] == false) {
+                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 1] == false)
+                            {
                                 ButtonAdeptA.GetComponentInChildren<Text>().text = "Spawn Air Adept";
                                 ButtonAdeptA.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Air));
                                 ButtonAdeptA.GetComponent<Button>().interactable = true;
                             }
-                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 2] == false) {
+                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 2] == false)
+                            {
                                 ButtonAdeptF.GetComponentInChildren<Text>().text = "Spawn Fire Adept";
                                 ButtonAdeptF.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Fire));
                                 ButtonAdeptF.GetComponent<Button>().interactable = true;
                             }
-                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 3] == false) {
+                            if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 3] == false)
+                            {
                                 ButtonAdeptW.GetComponentInChildren<Text>().text = "Spawn Water Adept";
                                 ButtonAdeptW.GetComponent<Button>().onClick.AddListener(() => placeAdept(ElementType.Water));
                                 ButtonAdeptW.GetComponent<Button>().interactable = true;
@@ -586,37 +710,52 @@ public class WorldManager : MonoBehaviour
                 zsFOV = Camera.main.fieldOfView;
                 setUpZoom();
             }
-        } else {
-            if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.None) {
+        }
+        else
+        {
+            if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.None)
+            {
                 //If the gameMode is CastSpell we don't care.  Players cannot cast onto empty hexes.
-                if (gameMode == GameMode.PlaceSpawn) {
+                if (gameMode == GameMode.PlaceSpawn)
+                {
                     //This hex is empty.  Place the new thing here.
                     Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
                     placeNewActor(tile.x, tile.z, IamSpawning.characterType, IamSpawning.Element, GameManager.CurrentPlayer);
                     gameMode = GameMode.Default;
                     changePlayer();
-                } else if (gameMode == GameMode.MoveSpawn) {
+                }
+                else if (gameMode == GameMode.MoveSpawn)
+                {
                     //This hex is empty.  Move to here.
                     Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
                     moveActor(selectedTile.x, selectedTile.z, tile.x, tile.z);
                     gameMode = GameMode.Default;
                     changePlayer();
                 }
-            } else if (tile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer) {
+            }
+            else if (tile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
+            {
                 //The player clicked on their own piece.
-                if (gameMode == GameMode.CastSpell) {
+                if (gameMode == GameMode.CastSpell)
+                {
                     //The player wants to cast a spell on their own piece.
-                } else {
+                }
+                else
+                {
                     //Let's cancel the current mode and return to default.
                     Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
                     gameMode = GameMode.Default;
                 }
-            } else// if (tile.GetComponentInChildren<Actor>().Player != GameManager.CurrentPlayer)
+            }
+            else// if (tile.GetComponentInChildren<Actor>().Player != GameManager.CurrentPlayer)
             {//The above else if appears redundant, maybe use else.
                 //The player clicked on an oppoent's piece.
-                if (gameMode == GameMode.CastSpell) {
+                if (gameMode == GameMode.CastSpell)
+                {
                     //The player wants to cast a spell on an oppoent's piece.
-                } else if (gameMode == GameMode.MoveSpawn) {
+                }
+                else if (gameMode == GameMode.MoveSpawn)
+                {
                     //The player wants to battle.
                     //TODO: Trigger battle.
                     Actor P1 = selectedTile.GetComponentInChildren<Actor>();
@@ -627,8 +766,10 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    public void setUpZoomOut() {
-        if (summonMode == SummoningMenuMode.SlidedIn) {
+    public void setUpZoomOut()
+    {
+        if (summonMode == SummoningMenuMode.SlidedIn)
+        {
             summonMode = SummoningMenuMode.SlidingOut;
         }
         zoom = ZoomingMode.ZoomingOut;
@@ -641,9 +782,12 @@ public class WorldManager : MonoBehaviour
         zsZ = Camera.main.transform.position.z;
         zsFOV = Camera.main.fieldOfView;
         setUpZoom();
-        if (gameMode == GameMode.Default) {
+        if (gameMode == GameMode.Default)
+        {
             Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
-        } else {
+        }
+        else
+        {
             Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 0f, 0f, 0.82f);
             //Setup the Cancel button to do the right stuff.
             //ButtonCancel.GetComponentInChildren<Text>().text = "Cancel";
@@ -653,7 +797,8 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    private void setUpZoom() {
+    private void setUpZoom()
+    {
         xDiff = zsX - ztX;
         zDiff = zsZ - ztZ;
         yDiff = zsY - ztY;
@@ -661,17 +806,20 @@ public class WorldManager : MonoBehaviour
         zoomStart = Time.time;
     }
 
-    private void recalculateCanvasSize() {
+    private void recalculateCanvasSize()
+    {
         canvasWidth = Canvas.transform.position.x * 2;
         canvasHeight = Canvas.transform.position.y * 2;
         panelWidth = canvasWidth * 0.25F;
         panelHeight = canvasHeight * 0.25F;
         fontSize = (int)(canvasWidth * 0.02f);
-        for (int i = 0; i < TextDisplays.Length; i++) {
+        for (int i = 0; i < TextDisplays.Length; i++)
+        {
             TextDisplays[i].GetComponent<Text>().fontSize = fontSize;
         }
         InfoTips.GetComponent<Text>().fontSize = InfoTips.GetComponent<Text>().fontSize * 2;
-        if (zoom == ZoomingMode.ZoomedOut) {
+        if (zoom == ZoomingMode.ZoomedOut)
+        {
             PanelLeft.GetComponent<RectTransform>().anchoredPosition = new Vector2(-panelWidth, 0f);
             PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(panelWidth, 0f);
             PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight);
@@ -679,19 +827,30 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    public void setTutorialUp() {
-        if (GameManager.roundNumber == 0 && gameMode == GameMode.Default) {
+    public void setTutorialUp()
+    {
+        Vector3 TutorialOffset = new Vector3(0, 0, 3f);
+        TutorialImage.GetComponent<Image>().color = new Color(192f, 192f, 192f, 255f);
+        TutorialText.GetComponent<Text>().color = new Color(0f, 0f, 0f, 255f);
+
+        if (GameManager.roundNumber == 0 && gameMode == GameMode.Default)
+        {
             showingTutorial = true;
             RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
-            TutRect.position = new Vector3(GameManager.TileManger.allTiles[3, 7].transform.position.x, 0.01f, GameManager.TileManger.allTiles[3, 7].transform.position.z + 2.5f);
+            TutRect.position = Camera.main.WorldToScreenPoint(GameManager.TileManger.allTiles[3, 7].transform.position + TutorialOffset);
             TutorialText.GetComponent<Text>().text = "Click your castle and pick an Adept to summon.";
-        } else if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn) {
+        }
+        else if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn)
+        {
             showingTutorial = true;
-            Tiles tile = GameManager.TileManger.allTiles[0,0];
-            for (int x = 0; x < xSize; x++) {
-                for (int z = 0; z < zSize; z++) {
+            Tiles tile = GameManager.TileManger.allTiles[0, 0];
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int z = 0; z < zSize; z++)
+                {
                     tile = GameManager.TileManger.allTiles[Mathf.Abs(x), z];
-                    if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.None && tile.hasPowerWell) {
+                    if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.None && tile.hasPowerWell)
+                    {
                         x = xSize;
                         z = zSize;
                     }
@@ -699,20 +858,27 @@ public class WorldManager : MonoBehaviour
             }
 
             RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
-            TutRect.position = new Vector3(tile.transform.position.x, 0.01f, tile.transform.position.z + 2.5f);
+            TutRect.position = Camera.main.WorldToScreenPoint(tile.transform.position + TutorialOffset);
             TutorialText.GetComponent<Text>().text = "Place your Adept on a Power Well.";
-        } else if (GameManager.roundNumber >= 1 && GameManager.roundNumber <= 3) {
+        }
+        else if (GameManager.roundNumber >= 1 && GameManager.roundNumber <= 3)
+        {
             showingTutorial = true;
             RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
-            TutRect.position = new Vector3(GameManager.TileManger.allTiles[3, 7].transform.position.x, 0.01f, GameManager.TileManger.allTiles[3, 7].transform.position.z + 2.5f);
+            TutRect.position = Camera.main.WorldToScreenPoint(GameManager.TileManger.allTiles[3, 7].transform.position + TutorialOffset);
             TutorialText.GetComponent<Text>().text = "Place the rest of your Adept on Power Wells.";
-        } else if (GameManager.roundNumber == 4) {
+        }
+        else if (GameManager.roundNumber == 4)
+        {
             showingTutorial = true;
             Tiles tile = GameManager.TileManger.allTiles[0, 0];
-            for (int x = 0; x < xSize; x++) {
-                for (int z = 0; z < zSize; z++) {
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int z = 0; z < zSize; z++)
+                {
                     tile = GameManager.TileManger.allTiles[Mathf.Abs(x), z];
-                    if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Adept && tile.GetComponentInChildren<Actor>().Player == 1) {
+                    if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Adept && tile.GetComponentInChildren<Actor>().Player == 1)
+                    {
                         x = xSize;
                         z = zSize;
                     }
@@ -720,15 +886,20 @@ public class WorldManager : MonoBehaviour
             }
 
             RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
-            TutRect.position = new Vector3(tile.transform.position.x, 0.01f, tile.transform.position.z + 2.5f);
+            TutRect.position = Camera.main.WorldToScreenPoint(tile.transform.position + TutorialOffset);
             TutorialText.GetComponent<Text>().text = "Summon a Demon or Monster with your Adept.";
-        } else if (GameManager.roundNumber == 5) {
+        }
+        else if (GameManager.roundNumber == 5)
+        {
             showingTutorial = true;
             Tiles tile = GameManager.TileManger.allTiles[0, 0];
-            for (int x = 0; x < xSize; x++) {
-                for (int z = 0; z < zSize; z++) {
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int z = 0; z < zSize; z++)
+                {
                     tile = GameManager.TileManger.allTiles[Mathf.Abs(x), z];
-                    if ((tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Demon || tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Monster) && tile.GetComponentInChildren<Actor>().Player == 1) {
+                    if ((tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Demon || tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Monster) && tile.GetComponentInChildren<Actor>().Player == 1)
+                    {
                         x = xSize;
                         z = zSize;
                     }
@@ -736,15 +907,20 @@ public class WorldManager : MonoBehaviour
             }
 
             RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
-            TutRect.position = new Vector3(tile.transform.position.x, 0.01f, tile.transform.position.z + 2.5f);
+            TutRect.position = Camera.main.WorldToScreenPoint(tile.transform.position + TutorialOffset);
             TutorialText.GetComponent<Text>().text = "Attack, destroy the enemy, capture all wells.";
-        } else if (GameManager.roundNumber == 6) {
+        }
+        else if (GameManager.roundNumber == 6)
+        {
             showingTutorial = true;
             Tiles tile = GameManager.TileManger.allTiles[0, 0];
-            for (int x = 0; x < xSize; x++) {
-                for (int z = 0; z < zSize; z++) {
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int z = 0; z < zSize; z++)
+                {
                     tile = GameManager.TileManger.allTiles[Mathf.Abs(x), z];
-                    if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Adept && tile.GetComponentInChildren<Actor>().Player == 1) {
+                    if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.Adept && tile.GetComponentInChildren<Actor>().Player == 1)
+                    {
                         x = xSize;
                         z = zSize;
                     }
@@ -752,57 +928,80 @@ public class WorldManager : MonoBehaviour
             }
 
             RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
-            TutRect.position = new Vector3(tile.transform.position.x, 0.01f, tile.transform.position.z + 2.5f);
+            TutRect.position = Camera.main.WorldToScreenPoint(tile.transform.position + TutorialOffset);
             TutorialText.GetComponent<Text>().text = "Adepts can also cast spells.";
+        }
+        else
+        {
+            TutorialImage.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
+            TutorialText.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
         }
     }
 
     // Update is called every frame, if the MonoBehaviour is enabled (Since v1.0)
-    void Update() {
-        if (showingTip == true && Time.time > hideTipWhen) {
+    void Update()
+    {
+        if (showingTip == true && Time.time > hideTipWhen)
+        {
             PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
             InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
             showingTip = false;
-            if (GameManager.PlayerIsAI[GameManager.CurrentPlayer - 1]) {
+            if (GameManager.PlayerIsAI[GameManager.CurrentPlayer - 1])
+            {
                 GameManager.AIHelper.MakeDecision();
-            } else {
+            }
+            else
+            {
                 setTutorialUp();
             }
-        } else if (showingTip == true) {
+        }
+        else if (showingTip == true)
+        {
             float alphaBlend = 255f;
             float timeRemaning = hideTipWhen - Time.time;
-            if (timeRemaning > zoomMaxSteps - 0.25f) {
+            if (timeRemaning > zoomMaxSteps - 0.25f)
+            {
                 alphaBlend = BezierBlend((0.25f + ((zoomMaxSteps - 0.25f) - timeRemaning)) * 4f);
-            } else if (timeRemaning < 0.25F) {
+            }
+            else if (timeRemaning < 0.25F)
+            {
                 alphaBlend = BezierBlend((timeRemaning) * 4f);
             }
             PanelTips.GetComponent<Image>().color = new Color(192f, 192f, 192f, alphaBlend);
             InfoTips.GetComponent<Text>().color = new Color(0f, 0f, 0f, alphaBlend);
         }
-        if (Input.GetMouseButtonUp(0) && zoom == ZoomingMode.ZoomedOut) {
-            if (showingTutorial == true) {
+        if (Input.GetMouseButtonUp(0) && zoom == ZoomingMode.ZoomedOut)
+        {
+            if (showingTutorial == true)
+            {
                 showingTutorial = false;
-                RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
-                TutRect.position = new Vector3(15, -1, 13);
+                TutorialImage.GetComponent<Image>().color = new Color(192f, 192f, 192f, 0f);
+                TutorialText.GetComponent<Text>().color = new Color(0f, 0f, 0f, 0f);
             }
             zoomOnToTile(HighlightedTile);
         }
-        if (canvasWidth != Canvas.transform.position.x * 2 || canvasHeight != Canvas.transform.position.y * 2) {
+        if (canvasWidth != Canvas.transform.position.x * 2 || canvasHeight != Canvas.transform.position.y * 2)
+        {
             recalculateCanvasSize();
         }
 
-        if (zoom == ZoomingMode.ZoomingIn || zoom == ZoomingMode.ZoomingOut) {
-            if (Time.time - zoomStart < zoomMaxSteps) {
+        if (zoom == ZoomingMode.ZoomingIn || zoom == ZoomingMode.ZoomingOut)
+        {
+            if (Time.time - zoomStart < zoomMaxSteps)
+            {
                 float timeStep = (Time.time - zoomStart) / zoomMaxSteps;
                 float bezier = BezierBlend(timeStep);
                 Camera.main.fieldOfView = zsFOV - (fovDiff * bezier);
                 Camera.main.transform.position = new Vector3(zsX - (xDiff * bezier), zsY - (yDiff * bezier), zsZ - (zDiff * bezier));
                 float x, y, y2;
-                if (zoom == ZoomingMode.ZoomingIn) {
+                if (zoom == ZoomingMode.ZoomingIn)
+                {
                     x = (bezier * panelWidth) - panelWidth;
                     y = (bezier * panelHeight) - panelHeight;
                     y2 = (bezier * panelHeight * 2) - panelHeight * 2;
-                } else {
+                }
+                else
+                {
                     x = -(bezier * panelWidth);
                     y = -(bezier * panelHeight);
                     y2 = -(bezier * panelHeight * 2);
@@ -811,23 +1010,33 @@ public class WorldManager : MonoBehaviour
                 PanelRight.GetComponent<RectTransform>().anchoredPosition = new Vector2(-x, 0f);
                 PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -y);
                 PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, y);
-                if (summonMode == SummoningMenuMode.SlidingIn || summonMode == SummoningMenuMode.SlidingOut) {
+                if (summonMode == SummoningMenuMode.SlidingIn || summonMode == SummoningMenuMode.SlidingOut)
+                {
                 }
-            } else {
-                if (zoom == ZoomingMode.ZoomingOut) {
+            }
+            else
+            {
+                if (zoom == ZoomingMode.ZoomingOut)
+                {
                     zoom = ZoomingMode.ZoomedOut;
                     isZoomed = false;
-                    if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn) {
+                    if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn)
+                    {
                         setTutorialUp();
                     }
-                } else {
+                }
+                else
+                {
                     zoom = ZoomingMode.ZoomedIn;
                     isZoomed = true;
                 }
 
-                if (summonMode == SummoningMenuMode.SlidingIn) {
+                if (summonMode == SummoningMenuMode.SlidingIn)
+                {
                     summonMode = SummoningMenuMode.SlidedIn;
-                } else {
+                }
+                else
+                {
                     summonMode = SummoningMenuMode.SlidedOut;
                 }
             }
@@ -835,22 +1044,29 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    private float BezierBlend(float t) {
+    private float BezierBlend(float t)
+    {
         return (t * t) * (3.0f - 2.0f * t);
     }
 
-    public void changePlayer() {
+    public void changePlayer()
+    {
         GameManager.CurrentPlayer++;
-        if (GameManager.CurrentPlayer == 3) {
+        if (GameManager.CurrentPlayer == 3)
+        {
             GameManager.roundNumber++;
             GameManager.CurrentPlayer = 1;
         }
 
-        for (int x = 0; x < xSize; x++) {
-            for (int z = 0; z < zSize; z++) {
-                if (GameManager.TileManger.allTiles[x, z].transform.Find("Adept") != null) {
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int z = 0; z < zSize; z++)
+            {
+                if (GameManager.TileManger.allTiles[x, z].transform.Find("Adept") != null)
+                {
                     GameObject adept = GameManager.TileManger.allTiles[x, z].transform.Find("Adept").gameObject;
-                    if (GameManager.TileManger.allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == GameManager.CurrentPlayer) {
+                    if (GameManager.TileManger.allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == GameManager.CurrentPlayer)
+                    {
                         GameManager.PlayerPower[GameManager.CurrentPlayer - 1] += 10 - pendingPowerExpendature;
                     }
                 }
@@ -863,9 +1079,12 @@ public class WorldManager : MonoBehaviour
         hideTipWhen = Time.time + zoomMaxSteps;
         //InfoTips.GetComponent<Text>().text = "Player " + GameManager.CurrentPlayer + "'s Turn!\r\nCurrent Power: " + GameManager.PlayerPower[GameManager.CurrentPlayer - 1].ToString();
         //Since this is a single player game now, let's change the verbage.
-        if (GameManager.CurrentPlayer == 1) {
+        if (GameManager.CurrentPlayer == 1)
+        {
             InfoTips.GetComponent<Text>().text = "Your Turn!\r\nCurrent Power: " + GameManager.PlayerPower[0];
-        } else {
+        }
+        else
+        {
             InfoTips.GetComponent<Text>().text = "Computer's Turn!\r\nCurrent Power: " + GameManager.PlayerPower[1];
         }
     }

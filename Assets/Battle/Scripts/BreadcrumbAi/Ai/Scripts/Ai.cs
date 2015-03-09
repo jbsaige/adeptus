@@ -121,7 +121,7 @@ namespace BreadcrumbAi{
 				_HasWanderPos = false; // TODO: this needs to be fixed
                 // stuff Thomas has added
                 GameObject wraithPlayer = GameObject.Find("Wraith");
-                if (wraithPlayer != null && !wraithPlayer.renderer.enabled)
+                if (wraithPlayer != null && !wraithPlayer.GetComponent<Renderer>().enabled)
                 {
                     visionState = VISION_STATE.CanSeeNothing;
                     //Debug.Log("Can't see player");
@@ -241,7 +241,7 @@ namespace BreadcrumbAi{
 				}
 			}
 			if(Ai_EdgeAvoidance() && !_IsJumping){
-				rigidbody.MovePosition(rigidbody.position + transform.forward * Time.deltaTime * speed);
+				GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + transform.forward * Time.deltaTime * speed);
 			} else if(_CanLongJump){
 				if(moveState == MOVEMENT_STATE.IsFollowingPlayer || 
 				   moveState == MOVEMENT_STATE.IsFollowingAi ||
@@ -260,19 +260,19 @@ namespace BreadcrumbAi{
 			} else if(_IsAir){
 				playerPos = new Vector3(position.x,position.y,position.z);
 			}
-			rigidbody.MoveRotation(Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerPos - transform.position), rotationSpeed));
+			GetComponent<Rigidbody>().MoveRotation(Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerPos - transform.position), rotationSpeed));
 		}
 		
 		private void Ai_Flee(){
-			rigidbody.MoveRotation(Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(transform.position - Player.position), rotationSpeed));
+			GetComponent<Rigidbody>().MoveRotation(Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(transform.position - Player.position), rotationSpeed));
 			if(Ai_EdgeAvoidance()){
-				rigidbody.MovePosition(rigidbody.position + transform.forward * Time.deltaTime * followSpeed);
+				GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + transform.forward * Time.deltaTime * followSpeed);
 			}
 		}
 		
 		private void Ai_Jump(){
 			if(IsGrounded() && !_IsJumping){
-				rigidbody.AddForce((Vector3.up * jumpForce) + (transform.forward * (jumpForce/2)), ForceMode.VelocityChange);
+				GetComponent<Rigidbody>().AddForce((Vector3.up * jumpForce) + (transform.forward * (jumpForce/2)), ForceMode.VelocityChange);
 				_IsJumping = true;
 			}
 		}
@@ -280,7 +280,7 @@ namespace BreadcrumbAi{
 		private void Ai_LongJump(){
 			if(IsGrounded() && !_IsJumping){
 				if(Physics.Linecast(LongJumpDetector.position, LongJumpDetector.position + (-Vector3.up * edgeDistance))){
-					rigidbody.AddForce((Vector3.up + transform.forward) * longJumpForce, ForceMode.VelocityChange );
+					GetComponent<Rigidbody>().AddForce((Vector3.up + transform.forward) * longJumpForce, ForceMode.VelocityChange );
 					_IsJumping = true;
 				}
 				Debug.DrawLine(LongJumpDetector.position,LongJumpDetector.position + (-Vector3.up * edgeDistance));
@@ -328,39 +328,39 @@ namespace BreadcrumbAi{
 			if(_HasAvoidance){
 				if (Physics.Raycast(transform.position,-transform.right,out hit,avoidDistance, Layer)){
 					Debug.DrawLine(transform.position, hit.point, Color.cyan);
-					rigidbody.AddForce(transform.right * avoidSpeed);
+					GetComponent<Rigidbody>().AddForce(transform.right * avoidSpeed);
 					_IsAvoiding = true;
 				} 
 				if (Physics.Raycast(transform.position,transform.right,out hit,avoidDistance, Layer)){
 					Debug.DrawLine(transform.position, hit.point, Color.cyan);
-					rigidbody.AddForce(-transform.right * avoidSpeed);
+					GetComponent<Rigidbody>().AddForce(-transform.right * avoidSpeed);
 					_IsAvoiding = true;
 				} 
 				if (Physics.Raycast(transform.position,transform.forward + -transform.right *2,out hit,avoidDistance, Layer)){
 					Debug.DrawLine(transform.position, hit.point, Color.cyan);
-					rigidbody.AddForce(transform.right * avoidSpeed);
+					GetComponent<Rigidbody>().AddForce(transform.right * avoidSpeed);
 					_IsAvoiding = true;	
 				} 
 				if (Physics.Raycast(transform.position,transform.forward + transform.right * 2,out hit,avoidDistance, Layer)){
 					Debug.DrawLine(transform.position, hit.point, Color.cyan);
-					rigidbody.AddForce(-transform.right * avoidSpeed);
+					GetComponent<Rigidbody>().AddForce(-transform.right * avoidSpeed);
 					_IsAvoiding = true;
 				} 
 				if (Physics.Raycast(transform.position,-transform.forward,out hit,avoidDistance, Layer)){
 					Debug.DrawLine(transform.position, hit.point, Color.cyan);
-					rigidbody.AddForce(transform.forward * avoidSpeed);
+					GetComponent<Rigidbody>().AddForce(transform.forward * avoidSpeed);
 					_IsAvoiding = true;
 				} 
 				
 				// This raycast helps avoid other Ai that are directly infront
-				if(Physics.Raycast(transform.position,transform.forward, out hit, transform.collider.bounds.extents.z + 0.1f)){
+				if(Physics.Raycast(transform.position,transform.forward, out hit, transform.GetComponent<Collider>().bounds.extents.z + 0.1f)){
 					if(hit.collider.tag == AiManager.enemyString){
-						rigidbody.AddForce(transform.right * avoidSpeed);
+						GetComponent<Rigidbody>().AddForce(transform.right * avoidSpeed);
 						_IsAvoiding = true;
 					}
 				} 
 				if(_IsAvoiding){
-					rigidbody.velocity = Vector3.zero;
+					GetComponent<Rigidbody>().velocity = Vector3.zero;
 					_IsAvoiding = false;
 				}
 			}
@@ -408,8 +408,8 @@ namespace BreadcrumbAi{
 		// This checks if the Ai is grounded, collider is required on the GameObject that has this script
 		// TODO: add customizable collider in case users have different collider gameobject.
 		public bool IsGrounded(){
-			if(collider != null){
-				return Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
+			if(GetComponent<Collider>() != null){
+				return Physics.Raycast(transform.position, -Vector3.up, GetComponent<Collider>().bounds.extents.y + 0.1f);
 			} else {
 				return true;
 			}
@@ -424,7 +424,7 @@ namespace BreadcrumbAi{
 				if(Physics.Raycast(hoverRay, out hit, hoverHeight)){
 					float proportionalHeight = (hoverHeight - hit.distance) / hoverHeight;
 					Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
-					rigidbody.AddForce(appliedHoverForce, ForceMode.Acceleration);
+					GetComponent<Rigidbody>().AddForce(appliedHoverForce, ForceMode.Acceleration);
 					Debug.DrawLine(Hover.position, hit.point, Color.blue);
 				}
 			}

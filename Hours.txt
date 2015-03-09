@@ -1,0 +1,2 @@
+20150308 - 2 hours - Research - Watched videos of gameplay for Archon II.  The powerwells move (predictably) each round.  The armageddon mode is one adept vs another.  There are less powerwells.  The battlegrounds are simple, black screen with elemental obsticales.
+20150309 - 0.75 hours - World Scene - Moved tutorial canvas into the overlay.  Updated calculations for world to screen.

@@ -53,8 +53,8 @@ public class BA_BasicFPS : MonoBehaviour {
 			{
 				speed = speedOrigin; // Keep speed to it's original value
 			}
-			rigidbody.MovePosition(rigidbody.position + (transform.right * h) * speed * Time.deltaTime); // Move player based on the horizontal input
-			rigidbody.MovePosition(rigidbody.position + (transform.forward * v) * speed * Time.deltaTime); // Move player based on the vertical input
+			GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + (transform.right * h) * speed * Time.deltaTime); // Move player based on the horizontal input
+			GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + (transform.forward * v) * speed * Time.deltaTime); // Move player based on the vertical input
 		}
 	}
 	
@@ -62,13 +62,13 @@ public class BA_BasicFPS : MonoBehaviour {
 	{
 		if(_canJump) // If the player can jump then continue
 		{
-			rigidbody.velocity += 15f * Vector3.up; // add velocity to the player on vector UP
+			GetComponent<Rigidbody>().velocity += 15f * Vector3.up; // add velocity to the player on vector UP
 			_canJump = false; // the player can no longer jump
 		}
 	}
 	
 	private bool IsGrounded()
 	{
-		return Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f); // Do a ray cast to see if the players collider is 0.1 away from the surface of something
+		return Physics.Raycast(transform.position, -Vector3.up, GetComponent<Collider>().bounds.extents.y + 0.1f); // Do a ray cast to see if the players collider is 0.1 away from the surface of something
 	}
 }

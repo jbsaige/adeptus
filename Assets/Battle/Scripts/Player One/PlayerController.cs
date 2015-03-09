@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         
         if (wraithPlayer != null)
         {
-            wraithPlayer.renderer.enabled = false;
+            wraithPlayer.GetComponent<Renderer>().enabled = false;
             //myscript = wraithPlayer.GetComponent<Breadcrumbs>();
             //wraithPlayer.GetComponent<Breadcrumbs.cs>.enabled = false;
             
@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
                     GameObject wraithPlayer = GameObject.Find("Wraith");
                     if (wraithPlayer != null)
                     {
-                        wraithPlayer.renderer.enabled = true;
+                        wraithPlayer.GetComponent<Renderer>().enabled = true;
                     }
                 }
             }
@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
                     GameObject wraithPlayer = GameObject.Find("Wraith");
                     if (wraithPlayer != null)
                     {
-                        wraithPlayer.renderer.enabled = false;
+                        wraithPlayer.GetComponent<Renderer>().enabled = false;
                     }
                 }
             }
