@@ -111,6 +111,22 @@ public class AIHelper : MonoBehaviour
         return 0;
     }
 
+    private int adeptsAlive()
+    {
+        int adepts = 0;
+        for (int x = 0; x < GameManager.WorldManager.xSize; x++)
+        {
+            for (int z = 0; z < GameManager.WorldManager.zSize; z++)
+            {
+                if (GameManager.TileManger.allTiles[x, z].Actor.characterType == Actor.ActorType.Adept)
+                {
+                    adepts++;
+                }
+            }
+        }
+        return adepts;
+    }
+
     private Actor findUncommitteedSpawnling()
     {
         int start = 0, stop = 0;

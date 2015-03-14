@@ -950,7 +950,7 @@ public class WorldManager : MonoBehaviour
             {
                 GameManager.AIHelper.MakeDecision();
             }
-            else
+            else if(GameManager.TutorialEnabled)
             {
                 setTutorialUp();
             }
@@ -1020,7 +1020,7 @@ public class WorldManager : MonoBehaviour
                 {
                     zoom = ZoomingMode.ZoomedOut;
                     isZoomed = false;
-                    if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn)
+                    if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn && GameManager.TutorialEnabled)
                     {
                         setTutorialUp();
                     }
