@@ -28,7 +28,7 @@ public class AirEffectController : MonoBehaviour
         while (_isAlive)
         {
             SpawnThunder();
-            SpawnCyclone();
+            //SpawnCyclone();
             yield return new WaitForSeconds(thunderSpawnRate);
             if (!thePlayer)
             {
