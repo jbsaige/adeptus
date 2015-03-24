@@ -576,6 +576,15 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonDSpell.GetComponent<Button>().interactable = false;
                             }
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerArmageddon)
+                            {
+                                ButtonArmageddon.GetComponent<Button>().onClick.AddListener(() => triggerArmegddeon());
+                                ButtonArmageddon.GetComponent<Button>().interactable = true;
+                            }
+                            else
+                            {
+                                ButtonArmageddon.GetComponent<Button>().interactable = false;
+                            }
                             if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSummonMonster)
                             {
                                 ButtonSEE.GetComponent<Button>().interactable = true;
@@ -1090,7 +1099,16 @@ public class WorldManager : MonoBehaviour
 
     public void triggerArmegddeon()
     {
-
+        GameManager.GameMode = GameMode.Armageddon;
+        Actor P1Castle = new Actor();
+        P1Castle.characterType = Actor.ActorType.Castle;
+        P1Castle.Element = ElementType.None;
+        Actor P2Castle = new Actor();
+        P2Castle.characterType = Actor.ActorType.Castle;
+        P2Castle.Element = ElementType.None;
+        Tiles Stage = new Tiles();
+        Stage.Element = ElementType.None;
+        triggerBattle(P1Castle, P2Castle, Stage);
     }
 
 }
