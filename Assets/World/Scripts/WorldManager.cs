@@ -41,10 +41,9 @@ public class WorldManager : MonoBehaviour
         Default,
         PlaceSpawn,
         CastSpell,
-        MoveSpawn
+        MoveSpawn,
+        Armageddon
     };
-    [HideInInspector]
-    public GameMode gameMode = GameMode.Default;
     [HideInInspector]
     public Material[] mats;
     [HideInInspector]
@@ -327,7 +326,7 @@ public class WorldManager : MonoBehaviour
 
     public void cancelAction()
     {
-        gameMode = GameMode.Default;
+        GameManager.GameMode = GameMode.Default;
         Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
         ButtonCancel.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
         pendingPowerExpendature = 0;
@@ -335,7 +334,7 @@ public class WorldManager : MonoBehaviour
 
     public void placeAdept(ElementType Type)
     {
-        gameMode = GameMode.PlaceSpawn;
+        GameManager.GameMode = GameMode.PlaceSpawn;
         IamSpawning.characterType = Actor.ActorType.Adept;
         IamSpawning.Element = Type;
         setUpZoomOut();
@@ -417,7 +416,7 @@ public class WorldManager : MonoBehaviour
 
     private void moveActor()
     {
-        gameMode = GameMode.MoveSpawn;
+        GameManager.GameMode = GameMode.MoveSpawn;
         setUpZoomOut();
     }
 
@@ -463,7 +462,7 @@ public class WorldManager : MonoBehaviour
         IamSpawning.characterType = type;
         IamSpawning.Element = element;
         pendingPowerExpendature = -50;
-        gameMode = GameMode.PlaceSpawn;
+        GameManager.GameMode = GameMode.PlaceSpawn;
         setUpZoomOut();
     }
 
@@ -520,7 +519,7 @@ public class WorldManager : MonoBehaviour
 
     public void zoomOnToTile(Tiles tile)
     {
-        if (gameMode == GameMode.Default)
+        if (GameManager.GameMode == GameMode.Default)
         {
             if (zoom == ZoomingMode.ZoomedOut)
             {
@@ -715,28 +714,28 @@ public class WorldManager : MonoBehaviour
         {
             if (tile.GetComponentInChildren<Actor>().characterType == Actor.ActorType.None)
             {
-                //If the gameMode is CastSpell we don't care.  Players cannot cast onto empty hexes.
-                if (gameMode == GameMode.PlaceSpawn)
+                //If the GameManager.GameMode is CastSpell we don't care.  Players cannot cast onto empty hexes.
+                if (GameManager.GameMode == GameMode.PlaceSpawn)
                 {
                     //This hex is empty.  Place the new thing here.
                     Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
                     placeNewActor(tile.x, tile.z, IamSpawning.characterType, IamSpawning.Element, GameManager.CurrentPlayer);
-                    gameMode = GameMode.Default;
+                    GameManager.GameMode = GameMode.Default;
                     changePlayer();
                 }
-                else if (gameMode == GameMode.MoveSpawn)
+                else if (GameManager.GameMode == GameMode.MoveSpawn)
                 {
                     //This hex is empty.  Move to here.
                     Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
                     moveActor(selectedTile.x, selectedTile.z, tile.x, tile.z);
-                    gameMode = GameMode.Default;
+                    GameManager.GameMode = GameMode.Default;
                     changePlayer();
                 }
             }
             else if (tile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
             {
                 //The player clicked on their own piece.
-                if (gameMode == GameMode.CastSpell)
+                if (GameManager.GameMode == GameMode.CastSpell)
                 {
                     //The player wants to cast a spell on their own piece.
                 }
@@ -744,17 +743,17 @@ public class WorldManager : MonoBehaviour
                 {
                     //Let's cancel the current mode and return to default.
                     Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
-                    gameMode = GameMode.Default;
+                    GameManager.GameMode = GameMode.Default;
                 }
             }
             else// if (tile.GetComponentInChildren<Actor>().Player != GameManager.CurrentPlayer)
             {//The above else if appears redundant, maybe use else.
                 //The player clicked on an oppoent's piece.
-                if (gameMode == GameMode.CastSpell)
+                if (GameManager.GameMode == GameMode.CastSpell)
                 {
                     //The player wants to cast a spell on an oppoent's piece.
                 }
-                else if (gameMode == GameMode.MoveSpawn)
+                else if (GameManager.GameMode == GameMode.MoveSpawn)
                 {
                     //The player wants to battle.
                     //TODO: Trigger battle.
@@ -782,7 +781,7 @@ public class WorldManager : MonoBehaviour
         zsZ = Camera.main.transform.position.z;
         zsFOV = Camera.main.fieldOfView;
         setUpZoom();
-        if (gameMode == GameMode.Default)
+        if (GameManager.GameMode == GameMode.Default)
         {
             Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
         }
@@ -833,14 +832,14 @@ public class WorldManager : MonoBehaviour
         TutorialImage.GetComponent<Image>().color = new Color(192f, 192f, 192f, 255f);
         TutorialText.GetComponent<Text>().color = new Color(0f, 0f, 0f, 255f);
 
-        if (GameManager.roundNumber == 0 && gameMode == GameMode.Default)
+        if (GameManager.roundNumber == 0 && GameManager.GameMode == GameMode.Default)
         {
             showingTutorial = true;
             RectTransform TutRect = TutorialPanel.GetComponent<RectTransform>();
             TutRect.position = Camera.main.WorldToScreenPoint(GameManager.TileManger.allTiles[3, 7].transform.position + TutorialOffset);
             TutorialText.GetComponent<Text>().text = "Click your castle and pick an Adept to summon.";
         }
-        else if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn)
+        else if (GameManager.roundNumber == 0 && GameManager.GameMode == GameMode.PlaceSpawn)
         {
             showingTutorial = true;
             Tiles tile = GameManager.TileManger.allTiles[0, 0];
@@ -1020,7 +1019,7 @@ public class WorldManager : MonoBehaviour
                 {
                     zoom = ZoomingMode.ZoomedOut;
                     isZoomed = false;
-                    if (GameManager.roundNumber == 0 && gameMode == GameMode.PlaceSpawn && GameManager.TutorialEnabled)
+                    if (GameManager.roundNumber == 0 && GameManager.GameMode == GameMode.PlaceSpawn && GameManager.TutorialEnabled)
                     {
                         setTutorialUp();
                     }
@@ -1087,6 +1086,11 @@ public class WorldManager : MonoBehaviour
         {
             InfoTips.GetComponent<Text>().text = "Computer's Turn!\r\nCurrent Power: " + GameManager.PlayerPower[1];
         }
+    }
+
+    public void triggerArmegddeon()
+    {
+
     }
 
 }
