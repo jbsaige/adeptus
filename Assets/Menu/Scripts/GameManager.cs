@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public WorldManager.RenderMode RenderMode;
     [HideInInspector]
+    public WorldManager.GameMode GameMode;
+    [HideInInspector]
     public GameController BattleManager;
     [HideInInspector]
     public AIHelper AIHelper;
