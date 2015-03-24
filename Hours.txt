@@ -1,2 +1,12 @@
-20150308 - 2 hours - Research - Watched videos of gameplay for Archon II.  The powerwells move (predictably) each round.  The armageddon mode is one adept vs another.  There are less powerwells.  The battlegrounds are simple, black screen with elemental obsticales.
-20150309 - 0.75 hours - World Scene - Moved tutorial canvas into the overlay.  Updated calculations for world to screen.
+20150308 - 2'00" - Research - Watched videos of gameplay for Archon II.  The powerwells move (predictably) each round.  The armageddon mode is one adept vs another.  There are less powerwells.  The battlegrounds are simple, black screen with elemental obsticales.
+20150309 - 0'45" - World Scene - Moved tutorial canvas into the overlay.  Updated calculations for world to screen.
+--------
+20150323 - Drive failure. Some updates were committed to github and bitbucket.  However, the updates to this file were excluded.  Will attempt to reconstruct.  Last commit was 20150315.  The changes after that point are lost, and will have to be reconstructed.
+--------
+20150314 - 1'00" - World Scene - Tutorial now runs on an enabled/disabled flag.  This is to setup for being able to turn it off mid-game.
+20150315 - 0'30" - Battle Scene (Air) - Disabled cyclones.
+20150315 - 0'15" - Research - The Battle Scene (Void) can be used to replace the other battle scenes, to make it more like the orginial.
+--------
+20150324 - 0'30" - Battle Scene (All) - Updated each weapon so that they are balanced.
+20150324 - 0'10" - Updated the spawn positions so that they are on the screen.
+20150324 - 0'10" - World Manager - Moved the GameMode to the GameManager so that the mode survives battles.
