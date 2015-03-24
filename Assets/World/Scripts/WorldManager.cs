@@ -586,10 +586,10 @@ public class WorldManager : MonoBehaviour
                                 ButtonSEA.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Air, Actor.ActorType.Demon));
                                 ButtonSEF.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Fire, Actor.ActorType.Demon));
                                 ButtonSEW.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Water, Actor.ActorType.Demon));
-                                ButtonSEE.GetComponentInChildren<Text>().text = "Summon Earth Elemental";
-                                ButtonSEA.GetComponentInChildren<Text>().text = "Summon Air Elemental";
-                                ButtonSEF.GetComponentInChildren<Text>().text = "Summon Fire Elemental";
-                                ButtonSEW.GetComponentInChildren<Text>().text = "Summon Water Elemental";
+                                ButtonSEE.GetComponentInChildren<Text>().text = "Summon Earth Elemental\r\n(" + powerSummonElemental.ToString() + "p)";
+                                ButtonSEA.GetComponentInChildren<Text>().text = "Summon Air Elemental\r\n(" + powerSummonElemental.ToString() + "p)";
+                                ButtonSEF.GetComponentInChildren<Text>().text = "Summon Fire Elemental\r\n(" + powerSummonElemental.ToString() + "p)";
+                                ButtonSEW.GetComponentInChildren<Text>().text = "Summon Water Elemental\r\n(" + powerSummonElemental.ToString() + "p)";
                             }
                             else
                             {
@@ -608,10 +608,10 @@ public class WorldManager : MonoBehaviour
                                 ButtonSMA.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Air, Actor.ActorType.Monster));
                                 ButtonSMF.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Fire, Actor.ActorType.Monster));
                                 ButtonSMW.GetComponent<Button>().onClick.AddListener(() => adeptSummonAction(ElementType.Water, Actor.ActorType.Monster));
-                                ButtonSME.GetComponentInChildren<Text>().text = "Summon Earth Monster";
-                                ButtonSMA.GetComponentInChildren<Text>().text = "Summon Air Monster";
-                                ButtonSMF.GetComponentInChildren<Text>().text = "Summon Fire Monster";
-                                ButtonSMW.GetComponentInChildren<Text>().text = "Summon Water Monster";
+                                ButtonSME.GetComponentInChildren<Text>().text = "Summon Earth Monster\r\n(" + powerSummonMonster.ToString() + "p)";
+                                ButtonSMA.GetComponentInChildren<Text>().text = "Summon Air Monster\r\n(" + powerSummonMonster.ToString() + "p)";
+                                ButtonSMF.GetComponentInChildren<Text>().text = "Summon Fire Monster\r\n(" + powerSummonMonster.ToString() + "p)";
+                                ButtonSMW.GetComponentInChildren<Text>().text = "Summon Water Monster\r\n(" + powerSummonMonster.ToString() + "p)";
                             }
                             else
                             {
