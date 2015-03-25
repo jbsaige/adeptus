@@ -35,7 +35,7 @@ public class Tiles : MonoBehaviour
         }
         else
         {
-            otherElement = WorldManager.ElementType.None;
+            otherElement = WorldManager.ElementType.Void;
         }
     }
 

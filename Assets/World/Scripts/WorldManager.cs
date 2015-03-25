@@ -30,7 +30,7 @@ public class WorldManager : MonoBehaviour
     public RenderMode renderMode;
     public enum ElementType
     {
-        None,
+        Void,
         Earth,
         Air,
         Fire,
@@ -319,8 +319,8 @@ public class WorldManager : MonoBehaviour
         }
         else
         {
-            placeNewActor(3, 7, Actor.ActorType.Castle, ElementType.None, 1);
-            placeNewActor(19, 7, Actor.ActorType.Castle, ElementType.None, 2);
+            placeNewActor(3, 7, Actor.ActorType.Castle, ElementType.Void, 1);
+            placeNewActor(19, 7, Actor.ActorType.Castle, ElementType.Void, 2);
         }
     }
 
@@ -531,7 +531,7 @@ public class WorldManager : MonoBehaviour
                     InfoZone.GetComponent<Text>().text += " with Magic Source";
                 }
                 string elementName = "";
-                if (selectedTile.GetComponentInChildren<Actor>().Element != ElementType.None)
+                if (selectedTile.GetComponentInChildren<Actor>().Element != ElementType.Void)
                 {
                     elementName = selectedTile.GetComponentInChildren<Actor>().Element.ToString();
                 }
@@ -1102,12 +1102,12 @@ public class WorldManager : MonoBehaviour
         GameManager.GameMode = GameMode.Armageddon;
         Actor P1Castle = new Actor();
         P1Castle.characterType = Actor.ActorType.Castle;
-        P1Castle.Element = ElementType.None;
+        P1Castle.Element = ElementType.Void;
         Actor P2Castle = new Actor();
         P2Castle.characterType = Actor.ActorType.Castle;
-        P2Castle.Element = ElementType.None;
+        P2Castle.Element = ElementType.Void;
         Tiles Stage = new Tiles();
-        Stage.Element = ElementType.None;
+        Stage.Element = ElementType.Void;
         triggerBattle(P1Castle, P2Castle, Stage);
     }
 

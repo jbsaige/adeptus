@@ -77,11 +77,11 @@ public class GameManager : MonoBehaviour
             Debug.Log("Battle Winner: " + BattleWinner + "\r\nCurrent Player:" + CurrentPlayer);
             if (BattleWinner == 1)
             {
-                TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P2Coord.x, (int)P2Coord.y, (int)WorldManager.ElementType.None, 0, worldManager.None, worldManager);
+                TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P2Coord.x, (int)P2Coord.y, (int)WorldManager.ElementType.Void, 0, worldManager.None, worldManager);
             }
             else
             {
-                TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P1Coord.x, (int)P1Coord.y, (int)WorldManager.ElementType.None, 0, worldManager.None, worldManager);
+                TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P1Coord.x, (int)P1Coord.y, (int)WorldManager.ElementType.Void, 0, worldManager.None, worldManager);
             }
             if (CurrentPlayer == BattleWinner)
             {
