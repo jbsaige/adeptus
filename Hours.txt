@@ -10,3 +10,4 @@
 20150324 - 0'30" - Battle Scene (All) - Updated each weapon so that they are balanced.
 20150324 - 0'10" - Updated the spawn positions so that they are on the screen.
 20150324 - 0'10" - World Manager - Moved the GameMode to the GameManager so that the mode survives battles.
+20150324 - 2'15" - Battle Scene (Armageddon) - Tested armageddon mode, it triggers properly.  The end game screen (victory or defeat) needs to be displayed.
