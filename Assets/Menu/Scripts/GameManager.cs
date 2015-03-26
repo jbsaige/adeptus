@@ -34,9 +34,11 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public string NextLevel;
     [HideInInspector]
-    public int BattleWinner = 0, roundNumber = 0, CurrentPlayer = 0;
+    public int BattleWinner = 0, roundNumber = 0, CurrentPlayer = 0, GameWinner = 0;
     [HideInInspector]
     public bool TutorialEnabled = true;
+    [HideInInspector]
+    public EndGameManager EndGameManager;
 
     private bool firstWorldLoad = true;
 
@@ -141,7 +143,20 @@ public class GameManager : MonoBehaviour
         BattleP1.z = P1Z;
         BattleP2.x = P2X;
         BattleP2.z = P2Z;
-        this.loadStoredMap();
+        if (GameMode == global::WorldManager.GameMode.Armageddon)
+        {
+            TriggerEndGame(BattleWinner);
+        }
+        else
+        {
+            this.loadStoredMap();
+        }
+    }
+
+    public void TriggerEndGame(int Winner)
+    {
+        GameWinner = Winner;
+        Application.LoadLevel("EndGame");
     }
 
     public void LoadBattle(Actor P1, Actor P2, string BattleGroundName)
@@ -163,6 +178,12 @@ public class GameManager : MonoBehaviour
     {
         this.LoadingManager = loadingManager;
         LoadingManager.LoadNext(NextLevel);
+    }
+
+    public void SetEndGameManager(EndGameManager endGameManager)
+    {
+        this.EndGameManager = endGameManager;
+        EndGameManager.SetWinner(GameWinner);
     }
 
     public void LoadLevel(string LevelName)
