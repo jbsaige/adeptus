@@ -18,9 +18,12 @@ public class EndGameManager : MonoBehaviour
     {
         recalculateCanvas();
         GameManager = FindObjectOfType<GameManager>();
-        GameManager.SetEndGameManager(this);
-        ButtonMenu.GetComponent<Button>().onClick.AddListener(() => menuButtonClick());
-        ButtonQuit.GetComponent<Button>().onClick.AddListener(() => quitButtonClick());
+        if (GameManager != null)
+        {
+            GameManager.SetEndGameManager(this);
+        }
+        //ButtonMenu.GetComponent<Button>().onClick.AddListener(() => menuButtonClick());
+        //ButtonQuit.GetComponent<Button>().onClick.AddListener(() => quitButtonClick());
     }
 
     public void SetWinner(int Winner)

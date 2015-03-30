@@ -26,7 +26,6 @@ public class WeaponOne : MonoBehaviour
 
     // New Weapon system based on breadcrumb and mixed with this:
     public Rigidbody rangedProjectilePrefab;
-    public GameObject bloodPrefab;
     public GameObject specialPrefab;
 
     // Attack rates
@@ -65,6 +64,7 @@ public class WeaponOne : MonoBehaviour
 
                 if(hit.collider.GetComponent<Entity>())
                 {
+                    Debug.Log("Entity is taking damage: " + damage.ToString());
                     hit.collider.GetComponent<Entity>().TakeDamage(damage);
                 }
             }

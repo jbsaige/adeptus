@@ -4,7 +4,7 @@ using System.Collections;
 public class AIHelper : MonoBehaviour
 {
 
-    public int myPlayerNum;
+    public int myPlayerNum = 2;
     public GameManager GameManager;
     public WorldManager WorldManager;
 
@@ -101,9 +101,10 @@ public class AIHelper : MonoBehaviour
 
     private int haveIplacedAllMyAdepts()
     {
+        int usePlayerNumber = myPlayerNum - 1;
         for (int i = 0; i < 4; i++)
         {
-            if (!GameManager.placedAdepts[myPlayerNum - 1, i])
+            if (!GameManager.placedAdepts[usePlayerNumber, i])
             {
                 return i + 1;
             }

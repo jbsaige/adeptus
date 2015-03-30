@@ -69,6 +69,7 @@ public class EnemyShooting : MonoBehaviour
 		shooting = true;
 		float fractionalDistance = (col.radius - Vector3.Distance(transform.position, player.position)) / col.radius;
 		float damage = scaledDamage * fractionalDistance + minimumDamage;
+        Debug.Log("playerHealth is taking damage: " + damage.ToString());
 		playerHealth.TakeDamage(damage);
 		ShotEffects();
 	}

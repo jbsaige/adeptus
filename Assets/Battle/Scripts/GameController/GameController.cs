@@ -133,6 +133,7 @@ public class GameController : MonoBehaviour
     {
         // send back the piece type from whomever won
         // may need to send back a string like "player won" or "enemy won" instead or as well or maybe just another int that is set to 0 or 1.   0 means the player won.
+        Debug.Log("Battle is Over");
         if (PlayerWon)
         {
             Debug.Log("player won");

@@ -138,7 +138,7 @@ public class PlayerStats : Entity
             thisPlayerController.walkSpeed--;
             if (thisPlayerController.walkSpeed <= 0)
             {
-                Die();
+                thisPlayer.TakeDamage(thisPlayer.maxHealth);
             }
             _isHitByGaze = false;
         }
@@ -168,6 +168,7 @@ public class PlayerStats : Entity
 
     public override void Die()
     {
+        Debug.Log("Player Death was Triggered");
         thisPlayer.health = 0;
         _isHitBySpit = false;
         _isHit = false;

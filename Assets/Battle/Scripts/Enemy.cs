@@ -217,7 +217,7 @@ public class Enemy : Entity
             ai.avoidSpeed--;
             if (ai.followSpeed <= 0)
             {
-                Die();
+                thisEnemy.TakeDamage(thisEnemy.maxHealth);
             }
             _isHitByGaze = false;
         }
@@ -244,6 +244,7 @@ public class Enemy : Entity
 
     public override void Die()
     {
+        Debug.Log("Enemy Death was Triggered");
         //player.AddExperience(expOnDeath);
         thisEnemy.health = 0;
         _isHit = false;
