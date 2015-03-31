@@ -22,8 +22,12 @@ public class EndGameManager : MonoBehaviour
         {
             GameManager.SetEndGameManager(this);
         }
-        //ButtonMenu.GetComponent<Button>().onClick.AddListener(() => menuButtonClick());
-        //ButtonQuit.GetComponent<Button>().onClick.AddListener(() => quitButtonClick());
+        else
+        {
+            Debug.Log("Could not find the Game Manager!");
+        }
+        ButtonMenu.GetComponent<Button>().onClick.AddListener(() => menuButtonClick());
+        ButtonQuit.GetComponent<Button>().onClick.AddListener(() => quitButtonClick());
     }
 
     public void SetWinner(int Winner)

@@ -144,15 +144,15 @@ public class GameManager : MonoBehaviour
         BattleP2.x = P2X;
         BattleP2.z = P2Z;
         Debug.Log("Checking Game Mode: " + GameMode.ToString());
-        //System.Threading.Thread.Sleep(1000);
-        //if (GameMode == global::WorldManager.GameMode.Armageddon)
-        //{
-        //    this.TriggerEndGame(BattleWinner);
-        //}
-        //else
-        //{
+        System.Threading.Thread.Sleep(50);
+        if (GameMode == global::WorldManager.GameMode.Armageddon)
+        {
+            this.TriggerEndGame(BattleWinner);
+        }
+        else
+        {
             this.loadStoredMap();
-        //}
+        }
     }
 
     public void TriggerEndGame(int Winner)
@@ -184,6 +184,7 @@ public class GameManager : MonoBehaviour
 
     public void SetEndGameManager(EndGameManager endGameManager)
     {
+        Debug.Log("EndGameManager has been set.");
         this.EndGameManager = endGameManager;
         EndGameManager.SetWinner(GameWinner);
     }

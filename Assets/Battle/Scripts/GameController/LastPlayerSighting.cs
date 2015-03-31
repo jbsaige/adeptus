@@ -18,8 +18,8 @@ public class LastPlayerSighting : MonoBehaviour
     void Awake()
     {
         //alarm = GameObject.FindGameObjectWithTag(Tags.alarm).GetComponent<AlarmLight>();
-        mainLight = GameObject.FindGameObjectWithTag(Tags.mainLight).GetComponent<Light>();
-        panicAudio = transform.Find("secondaryMusic").GetComponent<AudioSource>();
+        //mainLight = GameObject.FindGameObjectWithTag(Tags.mainLight).GetComponent<Light>();
+        //panicAudio = transform.Find("secondaryMusic").GetComponent<AudioSource>();
         //GameObject[] sirenGameObjects = GameObject.FindGameObjectsWithTag(Tags.siren);
         //sirens = new AudioSource[sirenGameObjects.Length];
 
@@ -32,7 +32,7 @@ public class LastPlayerSighting : MonoBehaviour
     void Update()
     {
         //SwitchAlarms();
-        MusicFading();
+        //MusicFading();
     }
 
     //void SwitchAlarms()
