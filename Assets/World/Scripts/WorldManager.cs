@@ -958,7 +958,7 @@ public class WorldManager : MonoBehaviour
             {
                 GameManager.AIHelper.MakeDecision();
             }
-            else if(GameManager.TutorialEnabled)
+            else if (GameManager.TutorialEnabled)
             {
                 setTutorialUp();
             }
@@ -1066,6 +1066,7 @@ public class WorldManager : MonoBehaviour
             GameManager.CurrentPlayer = 1;
         }
 
+        int CurrentPlayerNumberOfAdepts = 0;
         for (int x = 0; x < xSize; x++)
         {
             for (int z = 0; z < zSize; z++)
@@ -1073,11 +1074,33 @@ public class WorldManager : MonoBehaviour
                 if (GameManager.TileManger.allTiles[x, z].transform.Find("Adept") != null)
                 {
                     GameObject adept = GameManager.TileManger.allTiles[x, z].transform.Find("Adept").gameObject;
-                    if (GameManager.TileManger.allTiles[x, z].hasPowerWell && adept.GetComponent<Actor>().Player == GameManager.CurrentPlayer)
+                    if (adept.GetComponent<Actor>().Player == GameManager.CurrentPlayer)
                     {
-                        GameManager.PlayerPower[GameManager.CurrentPlayer - 1] += 10 - pendingPowerExpendature;
+                        CurrentPlayerNumberOfAdepts++;
+                        if (GameManager.TileManger.allTiles[x, z].hasPowerWell)
+                        {
+                            GameManager.PlayerPower[GameManager.CurrentPlayer - 1] += 10 - pendingPowerExpendature;
+                        }
                     }
                 }
+            }
+        }
+
+        Debug.Log("Player " + GameManager.CurrentPlayer + " has " + CurrentPlayerNumberOfAdepts + " Adepts on the field.");
+
+        if (CurrentPlayerNumberOfAdepts == 0)
+        {//The current player has no adepts on the field.  Check to see that they have adepts to place.
+            for (int a = 0; a < 4; a++)
+            {
+                if (GameManager.placedAdepts[GameManager.CurrentPlayer - 1, a] == false)
+                {//There is an unplaced adept.
+                    CurrentPlayerNumberOfAdepts++;
+                }
+            }
+            Debug.Log("Player " + GameManager.CurrentPlayer + " has " + CurrentPlayerNumberOfAdepts + " Adepts total.");
+            if (CurrentPlayerNumberOfAdepts == 0)
+            {
+                GameManager.TriggerEndGame((GameManager.CurrentPlayer == 0) ? 2 : 1);
             }
         }
 
