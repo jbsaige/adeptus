@@ -112,7 +112,7 @@ public class WeaponOne : MonoBehaviour
             nextPossibleShootTime = Time.time + secondsBetweenShots;
             Rigidbody rangedAttackForm = Instantiate(rangedProjectilePrefab, transform.position + transform.forward + transform.up, transform.rotation) as Rigidbody;
             rangedAttackForm.AddForce(transform.forward * rangedAttackSpeed);
-            audioSource.clip = audioClips.audio_hit_1;
+            //audioSource.clip = audioClips.audio_hit_1;
         }
     }
 

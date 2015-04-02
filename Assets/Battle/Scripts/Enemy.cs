@@ -10,7 +10,7 @@ public class EnemySounds
 
 public class Enemy : Entity 
 {
-    public EnemySounds audioClips;
+    //public EnemySounds audioClips;
     public enum EnemyType { Melee, Ranged, Special };
     public EnemyType enemyType;
 
@@ -22,7 +22,7 @@ public class Enemy : Entity
     public GameObject specialPrefab;
     private Transform player;
     private Ai ai;
-    private AudioSource audioSource;
+    //private AudioSource audioSource;
     private GameController gameController;
     //private WeaponOne playerWeaponOne;
     private PlayerController playerController;
@@ -57,7 +57,7 @@ public class Enemy : Entity
 
         ai = GetComponent<Ai>();
         animator = GetComponent<Animator>();
-        audioSource = gameObject.AddComponent<AudioSource>();
+        //audioSource = gameObject.AddComponent<AudioSource>();
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         //playerWeaponOne = GameObject.FindGameObjectWithTag("WeaponOne").GetComponent<WeaponOne>();
@@ -98,13 +98,13 @@ public class Enemy : Entity
                         float rand = Random.value;
                         if (rand <= 0.4f)
                         {
-                            audioSource.clip = audioClips.audio_melee_attack_1;
+                            //audioSource.clip = audioClips.audio_melee_attack_1;
                         }
                         else
                         {
-                            audioSource.clip = audioClips.audio_melee_attack_2;
+                            //audioSource.clip = audioClips.audio_melee_attack_2;
                         }
-                        audioSource.PlayOneShot(audioSource.clip);
+                        //audioSource.PlayOneShot(audioSource.clip);
                         player.GetComponent<DemoPlayerControls>()._isHit = true;
                         player.GetComponent<DemoPlayerControls>().Bleed(transform.rotation);
                         _animAttack = true;
