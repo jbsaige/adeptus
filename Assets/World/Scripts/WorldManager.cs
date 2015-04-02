@@ -1123,12 +1123,8 @@ public class WorldManager : MonoBehaviour
     public void triggerArmegddeon()
     {
         GameManager.GameMode = GameMode.Armageddon;
-        Actor P1Castle = new Actor();
-        P1Castle.characterType = Actor.ActorType.Castle;
-        P1Castle.Element = ElementType.Void;
-        Actor P2Castle = new Actor();
-        P2Castle.characterType = Actor.ActorType.Castle;
-        P2Castle.Element = ElementType.Void;
+        Actor P1Castle = GameManager.TileManger.allTiles[3, 7].Actor;
+        Actor P2Castle = GameManager.TileManger.allTiles[19, 7].Actor;
         Tiles Stage = new Tiles();
         Stage.Element = ElementType.Void;
         triggerBattle(P1Castle, P2Castle, Stage);

@@ -164,8 +164,8 @@ public class GameManager : MonoBehaviour
     public void LoadBattle(Actor P1, Actor P2, string BattleGroundName)
     {
         TileManger.allTiles = WorldManager.getAllTiles();
-        BattleP1 = TileManger.allTiles[P1.x, P1.z].Actor;
-        BattleP2 = TileManger.allTiles[P2.x, P2.z].Actor;
+        BattleP1 = P1;
+        BattleP2 = P2;
         P1Coord = new Vector2(BattleP1.x, BattleP1.z);
         P2Coord = new Vector2(BattleP2.x, BattleP2.z);
         Application.LoadLevel(BattleGroundName);
