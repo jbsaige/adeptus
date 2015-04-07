@@ -22,7 +22,7 @@ public class AIHelper : MonoBehaviour
         int adept = haveIplacedAllMyAdepts();
         if (adept > 0)
         {
-            Debug.Log("The AI is placing an adept.");
+            Debug.Log("The AI is placing an adept: " + adept.ToString());
             placeAnAdept(adept);
             return;
         }
@@ -162,7 +162,16 @@ public class AIHelper : MonoBehaviour
         Tiles tileWithOpenPW = findOpenPW();
         if (tileWithOpenPW == null)
         {
-
+            Tiles openTile = findOpenTile();
+            if (openTile == null)
+            {
+                Debug.Log("There was no open tiles on the game board!");
+                GameManager.TriggerEndGame((myPlayerNum == 1) ? 2 : 1);
+            }
+            else
+            {
+                WorldManager.placeNewActor(openTile.x, openTile.z, Actor.ActorType.Adept, (WorldManager.ElementType)element, myPlayerNum);
+            }
         }
         else
         {

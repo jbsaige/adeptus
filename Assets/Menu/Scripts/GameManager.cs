@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public bool WorldIsLoaded = false;
     [HideInInspector]
-    public bool[,] placedAdepts;
+    public bool[,] placedAdepts = {{false, false, false, false}, {false, false, false, false}};
     [HideInInspector]
     public string NextLevel;
     [HideInInspector]

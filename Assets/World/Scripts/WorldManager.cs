@@ -126,14 +126,14 @@ public class WorldManager : MonoBehaviour
         Highlighting = (GameObject)Instantiate(TileHighlight, new Vector3(0, -0.2f, 0), TileHighlight.transform.rotation);
         IamSpawning = new Actor();
         Camera.main.transform.position = new Vector3(cameraX, Camera.main.transform.position.y, cameraZ);
-        GameManager.placedAdepts = new bool[2, 4];
-        for (int a = 0; a < 2; a++)
-        {
-            for (int b = 0; b < 4; b++)
-            {
-                GameManager.placedAdepts[a, b] = false;
-            }
-        }
+        //GameManager.placedAdepts = new bool[2, 4];
+        //for (int a = 0; a < 2; a++)
+        //{
+        //    for (int b = 0; b < 4; b++)
+        //    {
+        //        GameManager.placedAdepts[a, b] = false;
+        //    }
+        //}
         recalculateCanvasSize();
         if (renderMode == RenderMode.FromStored)
         {
@@ -1065,6 +1065,13 @@ public class WorldManager : MonoBehaviour
             GameManager.roundNumber++;
             GameManager.CurrentPlayer = 1;
         }
+
+        Debug.Log("Placed Adepts for Player " + GameManager.CurrentPlayer.ToString() + ": "
+            + GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 0].ToString()
+            + GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 1].ToString()
+            + GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 2].ToString()
+            + GameManager.placedAdepts[GameManager.CurrentPlayer - 1, 3].ToString()
+            );
 
         int CurrentPlayerNumberOfAdepts = 0;
         for (int x = 0; x < xSize; x++)
