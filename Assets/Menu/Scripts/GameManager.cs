@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this);
         PlayerPower = new int[2] { 0, 0 };
         PlayerIsAI = new bool[2] { false, true };
+        placedAdepts = new bool[2, 4] { { false, false, false, false }, { false, false, false, false } };
         MenuManager = GameObject.FindObjectOfType<MenuManager>();
         MenuManager.SetGameManager(this);
         TileManger = gameObject.AddComponent<TileManager>();
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
         BattleP2 = gameObject.AddComponent<Actor>();
         AIHelper = gameObject.AddComponent<AIHelper>();
         AIHelper.GameManager = this;
+        WorldIsLoaded = false;
     }
 
     /// <summary>
@@ -187,6 +189,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("EndGameManager has been set.");
         this.EndGameManager = endGameManager;
         EndGameManager.SetWinner(GameWinner);
+        Start();
     }
 
     public void LoadLevel(string LevelName)

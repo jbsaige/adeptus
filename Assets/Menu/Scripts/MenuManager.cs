@@ -7,7 +7,7 @@ public class MenuManager : MonoBehaviour
     public Canvas Canvas;
     public GameObject[] TextDisplays;
     public GameObject[] TextDisplaysLarge;
-    public GameObject ButtonRandomMap, ButtonPatternMap;
+    public GameObject ButtonRandomMap, ButtonPatternMap, TutorialEnabled, P1Human, P2Human;
 
     private GameManager GameManager;
     private float canvasWidth, canvasHeight;
@@ -49,14 +49,25 @@ public class MenuManager : MonoBehaviour
 
     public void loadPatternMap()
     {
+        SetSettings();
         GameManager.loadPatternMap();
     }
 
     public void loadRandomMap()
     {
+        SetSettings();
         GameManager.loadRandomMap();
     }
 
+    public void SetSettings()
+    {
+        Debug.Log("Setting TutorialEnabled to " + TutorialEnabled.GetComponent<Toggle>().isOn);
+        GameManager.TutorialEnabled = TutorialEnabled.GetComponent<Toggle>().isOn;
+        Debug.Log("Setting PlayerIsAI[0] to " + P1Human.GetComponent<Toggle>().isOn);
+        GameManager.PlayerIsAI[0] = P1Human.GetComponent<Toggle>().isOn;
+        Debug.Log("Setting PlayerIsAI[1] to " + P2Human.GetComponent<Toggle>().isOn);
+        GameManager.PlayerIsAI[1] = P2Human.GetComponent<Toggle>().isOn;
+    }
 
 
 }
