@@ -210,6 +210,7 @@ public class WorldManager : MonoBehaviour
                 tileInteracter.SetElement((int)oldTile.Element - 1);
                 tileInteracter.SetXandZ(x, z);
                 tileInteracter.transform.parent = tileHolder.transform;
+                tileInteracter.hasPowerWell = oldTile.hasPowerWell;
                 GameManager.TileManger.allTiles[x, z] = tileInteracter;
                 placeNewActor(x, z, oldTile.Actor.characterType, oldTile.Actor.Element, oldTile.Actor.Player);
                 if (oldTile.hasPowerWell)
