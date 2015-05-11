@@ -3,41 +3,23 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector]
     public Actor BattleP1, BattleP2;
-    [HideInInspector]
     public Vector2 P1Coord, P2Coord;
-    [HideInInspector]
     public int[] PlayerPower;
-    [HideInInspector]
     public bool[] PlayerIsAI;
-    [HideInInspector]
     public WorldManager WorldManager;
-    [HideInInspector]
     public MenuManager MenuManager;
-    [HideInInspector]
     public TileManager TileManger;
-    [HideInInspector]
     public LoadingManager LoadingManager;
-    [HideInInspector]
     public WorldManager.RenderMode RenderMode;
-    [HideInInspector]
     public WorldManager.GameMode GameMode;
-    [HideInInspector]
     public GameController BattleManager;
-    [HideInInspector]
     public AIHelper AIHelper;
-    [HideInInspector]
     public bool WorldIsLoaded = false;
-    [HideInInspector]
     public bool[,] placedAdepts = {{false, false, false, false}, {false, false, false, false}};
-    [HideInInspector]
     public string NextLevel;
-    [HideInInspector]
-    public int BattleWinner = 0, roundNumber = 0, CurrentPlayer = 0, GameWinner = 0;
-    [HideInInspector]
+    public int BattleWinner = 0, roundNumber = 0, CurrentPlayer = 0, GameWinner = 0, P1HP = 0, P2HP = 0;
     public bool TutorialEnabled = true;
-    [HideInInspector]
     public EndGameManager EndGameManager;
 
     private bool firstWorldLoad = true;
@@ -49,13 +31,21 @@ public class GameManager : MonoBehaviour
         PlayerIsAI = new bool[2] { false, true };
         placedAdepts = new bool[2, 4] { { false, false, false, false }, { false, false, false, false } };
         MenuManager = GameObject.FindObjectOfType<MenuManager>();
-        MenuManager.SetGameManager(this);
+        if (MenuManager != null)
+        {
+            MenuManager.SetGameManager(this);
+        }
         TileManger = gameObject.AddComponent<TileManager>();
         BattleP1 = gameObject.AddComponent<Actor>();
         BattleP2 = gameObject.AddComponent<Actor>();
         AIHelper = gameObject.AddComponent<AIHelper>();
         AIHelper.GameManager = this;
         WorldIsLoaded = false;
+        BattleWinner = 0;
+        roundNumber = 0;
+        CurrentPlayer = 0;
+        GameWinner = 0;
+        TutorialEnabled = true;
     }
 
     /// <summary>
@@ -79,14 +69,20 @@ public class GameManager : MonoBehaviour
         if (BattleWinner > 0)
         {
             Debug.Log("Battle Winner: " + BattleWinner + "\r\nCurrent Player:" + CurrentPlayer);
+            //Delete the looser and update the winner's HP.
+            Debug.Log("P1's HP: " + P1HP);
+            Debug.Log("P2's HP: " + P2HP);
             if (BattleWinner == 1)
             {
                 TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P2Coord.x, (int)P2Coord.y, (int)WorldManager.ElementType.Void, 0, worldManager.None, worldManager);
+                TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor.HP = P1HP;
             }
             else
             {
                 TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor.SetUp(Actor.ActorType.None, (int)P1Coord.x, (int)P1Coord.y, (int)WorldManager.ElementType.Void, 0, worldManager.None, worldManager);
+                TileManger.allTiles[(int)P2Coord.x, (int)P2Coord.y].Actor.HP = P2HP;
             }
+            //If the current player is the winner, they were on the offensive, and move them to the looser's location.
             if (CurrentPlayer == BattleWinner)
             {
                 Actor temp = TileManger.allTiles[(int)P1Coord.x, (int)P1Coord.y].Actor;
@@ -137,7 +133,7 @@ public class GameManager : MonoBehaviour
         return TileManger.allTiles;
     }
 
-    public void ReturnFromBattle(int winner, int P1X, int P1Z, int P2X, int P2Z)
+    public void ReturnFromBattle(int winner, int P1X, int P1Z, int P2X, int P2Z, int p1HP, int p2HP)
     {
         Debug.Log("Returning from battle");
         BattleWinner = winner;
@@ -145,6 +141,8 @@ public class GameManager : MonoBehaviour
         BattleP1.z = P1Z;
         BattleP2.x = P2X;
         BattleP2.z = P2Z;
+        this.P1HP = p1HP;
+        this.P2HP = p2HP;
         Debug.Log("Checking Game Mode: " + GameMode.ToString());
         System.Threading.Thread.Sleep(50);
         if (GameMode == global::WorldManager.GameMode.Armageddon)

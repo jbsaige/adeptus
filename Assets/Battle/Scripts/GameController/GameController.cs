@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameController : MonoBehaviour 
+public class GameController : MonoBehaviour
 {
     // The player pieces
     public GameObject playerAdept;
@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
     public GameObject playerGorgon;
     public GameObject playerChimera;
     public GameObject playerCastle;
-    
+
     // The enemy pieces
     public GameObject enemyAdept;
     public GameObject enemySalamander;
@@ -32,20 +32,20 @@ public class GameController : MonoBehaviour
 
     private Actor.ActorType PlayerType, EnemyType;
     private WorldManager.ElementType PlayerElement, EnemyElement;
-    private int PlayerX, PlayerY, EnemyX, EnemyY, PlayerHP, EnemyHP;
+    public int PlayerX, PlayerY, EnemyX, EnemyY, PlayerHP, EnemyHP;
 
     private GameManager GameManager;
 
     // use public prefab variables to assign player/enemy prefabs and then reference those below in the case switches to instantiate
-    
-    
-	// Use this for initialization
-	void Start () 
+
+
+    // Use this for initialization
+    void Start()
     {
         GameManager = FindObjectOfType<GameManager>();
         GameManager.SetBattleManager(this);
         CreatePlayers();
-	}
+    }
 
     // instantiates an object for the player and one for the enemy depending on the piece types passed from the world scene
     void CreatePlayers()
@@ -122,9 +122,11 @@ public class GameController : MonoBehaviour
             default:
                 break;
         }
-        
+    }
 
-        
+    public void requestSetUpPlayer(PlayerStats playerStats)
+    {
+
     }
 
     // Sends results of fight back to main world scene, loads main world scene
@@ -134,14 +136,16 @@ public class GameController : MonoBehaviour
         // send back the piece type from whomever won
         // may need to send back a string like "player won" or "enemy won" instead or as well or maybe just another int that is set to 0 or 1.   0 means the player won.
         Debug.Log("Battle is Over");
+        PlayerStats playerStats = GameObject.FindObjectOfType<PlayerStats>();
+        Enemy enemy = GameObject.FindObjectOfType<Enemy>();
         if (PlayerWon)
         {
             Debug.Log("player won");
-            GameManager.ReturnFromBattle(1, PlayerX, PlayerY, EnemyX, EnemyY);
+            GameManager.ReturnFromBattle(1, PlayerX, PlayerY, EnemyX, EnemyY, (int)playerStats.health, (int)enemy.health);
         }
         else
         {
-            GameManager.ReturnFromBattle(2, PlayerX, PlayerY, EnemyX, EnemyY);
+            GameManager.ReturnFromBattle(2, PlayerX, PlayerY, EnemyX, EnemyY, (int)playerStats.health, (int)enemy.health);
         }
     }
 

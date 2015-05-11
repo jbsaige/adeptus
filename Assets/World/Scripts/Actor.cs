@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Actor : MonoBehaviour
 {
-    public int Player, x, z, HP;
-    public WorldManager.ElementType Element;
-    public ActorType characterType;
+    public int Player = 0, x = 0, z = 0, HP = 0;
+    public WorldManager.ElementType Element = WorldManager.ElementType.Void;
+    public ActorType characterType = ActorType.None;
     public enum ActorType { None, Adept, Demon, Monster, Castle };
     public GameObject Avatar;
     public WorldManager Manager;

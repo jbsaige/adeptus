@@ -14,8 +14,7 @@ public class PlayerStats : Entity
     public bool _isHit, _pickedUpHealth, _hasMaxHealth, _isHitBySpit, _isHitByMagic, _isHitByRock, _isHitByWave, _isHitByBolt, _isHitByRoar, _isHitBySong, _isHitByFireBurst, _isHitByDrain, _isHitByGaze, _isHitByFireball, _isHitByAcidSpit;
     public GameObject bloodPoolPrefab, fightOver;
 
-    private PlayerStats thisPlayer;
-    private PlayerController thisPlayerController;
+    private PlayerController thisController;
     private float maxHealth;
     private GameGUI gui;
     private GameController gameController;
@@ -24,13 +23,12 @@ public class PlayerStats : Entity
 
     void Start()
     {
-        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        gui = GameObject.FindGameObjectWithTag("GUI").GetComponent<GameGUI>();
-        thisPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
-        thisPlayerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
-        maxHealth = thisPlayer.health;
-
+        gameController = GameObject.FindObjectOfType<GameController>();
+        gui = GameObject.FindObjectOfType<GameGUI>();
+        thisController = GameObject.FindObjectOfType<PlayerController>();
+        enemy = GameObject.FindObjectOfType<Enemy>();
+        maxHealth = health;
+        health = gameController.PlayerHP;
 
         // for xp system:
         //LevelUp();
@@ -69,51 +67,51 @@ public class PlayerStats : Entity
     {
         if (_isHit)
         {
-            thisPlayer.health -= 1;
+            this.health -= 1;
             _isHit = false;
         }
 
         if (_isHitBySpit)
         {
-            thisPlayer.TakeDamage(2);
+            this.TakeDamage(2);
             _isHitBySpit = false;
         }
 
         if (_isHitByRock)
         {
-            thisPlayer.TakeDamage(4);
+            this.TakeDamage(4);
             //thisEnemy.TakeDamage(1);
             _isHitByRock = false;
         }
 
         if (_isHitByWave)
         {
-            thisPlayer.TakeDamage(3);
+            this.TakeDamage(3);
             //thisEnemy.TakeDamage(1);
             _isHitByWave = false;
         }
 
         if (_isHitByBolt)
         {
-            thisPlayer.TakeDamage(2);
+            this.TakeDamage(2);
             _isHitByBolt = false;
         }
 
         if (_isHitByRoar)
         {
-            thisPlayer.TakeDamage(1);
+            this.TakeDamage(1);
             _isHitByRoar = false;
         }
 
         if (_isHitBySong)
         {
-            thisPlayer.TakeDamage(1);
+            this.TakeDamage(1);
             _isHitBySong = false;
         }
 
         if (_isHitByFireBurst)
         {
-            thisPlayer.TakeDamage(2);
+            this.TakeDamage(2);
             _isHitByFireBurst = false;
         }
 
@@ -121,7 +119,7 @@ public class PlayerStats : Entity
         {
             if(enemy.name.Contains("EnemyWraith"))
             {
-                thisPlayer.TakeDamage(2);
+                this.TakeDamage(2);
                 enemy.health++;
                 enemy.health++;
                 _isHitByDrain = false;
@@ -134,42 +132,42 @@ public class PlayerStats : Entity
 
         if (_isHitByGaze)
         {
-            thisPlayer.TakeDamage(1);
-            thisPlayerController.walkSpeed--;
-            if (thisPlayerController.walkSpeed <= 0)
+            this.TakeDamage(1);
+            thisController.walkSpeed--;
+            if (thisController.walkSpeed <= 0)
             {
-                thisPlayer.TakeDamage(thisPlayer.maxHealth);
+                this.TakeDamage(this.maxHealth);
             }
             _isHitByGaze = false;
         }
 
         if (_isHitByFireball)
         {
-            thisPlayer.TakeDamage(2);
+            this.TakeDamage(2);
             _isHitByFireball = false;
         }
 
         if (_isHitByAcidSpit)
         {
-            thisPlayer.TakeDamage(2);
+            this.TakeDamage(2);
             _isHitByAcidSpit = false;
         }
 
         if (_isHitByMagic)
         {
             // change when implement weapon system for enemies to:
-            // thisPlayer.TakeDamage(enemyWeaponOne.damage);
-            thisPlayer.TakeDamage(4);
+            // this.TakeDamage(enemyWeaponOne.damage);
+            this.TakeDamage(4);
             _isHitByMagic = false;
         }
 
-        gui.SetPlayerHealth(thisPlayer.health / maxHealth, thisPlayer.health);
+        gui.SetPlayerHealth(this.health / maxHealth, this.health);
     }
 
     public override void Die()
     {
         Debug.Log("Player Death was Triggered");
-        thisPlayer.health = 0;
+        this.health = 0;
         _isHitBySpit = false;
         _isHit = false;
         _isHitByRock = false;

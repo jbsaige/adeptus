@@ -10,15 +10,16 @@ public class WorldManager : MonoBehaviour
     public Canvas Canvas;
     public GameObject PanelLeft, PanelRight, PanelTop, PanelBottom, PanelTips, PanelSummonTop, PanelSummonBottom, TutorialPanel, TutorialImage, TutorialText;
     public GameObject InfoZone, InfoUnit, InfoP1Power, InfoP2Power, InfoTips;
-    public GameObject ButtonCancel, ButtonZoomOut, ButtonArmageddon, ButtonMove, ButtonOSpell, ButtonDSpell, ButtonAdeptE, ButtonAdeptA, ButtonAdeptF, ButtonAdeptW;
+    public GameObject ButtonCancel, ButtonZoomOut, ButtonArmageddon, ButtonMove, ButtonSpell, ButtonAdeptE, ButtonAdeptA, ButtonAdeptF, ButtonAdeptW;
     public GameObject ButtonSME, ButtonSMA, ButtonSMF, ButtonSMW, ButtonSEE, ButtonSEA, ButtonSEF, ButtonSEW;
     public GameObject Castle, Adept, Demon, Monster, None;
+    public GameObject OSpellParticle, DSpellParticle, SpellObject;
     public GameObject[] TextDisplays;
     public Material texEarth, texAir, texFire, texWater, texVoid, transMat;
     public Shader transShader;
     public GUISkin mySkin;
     public float xOffset, zOffset, cameraX, cameraY, cameraZ, cameraFOV, zoomMaxSteps, zoomFOV, zoomY;
-    public int xSize, zSize, numPowerWells, powerSummonMonster, powerSummonElemental, powerArmageddon, powerOSpell, powerDSpell, powerMove;
+    public int xSize, zSize, numPowerWells, powerSummonMonster, powerSummonElemental, powerArmageddon, powerSpell, powerMove, spellDamage;
     public enum RenderMode
     {
         Pattern,
@@ -213,6 +214,8 @@ public class WorldManager : MonoBehaviour
                 tileInteracter.hasPowerWell = oldTile.hasPowerWell;
                 GameManager.TileManger.allTiles[x, z] = tileInteracter;
                 placeNewActor(x, z, oldTile.Actor.characterType, oldTile.Actor.Element, oldTile.Actor.Player);
+                Actor newActor = GameManager.TileManger.allTiles[x, z].Actor;
+                newActor.HP = oldTile.Actor.HP;
                 if (oldTile.hasPowerWell)
                 {
                     GameObject powerWell = (GameObject)Instantiate(PowerWell, new Vector3(GameManager.TileManger.allTiles[x, z].transform.position.x, 0F, GameManager.TileManger.allTiles[x, z].transform.position.z), GameManager.TileManger.allTiles[x, z].transform.rotation);
@@ -395,7 +398,22 @@ public class WorldManager : MonoBehaviour
         }
         Actor CharacterScript = CharacterObject.AddComponent<Actor>();
         CharacterScript.SetUp(type, x, z, (int)element, player, CharacterObject, this);
-
+        switch (CharacterScript.characterType)
+        {
+            case Actor.ActorType.Castle:
+                CharacterScript.HP = 20;
+                break;
+            case Actor.ActorType.Adept:
+                CharacterScript.HP = 10;
+                break;
+            case Actor.ActorType.Demon:
+            case Actor.ActorType.Monster:
+                CharacterScript.HP = 8;
+                break;
+            case Actor.ActorType.None:
+                CharacterScript.HP = 0;
+                break;
+        }
         CharacterObject.transform.parent = GameManager.TileManger.allTiles[x, z].transform;
         GameManager.TileManger.allTiles[x, z].Actor = CharacterScript;
     }
@@ -462,7 +480,7 @@ public class WorldManager : MonoBehaviour
     {
         IamSpawning.characterType = type;
         IamSpawning.Element = element;
-        pendingPowerExpendature = -50;
+        pendingPowerExpendature = (type == Actor.ActorType.Demon) ? powerSummonElemental : powerSummonMonster;
         GameManager.GameMode = GameMode.PlaceSpawn;
         setUpZoomOut();
     }
@@ -518,6 +536,29 @@ public class WorldManager : MonoBehaviour
         }
     }
 
+    public void castSpell()
+    {
+        pendingPowerExpendature = powerSpell;
+        GameManager.GameMode = GameMode.CastSpell;
+        setUpZoomOut();
+    }
+
+    public void castOSpell(Tiles target)
+    {
+        SpellObject = (GameObject)Instantiate(OSpellParticle, new Vector3(target.x * xOffset, 0, target.z * zOffset), Quaternion.identity);
+        target.Actor.HP -= spellDamage;
+        if (target.Actor.HP <= 0)
+        {
+            destroyActorAt(target.x, target.z);
+        }
+    }
+
+    public void castDSpell(Tiles target)
+    {
+        SpellObject = (GameObject)Instantiate(DSpellParticle, new Vector3(target.x * xOffset, 0, target.z * zOffset), Quaternion.identity);
+        target.Actor.HP += spellDamage;
+    }
+
     public void zoomOnToTile(Tiles tile)
     {
         if (GameManager.GameMode == GameMode.Default)
@@ -546,8 +587,7 @@ public class WorldManager : MonoBehaviour
                         if (selectedTile.GetComponentInChildren<Actor>().Player == GameManager.CurrentPlayer)
                         {
                             ButtonMove.GetComponentInChildren<Text>().text = "Move\r\n(" + powerMove.ToString() + "p)";
-                            ButtonDSpell.GetComponentInChildren<Text>().text = "++ Spell\r\n(" + powerDSpell.ToString() + "p)";
-                            ButtonOSpell.GetComponentInChildren<Text>().text = "-- Spell\r\n(" + powerOSpell.ToString() + "p)";
+                            ButtonSpell.GetComponentInChildren<Text>().text = "Cast Spell\r\n(" + powerSpell.ToString() + "p)";
                             ButtonArmageddon.GetComponentInChildren<Text>().text = "Armageddon\r\n(" + powerArmageddon.ToString() + "p)";
                             summonMode = SummoningMenuMode.SlidingIn;
                             if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerMove)
@@ -559,23 +599,14 @@ public class WorldManager : MonoBehaviour
                             {
                                 ButtonMove.GetComponent<Button>().interactable = false;
                             }
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerOSpell)
+                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerSpell)
                             {
-                                //ButtonOSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                                ButtonOSpell.GetComponent<Button>().interactable = true;
+                                ButtonSpell.GetComponent<Button>().onClick.AddListener(() => castSpell());
+                                ButtonSpell.GetComponent<Button>().interactable = true;
                             }
                             else
                             {
-                                ButtonOSpell.GetComponent<Button>().interactable = false;
-                            }
-                            if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerDSpell)
-                            {
-                                //ButtonDSpell.GetComponent<Button>().onClick.AddListener(() => moveActor());
-                                ButtonDSpell.GetComponent<Button>().interactable = true;
-                            }
-                            else
-                            {
-                                ButtonDSpell.GetComponent<Button>().interactable = false;
+                                ButtonSpell.GetComponent<Button>().interactable = false;
                             }
                             if (GameManager.PlayerPower[GameManager.CurrentPlayer - 1] >= powerArmageddon)
                             {
@@ -747,7 +778,10 @@ public class WorldManager : MonoBehaviour
                 //The player clicked on their own piece.
                 if (GameManager.GameMode == GameMode.CastSpell)
                 {
-                    //The player wants to cast a spell on their own piece.
+                    Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
+                    castDSpell(tile);
+                    GameManager.GameMode = GameMode.Default;
+                    changePlayer();
                 }
                 else
                 {
@@ -761,7 +795,10 @@ public class WorldManager : MonoBehaviour
                 //The player clicked on an oppoent's piece.
                 if (GameManager.GameMode == GameMode.CastSpell)
                 {
-                    //The player wants to cast a spell on an oppoent's piece.
+                    Highlighting.GetComponent<MeshRenderer>().material.color = new Color(1f, 1f, 1f, 0.82f);
+                    castOSpell(tile);
+                    GameManager.GameMode = GameMode.Default;
+                    changePlayer();
                 }
                 else if (GameManager.GameMode == GameMode.MoveSpawn)
                 {
@@ -834,6 +871,7 @@ public class WorldManager : MonoBehaviour
             PanelTop.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, panelHeight);
             PanelBottom.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -panelHeight);
         }
+        TutorialPanel.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1000f, -1000f);
     }
 
     public void setTutorialUp()
@@ -1060,6 +1098,14 @@ public class WorldManager : MonoBehaviour
 
     public void changePlayer()
     {
+        if (SpellObject != null)
+        {
+            Destroy(SpellObject);
+        }
+        if (GameManager.CurrentPlayer > 0 && pendingPowerExpendature > 0)
+        {
+            GameManager.PlayerPower[GameManager.CurrentPlayer - 1] -= pendingPowerExpendature;
+        }
         GameManager.CurrentPlayer++;
         if (GameManager.CurrentPlayer == 3)
         {
@@ -1087,7 +1133,7 @@ public class WorldManager : MonoBehaviour
                         CurrentPlayerNumberOfAdepts++;
                         if (GameManager.TileManger.allTiles[x, z].hasPowerWell)
                         {
-                            GameManager.PlayerPower[GameManager.CurrentPlayer - 1] += 10 - pendingPowerExpendature;
+                            GameManager.PlayerPower[GameManager.CurrentPlayer - 1] += 10;
                         }
                     }
                 }
